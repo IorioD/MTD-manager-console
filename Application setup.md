@@ -1,5 +1,5 @@
 # The following operations must be performed to correctly setup the environment to use the application. 
-N.B. You need to install the cluster first (follow the "[How to Kubernetes](Howtokubernetes.md)" file).
+N.B. You need to install the cluster first (follow the "[How to Kubernetes](How to kubernetes.md)" file).
 
 In application.properties:
   - spring.datasource.url=jdbc:postgresql://localhost:5432/mtdmanager simply indicates the endpoint of the PGAdmin db installed on the local master machine
