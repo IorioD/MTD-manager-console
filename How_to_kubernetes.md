@@ -110,7 +110,14 @@ Notes:
 - In Custom Resources, click on the right of `ks-installer` and select `Edit YAML`.
 - Navigate to `metrics_server` (around row 104) and change the value of `enabled` from `false` to `true`.
 - Click `OK`.
-
-7. ```sh
-    
+7. on the edge machine use
+    ```sh
+    systemctl restart edgecore.service
     ```
+  to restart the service and start collecting metrics about the edge node.
+From now on, you’ll have a cluster with 3 cloud-nodes and 1 edge-node with the kubesphere console installed on the master node (if you need more than one edge, repeat steps 2 and 3).
+
+  
+```sh
+d 
+```
