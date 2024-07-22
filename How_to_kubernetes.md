@@ -54,16 +54,9 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l 'app
 ```
 
 ## 4. Adding an Edge Node in the Cluster
+[Install KubeEdge](https://www.kubesphere.io/docs/v3.4/pluggable-components/kubeedge/)
 
-Follow the steps below to add an edge node to your KubeSphere cluster.
-
-## 1. Install KubeEdge on Master Node
-
-### Install KubeEdge
-Follow the instructions to install KubeEdge: [Install KubeEdge](https://www.kubesphere.io/docs/v3.4/pluggable-components/kubeedge/)
-
-### Configure KubeEdge in KubeSphere
-
+### 1. Install KubeEdge on Master Node
 1. Log in to the KubeSphere console.
 2. Go to the `CRDs` menu on the left.
 3. Search for `clusterconfiguration` and click on it.
@@ -72,11 +65,8 @@ Follow the instructions to install KubeEdge: [Install KubeEdge](https://www.kube
 6. Change the value of `enabled` from `false` to `true`.
 7. Change the `advertiseAddress` to the IP of the master node to enable all KubeEdge components.
 8. Click `OK`.
+9. Run the following command to verify the installation:
+    ```sh
+    kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l 'app in (ks-install, ks-installer)' -o jsonpath='{.items[0].metadata.name}') -f
+    ```
 
-### Verify Installation
-
-Run the following command to verify the installation:
-
-```sh
-kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l 'app in (ks-install, ks-installer)' -o jsonpath='{.items[0].metadata.name}') -f
-```
