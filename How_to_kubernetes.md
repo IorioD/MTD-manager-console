@@ -1,6 +1,7 @@
 # In this file will be provided a guide to setup the kubernetes cluster.
 
-Each listed command must be executed in superuser mode.
+- To use this configuration, you need a host machine with at least 32 GB of RAM and a CPU that supports vierualization.
+- Each listed command must be executed in superuser mode.
 
 ## 1. VM Setup
 
