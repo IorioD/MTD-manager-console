@@ -122,32 +122,39 @@ e.g.
 From now on, you’ll have a cluster with 3 cloud-nodes and 1 edge-node with the kubesphere console installed on the master node (if you need more than one edge, repeat steps 2 and 3).
 
 ## 5. Cloud-app-db setup
-(da installare su uno o più worker)
-Create new workload (application workloads ->workloads) cloud-app-db:
-Basic info:
-name: cloud-app-db
-project: default
-Pod setting: 
-docker hub: vittolibre/cloud-app-db
-container name: cloud-app-db
-delete port settings
-no articular storage settings
-Advanced settings:
-select node on which the pod will be installed (worker)
-Click on the pod, go to “edit yaml” and add in spec.container (same indent of ports on row 29)
-          envFrom:
-            - configMapRef:
-                name: cloud-db-credentials
-Execute the following commands to apply configmap and service for db (in mtd-manager/miscConfig/cloud):
-kubectl apply -f cloud-db-configmap.yaml
-kubectl apply -f cloud-db-service.yaml
+(To be installed on one or more worker)
+1. Create new workload (`application workloads ->workloads`) cloud-app-db:
+	- Basic info:
+	- Name: `cloud-app-db`
+	- Project: `default`
+	- Pod setting: 
+		- Docker hub: `vittolibre/cloud-app-db`
+		- Container name: `cloud-app-db`
+		- Delete port settings
+	- No articular storage settings
+	- Advanced settings:
+		- select node on which the pod will be installed (`worker`)
+2. Click on the pod, go to `edit yaml` and add in `spec.container` (same indent of ports on row 29)
+	```sh
+        envFrom:
+          - configMapRef:
+              name: cloud-db-credentials
+ 	```
+3. Execute the following commands to apply configmap and service for db (in `/miscConfig/cloud`):
+	```sh
+ 	kubectl apply -f cloud-db-configmap.yaml
+	kubectl apply -f cloud-db-service.yaml
+	```
+ 
 ## 6. Cloud-app setup
-Create new workload (application workloads ->workloads) cloud-app as before: 
-name: cloud-app
-project: default
-docker hub: vittolibre/cloud-app
-select the same worker node as before
-Click on the pod, go to “edit yaml” and add in spec.container (same indent of image on row 29)
+This app simulates a situation in which the edge node sends temperature to the node that processes the information.
+1. Create new workload (application workloads ->workloads) cloud-app as before: 
+	- Name: `cloud-app`
+	- Project: `default`
+	- Docker hub: `vittolibre/cloud-app`
+	- Select the same `worker` node as before
+2. Click on the pod, go to `edit yaml` and add in `spec.container` (same indent of image on row 29)
+   	```sh
           env:
             - name: DB_URL
               value: 'jdbc:postgresql://192.168.1.38:31215/cloud'
@@ -155,78 +162,124 @@ Click on the pod, go to “edit yaml” and add in spec.container (same indent o
               value: cloudadmin
             - name: DB_PASSWORD
               value: cloud
-Change the IP with the ip of the worker node on which the DB is installed
-The port 31215 is the one of the cloud-db-service (application workloads ->service) 
+	```
+	- Change the `IP` with the ip of the worker node on which the DB is installed
+	- The port 31215 is the one of the cloud-db-service (`application workloads ->service`)
+
 ## 7. Temperature mapper setup
-App to simulate a temperature sensor on the edge node that sends data to the cluster:
-create a new workload as before:
-name: temp-mapper
-project: default
-docker hub: iori0d/temp-mapper:latest
-select the edge node in the advanced settings
-Use the following command on the master node to verify the connection with temp mapper: kubectl get device temperature -o yaml
+This app simulates a temperature sensor on the edge node that sends data to the cluster.
+1. Create a new workload as before:
+	- Name: `temp-mapper`
+	- Project: `default`
+	- Docker hub: `iori0d/temp-mapper:latest`
+	- Select the edge node in the advanced settings
+2. Use the following command on the master node to verify the connection with temp mapper:
+	```sh
+	kubectl get device temperature -o yaml
+	```
+ 
 ## 8. Mosquitto setup
-Install mosquitto and mosquitto-client on both master and edge node
-sudo apt update -y && sudo apt install mosquitto mosquitto-clients -y
-On the master node modify /etc/mosquitto/mosquitto.conf (sudo nano /etc/mosquitto/mosquitto.conf) adding
-	allow_anonymous true
+1. To allow communication between master and edge nodes via a message broker, install `mosquitto` and `mosquitto-client` on both master and edge node:
+	```sh
+	sudo apt update -y && sudo apt install mosquitto mosquitto-clients -y
+	```
+2. On the master node modify `/etc/mosquitto/mosquitto.conf`:
+	```sh
+ 	sudo nano /etc/mosquitto/mosquitto.conf
+ 	```
+  	adding
+	```sh
+ 	allow_anonymous true
 	listener 1883 192.168.1.37
+	```
+	the `IP` must match the master node's IP while the port is standard
+	- Then restart mosquitto daemon:
+		```sh
+		systemctl restart mosquitto
+  		```
+3. To verify setup:
+	- On master node:
+		```sh
+		mosquitto_sub -h <master_IP> -p 1883 -t <topic_name> -d
+  		```
+	- On edge node:
+		```sh
+		mosquitto_pub -h <master_IP> -p 1883 -t <topic_name> -m <message>
+  		```
+	and on the master node console the message should appear
 
-the IP must match the IP of the master node while the port is standard
-systemctl restart mosquitto
-To verify setup:
-On master node: mosquitto_sub -h <master_IP> -p 1883 -t <topic_name> -d
-On edge node: mosquitto_pub -h <master_IP> -p 1883 -t <topic_name> -m <message>
-on the master node console the message should appear
 ## 9. Gateway-db setup
-
-Create a new workload for gateway-db as done before:
-name: edge-db
-project: default
-docker hub: vittolibre/gateway-db
-set the port to 5432
-select the edge node in the advanced settings
-Click on the pod, go to “edit yaml” and add in spec.container (same indent of ports on row 29)
+1. Create a new workload for gateway-db as done before:
+	- Name: `edge-db`
+	- Project: `default`
+	- Docker hub: `vittolibre/gateway-db`
+	- Set the port to `5432` as port settings
+	- Select the `edge node` in the advanced settings
+2. Click on the pod, go to `edit yaml` and add in `spec.container` (same indent of ports on row 29)
+   	```sh
           envFrom:
             - configMapRef:
                 name: cloud-db-credentials
-Apply the configmap in mtd-manager/miscConfig/edge with the command: kubectl apply -f edge-db-configmap.yaml
+	```
+3. Apply the configmap in `/miscConfig/edge` with the following command:
+	```sh
+	kubectl apply -f edge-db-configmap.yaml
+	```
+ 
 ## 10. Gateway-app setup
-Create a new workload as before for gateway-app
-name: edge-gateway
-project: default
-docker hub: iori0d/edge-gate
-select the edge node in the advanced settings
-To verify connections and info coming from the app, execute the following command on the master node
-mosquitto_sub -h 192.168.1.37 -p 1883 -t default/edgenode/temperature -d
+This app has the same purposes as cloud-app but is installed on edge node.
+1. Create a new workload as before for gateway-app
+	- Name: `edge-gateway`
+	- Project: `default`
+	- Docker hub: `iori0d/edge-gate`
+	- select the `edge node` in the advanced settings
+2. To verify connections and info coming from the app, execute the following command on the master node:
+	```sh
+ 	mosquitto_sub -h 192.168.1.37 -p 1883 -t default/edgenode/temperature -d
+	```
+ 
+If you want to use multiple edge nodes and build multiple instances of the app, you need to download dir and change
+- `application.property`:
+	- set `spring.datasource.url` with the IP of the edge
+	- set `mqtt.server.host` with the IP of the master 
+	- set `mqtt.client.id` with another progressive id. 
+- the `message` in MQTTPublisher line 51 to distinguish the instances.
+- the `dockerfile` with the IP of the edge in the url
+- modify and use the script `deploy.sh` executing the following commands to build the image and push it to docker hub making it available when creating the workload:
+	```sh
+	maven clean install
+	docker build -t <account_name>/<container_name> .
+	docker push <account_name>/<container_name>
+   	```
 
-If you want to use multiple edge nodes and build multiple instances of the app, you need to go in the <link to dir>  and change the application.property:
-spring.datasource.url with the IP of the edge
-mqtt.server.host with the IP of the master 
-mqtt.client.id with another progressive id. 
-Eventually change the message in MQTTPublisher line 51.
-After changing the dockerfile with the IP of the edge in the url, modify and use the script deploy.sh executing the following the following commands to build the image and push it to docker hub making it available when creating the workload:
-maven clean install
-docker build -t <account_name>/<container_name> .
-docker push <account_name>/<container_name>
 ## 11. PGAdmin database setup
-Install PGadmin:
-Install the public key for the repository (if not done previously):
-curl -fsS https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo gpg --dearmor -o /usr/share/keyrings/packages-pgadmin-org.gpg
-Create the repository configuration file:
-sudo sh -c 'echo "deb [signed-by=/usr/share/keyrings/packages-pgadmin-org.gpg] https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'
-Install pgadmin for both desktop and web modes:
-sudo apt install pgadmin4
-Install for desktop mode only:
-sudo apt install pgadmin4-desktop
-Install for web mode only:
-sudo apt install pgadmin4-web
-Configure the webserver, if you installed pgadmin4-web:
-sudo /usr/pgadmin4/bin/setup-web.sh
-create new user mtdmanager
-create new db named mtdmanager with  mtdmanager as owner
-Modify the pgadmin.sql (row 307-309 with the IP of the nodes of the cluster) in mtd-manager/miscConfig
-delete (delete force) the mtdmanager db and recreate it again the db using the pgadmin.sql code (to solve some conflicts)
-
-  
-
+Use PGAdmin to manage the information about the cluster.
+1. Install PGadmin:
+	- Install the public key for the repository (if not done previously):
+	```sh	
+ 	curl -fsS https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo gpg --dearmor -o /usr/share/keyrings/packages-pgadmin-org.gpg
+ 	```
+ 	- Create the repository configuration file:
+	```sh
+	sudo sh -c 'echo "deb [signed-by=/usr/share/keyrings/packages-pgadmin-org.gpg] https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'
+ 	```
+	- Install pgadmin for both desktop and web modes:
+	```sh
+ 	sudo apt install pgadmin4
+ 	```
+	- Install for desktop mode only:
+	```sh
+	sudo apt install pgadmin4-desktop
+ 	```
+	- Install for web mode only:
+	```sh
+	sudo apt install pgadmin4-web
+ 	```
+	- Configure the webserver, if you installed pgadmin4-web:
+	```sh
+	sudo /usr/pgadmin4/bin/setup-web.sh
+ 	```
+2. Create new user mtdmanager
+3. Create new db named mtdmanager with  mtdmanager as owner
+4. Modify the `pgadmin.sql` (row 307-309 with the IP of the nodes of the cluster) in `/miscConfig`
+delete (delete force) the mtdmanager db and recreate it again the db using the file via the query tool of pgadmin (to solve some conflicts)
