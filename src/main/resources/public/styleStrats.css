@@ -1,0 +1,82 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    text-align: center;
+    padding: 50px;
+}
+.button {
+    background-color: gray;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.button:hover {
+    background-color: darkgray;
+}
+h1 {
+    color: #333;
+}
+h2 {
+    color: #555;
+    margin-bottom: 10px;
+}
+.strategy-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+.strategy-table th, .strategy-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+.strategy-table th {
+    background-color: #f2f2f2;
+}
+.strategy-table td {
+    background-color: #fff;
+}
+.enable-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+.disable-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+.enable-button:hover, .disable-button:hover {
+    opacity: 0.8;
+}
+.button-container {
+    display: grid;  /* Utilizziamo CSS Grid */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));  /* Colonnes automatiche */
+    gap: 10px;  /* Spazio tra i bottoni */
+    margin-top: 20px; /* Aggiungi uno spazio di 20px sopra al container */
+}

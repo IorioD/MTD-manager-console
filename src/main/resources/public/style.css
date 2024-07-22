@@ -1,0 +1,95 @@
+/* Stili per il bottone slide */
+.slide-button {
+    position: relative;
+    width: 60px;
+    height: 30px;
+    background-color: #4CAF50; /* Verde quando è true */
+    border-radius: 15px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.slider {
+    position: absolute;
+    top: 0;
+    left: 0; /* Modifica la posizione a sinistra */
+    width: 50%;
+    height: 100%;
+    background-color: #ccc; /* Cambia il colore quando è false */
+    border-radius: 15px;
+    transition: left 0.3s ease, background-color 0.3s ease; /* Aggiunto transition per il cambio di colore e posizione */
+}
+
+.slide-button[data-enabled="true"] .slider {
+    left: 50%; /* Cambia la posizione a destra */
+    background-color: #333; /* Cambia il colore quando è true */
+}
+
+
+/* Stili per il bottone generico */
+.button {
+    background-color: gray;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.button:hover {
+    background-color: darkgray;
+}
+
+/* Stili per il container principale */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    text-align: center;
+    padding: 50px;
+}
+
+h1 {
+    color: #333;
+}
+
+p {
+    font-size: 18px;
+    color: #666;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f2f2f2;
+}
+
+table td {
+    background-color: #fff;
+}
+
+.button-container {
+    display: grid;  /* Utilizziamo CSS Grid */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));  /* Colonnes automatiche */
+    gap: 10px;  /* Spazio tra i bottoni */
+    margin-top: 20px; /* Aggiungi uno spazio di 20px sopra al container */
+}

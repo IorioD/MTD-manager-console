@@ -1,0 +1,116 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #999;
+    overflow-x: hidden;
+    transition: 0.3s;
+    padding-top: 60px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+}
+.sidebar a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+    display: block;
+    transition: 0.3s;
+}
+.sidebar a:hover {
+    background-color: #777;
+}
+.sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+.openbtn {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #333;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+}
+.openbtn:hover {
+    background-color: #444;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* per allineare i figli a sinistra */
+    /*transition: margin-left .5s;*/
+    padding: 20px;
+    flex-grow: 1;
+    margin-left: 20px;
+}
+h1 {
+    color: #333;
+}
+h2 {
+    color: #555;
+    margin-bottom: 10px;
+}
+.cluster-info, .node-info {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+.cluster-info-item, .node-info-item {
+    margin-bottom: 10px;
+}
+.cluster-info-label, .node-info-label {
+    font-weight: bold;
+}
+.cluster-info th, .cluster-info td, .node-info th, .node-info td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+.cluster-info th, .node-info th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+.cluster-info tr:nth-child(even), .node-info tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.cluster-info tr:hover, .node-info tr:hover {
+    background-color: #ddd;
+}
+.table-container {
+    overflow-x: auto;
+    width: 100%; /* Larghezza massima del 100% per evitare il superamento */
+    margin-bottom: 20px;
+}
+.table-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.green {
+    background-color: green;
+    color: white;
+}
+.yellow {
+    background-color: yellow;
+    color: black;
+}
+.red {
+    background-color: red;
+    color: white;
+}

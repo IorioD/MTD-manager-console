@@ -1,0 +1,15 @@
+apiVersion: v1
+# Kind for kubernets ConfigMap
+kind: ConfigMap
+metadata:
+  # Name your ConfigMap
+  name: cloud-db-credentials
+  labels:
+    app: cloud-app-db
+data:
+  # User DB
+  POSTGRES_DB: cloud
+  # Db user
+  POSTGRES_USER: cloudadmin
+  # Db password
+  POSTGRES_PASSWORD: cloud

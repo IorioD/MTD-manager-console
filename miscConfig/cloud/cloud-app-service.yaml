@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud-app-service
+spec:
+  selector:
+    app: cloud-app  # Assicurati che corrisponda alle etichette del tuo pod
+  ports:
+    - protocol: TCP
+      port: 9090      # Porta del servizio
+      targetPort: 9090  # Porta del pod
+      nodePort: 32750  # Porta esposta sul nodo
+  type: NodePort

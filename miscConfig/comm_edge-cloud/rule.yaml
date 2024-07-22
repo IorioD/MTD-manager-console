@@ -1,0 +1,9 @@
+apiVersion: rules.kubeedge.io/v1
+kind: Rule
+metadata:
+  name: eventbus-rest
+spec:
+  source: "edge-eventbus"
+  sourceResource: {"topic": "timeseries","node_name": "edge-node"}
+  target: "cloud-rest"
+targetResource: {"resource":"http://192.168.122.92:8080/timeseries"}

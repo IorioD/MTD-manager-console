@@ -1,0 +1,17 @@
+apiVersion: v1
+# Kind for service
+kind: Service
+metadata:
+  # Name your service
+  name: cloud-db-service
+  labels:
+    app: cloud-app-db
+spec:
+  # Choose how to expose your service
+  type: NodePort
+  ports:
+    # The port number to expose the service
+    - port: 5432
+  # Pod to route service traffic  
+  selector:
+    app: cloud-app-db

@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "kubernetes.master.url",
+  "type": "java.lang.String",
+  "description": "A description for 'kubernetes.master.url'"
+}]}

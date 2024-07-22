@@ -1,0 +1,58 @@
+// Funzione per calcolare il tempo di ritardo
+function getDelayTime() {
+    const defaultDelay = 10000; // 10 secondi
+    const retryDelay = 5000; // 5 secondi
+
+    // Se la richiesta precedente è fallita, usa il retryDelay
+    if (pm.response.code !== 200) {
+        console.log("Request failure: status " + pm.response.code);
+        return retryDelay;
+    }
+    return defaultDelay;
+}
+
+// Funzione per pianificare la prossima richiesta
+function scheduleNextRequest() {
+    const delayTime = getDelayTime();
+
+    // Calcola l'overhead tra le richieste
+    const currentTime = new Date().getTime();
+    const startTime = pm.globals.get("startTime");
+    const overhead = currentTime - startTime;
+    console.log("Overhead between requests: " + overhead + "ms");
+
+    // Stampa il timestamp della richiesta
+    const requestTimestamp = new Date().toISOString();
+    console.log("Request timestamp: " + requestTimestamp);
+
+    // Imposta un timeout per la prossima richiesta dopo il ritardo specificato
+    setTimeout(() => {
+        pm.sendRequest({
+            url: pm.environment.get("baseUrl") + "/",
+            method: 'GET',
+            header: {
+                'Content-Type': 'application/json'
+            }
+        }, function (err, res) {
+            if (err) {
+                console.log("Request error: ", err);
+            } else {
+                console.log("Receive response: ", res);
+            }
+
+            // Aggiorna il tempo di inizio per l'overhead della prossima iterazione
+            pm.globals.set("startTime", new Date().getTime());
+
+            // Continua a pianificare la prossima richiesta
+            scheduleNextRequest();
+        });
+    }, delayTime);
+}
+
+// Inizializza il tempo di inizio per la prima iterazione
+if (!pm.globals.has("startTime")) {
+    pm.globals.set("startTime", new Date().getTime());
+}
+
+// Pianifica la prima richiesta
+scheduleNextRequest();
