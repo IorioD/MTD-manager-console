@@ -1,5 +1,5 @@
 # MTD-manager-console
- This is a JAVA application for managing the Moving Target Defense in cloud environment.
+### This is a JAVA application for managing the Moving Target Defense in cloud environment developed in collaboration with University of Naples Federico II.
  
 To use this application, you need to install a kubernetes cluster following this file [How to Kubernetes](How_to_kubernetes.md) and setup the environment following [Application setup](Application_setup.md).
 
@@ -42,6 +42,3 @@ In this case the user cannot edit the strategy directly in the UI but needs to m
 ![Alt text](miscConfig/Param.png "Parameter")
 
 the user can set the preferred execution window.
-
-
-This project has been has been developed in collaboration with University of Naples Federico II
