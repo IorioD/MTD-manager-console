@@ -42,3 +42,6 @@ In this case the user cannot edit the strategy directly in the UI but needs to m
 ![Alt text](miscConfig/Param.png "Parameter")
 
 the user can set the preferred execution window.
+
+
+This project has been has been developed in collaboration with University of Naples Federico II
