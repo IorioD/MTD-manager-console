@@ -44,7 +44,9 @@
     ./kk create cluster -f <config-name>.yaml
     ```
 At the end something like this will be shown:
+
 ![Alt text](miscConfig/kube.png)
+
 with the IP matches with the IP of the master node.
 
 ## 3. Check Installation:
