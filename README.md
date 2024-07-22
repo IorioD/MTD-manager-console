@@ -32,7 +32,7 @@ the user can manage the deployment lifecycle (using add, edit and delete functio
 
 - In the `Strategies List` page
 
-![Alt text](miscConfig/List-strats.png "Strategies")
+![Alt text](miscConfig/List-strat.png "Strategies")
 
 the user can enable one or more strtategy that will affect the enabled deployment.
 In this case the user cannot edit the strategy directly in the UI but needs to modify the source code to change/add implementation logic.
