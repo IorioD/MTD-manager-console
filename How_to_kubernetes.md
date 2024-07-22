@@ -67,7 +67,7 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l 'app
     ```
     
 ### 2. Configure Edge Mesh on the nodes
-1. edit /etc/nsswitch.conf: nano /etc/nsswitch.conf
+1. Edit the `/etc/nsswitch.conf` file:
     ```sh
     nano /etc/nsswitch.conf
     ```
@@ -75,11 +75,11 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l 'app
     ```sh
     hosts:          dns files mdns4_minimal [NOTFOUND=return]
     ```
-3. run:
+3. Run:
     ```sh
     sudo echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
     ```
-4. verify modification:
+4. Verify modification:
     ```sh
     sudo sysctl -p | grep ip_forward
     ```
@@ -94,8 +94,23 @@ e.g.
         ```sh
         arch=$(uname -m); if [[ $arch != x86_64 ]]; then arch='arm64'; fi;  curl -LO https://kubeedge.pek3b.qingstor.com/bin/v1.13.0/$arch/keadm-v1.13.0-linux-$arch.tar.gz  && tar xvf keadm-v1.13.0-linux-$arch.tar.gz && chmod +x keadm && ./keadm join --kubeedge-version=1.13.0 --cloudcore-ipport=192.168.1.37:30000 --quicport 30001 --certport 30002 --tunnelport 30004 --edgenode-name edgenode --edgenode-ip 192.168.1.45 --token 04632e3afc95ca52c36baaf6c537bc022c63b328bc1cf20dbc23b24fadf9bab4.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTY0NzM5NDl9.ke_uAXNu5pWKvkyBHAUKAEXGbQbtGSERDpEHB5qZOPs --with-edge-taint -r docker
         ```
+Notes:
+- Ports used are 30000-30004 instead of 10000-10004
+- At the end there is -r docker to explicit the use of docker on the edge 
+- Make sure wget is installed on your edge node before you run the command
+5. Edit the `edgecore.yaml` file:
+   ```sh
+    nano /etc/kubeedge/config/edgecore.yaml 
+    ```
+   and change `cgroupDriver` to `systemd` if necessary and  `edgeStream.enable` to `true` then save and exit
+6. On the master machine:
+- Log in to the KubeSphere console.
+- Go to the `CRDs` menu on the left.
+- Search for `clusterconfiguration` and click on it.
+- In Custom Resources, click on the right of `ks-installer` and select `Edit YAML`.
+- Navigate to `metrics_server` (around row 104) and change the value of `enabled` from `false` to `true`.
+- Click `OK`.
 
-
-6. ```sh
+7. ```sh
     
     ```
