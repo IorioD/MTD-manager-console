@@ -7,8 +7,8 @@
     kubectl apply -f cloud-app-service.yaml
   ```
 3. Connect to postman web interface and in `environment` create `baseURL` with 2 variables:
-  - `baseURL` as the ip of the node on which cloud-app is installed and the port exposed in cloud-app-service
-  - `nextRequest` as the name of the request
+    - `baseURL` as the ip of the node on which cloud-app is installed and the port exposed in cloud-app-service
+    - `nextRequest` as the name of the request
 4. Enable env variable.
 5. In the workspace create a new request with the provided script (`ScriptPostman` in `/miscConfig/testing`) into post-res and execute.
 This script allows to evaluate the overhead of the requests while the pods are subject to a mtd strategy.
