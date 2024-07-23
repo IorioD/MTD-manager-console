@@ -10,9 +10,9 @@ In `application.properties`:
       
 To make the application able to collect node metrics:
   - apply a permanent port forwarding with `NodePortPromete.yaml` (in mtd-manager/miscConfig) using the command
-        ```sh
-        kubectl apply -f NodePortPromete.yaml
-        ```
+    ```sh
+    kubectl apply -f NodePortPromete.yaml
+    ```
     
 In `ClusterService`:
   - change the ip of `PROMETHEUS_URL` to the master node IP
