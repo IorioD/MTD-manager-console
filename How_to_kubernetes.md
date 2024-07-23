@@ -1,4 +1,4 @@
-# In this file will be provided a guide to setup the kubernetes cluster.
+# In this file will be provided a guide to setup the Kubernetes cluster.
 
 - To use this configuration, you need a host machine with at least 32 GB of RAM and a CPU that supports vierualization.
 - Each listed command must be executed in superuser mode.
