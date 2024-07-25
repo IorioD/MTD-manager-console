@@ -241,7 +241,7 @@ This app has the same purposes as cloud-app but is installed on edge node.
  	mosquitto_sub -h 192.168.1.37 -p 1883 -t default/edgenode/temperature -d
 	```
  
-If you want to use multiple edge nodes and build multiple instances of the app, you need to download dir and change
+If you want to use multiple edge nodes and build multiple instances of the app, you need to download [Edge Gateway code](https://github.com/IorioD/Edge-gateway/tree/main) and change
 - `application.property`:
 	- set `spring.datasource.url` with the IP of the edge
 	- set `mqtt.server.host` with the IP of the master 
