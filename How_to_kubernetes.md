@@ -256,8 +256,12 @@ If you want to use multiple edge nodes and build multiple instances of the app, 
    	```
 
 ## 11. PGAdmin database setup
-Use PGAdmin to manage the information about the cluster.
-1. Install PGadmin:
+Use PostgreSQL db with PGAdmin interface to manage the information about the cluster.
+1. Install postgreSQL
+	```sh	
+ 	apt install postgresql
+ 	```
+2. Install PGadmin:
 	- Install the public key for the repository (if not done previously):
 	```sh	
  	curl -fsS https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo gpg --dearmor -o /usr/share/keyrings/packages-pgadmin-org.gpg
@@ -282,7 +286,7 @@ Use PGAdmin to manage the information about the cluster.
 	```sh
 	sudo /usr/pgadmin4/bin/setup-web.sh
  	```
-2. Create new user mtdmanager
-3. Create new db named mtdmanager with  mtdmanager as owner
-4. Modify the `pgadmin.sql` (row 307-309 with the IP of the nodes of the cluster) in `/miscConfig`
+3. Create new user mtdmanager
+4. Create new db named mtdmanager with  mtdmanager as owner
+5. Modify the `pgadmin.sql` (row 307-309 with the IP of the nodes of the cluster) in `/miscConfig`
 delete (delete force) the mtdmanager db and recreate it again the db using the file via the query tool of pgadmin (to solve some conflicts)
