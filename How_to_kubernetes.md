@@ -290,4 +290,4 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
 4. Create new user mtdmanager
 5. Create new db named mtdmanager with  mtdmanager as owner
 6. Modify the `pgadmin.sql` (row 307-309 with the IP of the nodes of the cluster) in `/miscConfig`
-delete (delete force) the mtdmanager db and recreate it again the db using the file via the query tool of pgadmin (to solve some conflicts).
+7. To solve some conflicts delete (delete force) the mtdmanager db and recreate it again using the file via the query tool of pgadmin.
