@@ -1,0 +1,1529 @@
+--
+-- PostgreSQL database cluster dump
+--
+
+-- Started on 2024-10-24 16:16:37 CEST
+
+SET default_transaction_read_only = off;
+
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+
+--
+-- Roles
+--
+
+CREATE ROLE mtdmanager;
+ALTER ROLE mtdmanager WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION BYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:BP/cIWLWawPThonox8rvIA==$mAUZsxS/lXcn50JOk/YW7NW4NM6G2aSrol6gPehHQ40=:lXbxkeWl3glg11dH1m/Y1iPWF8qbMEvSK/xeAMMXFs4=';
+CREATE ROLE postgres;
+ALTER ROLE postgres WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION BYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:pnO2kAWwUBqbcBerzJwTzw==$bHL+pfoEpDg1pa9RTR2s0AyY8fNxatFqvFqXVSPsP64=:9rawP87tk9GsYoSOw6h12DO1unHQZysUmxeNSaXhl/w=';
+
+
+
+
+
+
+--
+-- Databases
+--
+
+--
+-- Database "template1" dump
+--
+
+\connect template1
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.13 (Ubuntu 14.13-0ubuntu0.22.04.1)
+-- Dumped by pg_dump version 14.13 (Ubuntu 14.13-0ubuntu0.22.04.1)
+
+-- Started on 2024-10-24 16:16:37 CEST
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+-- Completed on 2024-10-24 16:16:38 CEST
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- Database "mtdmanager" dump
+--
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.13 (Ubuntu 14.13-0ubuntu0.22.04.1)
+-- Dumped by pg_dump version 14.13 (Ubuntu 14.13-0ubuntu0.22.04.1)
+
+-- Started on 2024-10-24 16:16:38 CEST
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 3424 (class 1262 OID 16715)
+-- Name: mtdmanager; Type: DATABASE; Schema: -; Owner: mtdmanager
+--
+
+CREATE DATABASE mtdmanager WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE = 'en_US.UTF-8';
+
+
+ALTER DATABASE mtdmanager OWNER TO mtdmanager;
+
+\connect mtdmanager
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 6 (class 2615 OID 16716)
+-- Name: mtdmanager; Type: SCHEMA; Schema: -; Owner: mtdmanager
+--
+
+CREATE SCHEMA mtdmanager;
+
+
+ALTER SCHEMA mtdmanager OWNER TO mtdmanager;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 210 (class 1259 OID 16717)
+-- Name: deployment; Type: TABLE; Schema: mtdmanager; Owner: mtdmanager
+--
+
+CREATE TABLE mtdmanager.deployment (
+    name character varying(255) NOT NULL,
+    strategy integer NOT NULL,
+    namespace character varying(255),
+    id bigint NOT NULL,
+    type character varying(255),
+    enabled boolean
+);
+
+
+ALTER TABLE mtdmanager.deployment OWNER TO mtdmanager;
+
+--
+-- TOC entry 211 (class 1259 OID 16722)
+-- Name: deployment_id_seq; Type: SEQUENCE; Schema: mtdmanager; Owner: mtdmanager
+--
+
+CREATE SEQUENCE mtdmanager.deployment_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE mtdmanager.deployment_id_seq OWNER TO mtdmanager;
+
+--
+-- TOC entry 3425 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: deployment_id_seq; Type: SEQUENCE OWNED BY; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER SEQUENCE mtdmanager.deployment_id_seq OWNED BY mtdmanager.deployment.id;
+
+
+--
+-- TOC entry 212 (class 1259 OID 16723)
+-- Name: node; Type: TABLE; Schema: mtdmanager; Owner: mtdmanager
+--
+
+CREATE TABLE mtdmanager.node (
+    hostname character varying(255) NOT NULL,
+    ip_address character varying(255) NOT NULL,
+    id bigint NOT NULL,
+    role character varying(255),
+    available boolean DEFAULT false,
+    type character varying(255)
+);
+
+
+ALTER TABLE mtdmanager.node OWNER TO mtdmanager;
+
+--
+-- TOC entry 213 (class 1259 OID 16729)
+-- Name: node_id_seq; Type: SEQUENCE; Schema: mtdmanager; Owner: mtdmanager
+--
+
+CREATE SEQUENCE mtdmanager.node_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE mtdmanager.node_id_seq OWNER TO mtdmanager;
+
+--
+-- TOC entry 3426 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: node_id_seq; Type: SEQUENCE OWNED BY; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER SEQUENCE mtdmanager.node_id_seq OWNED BY mtdmanager.node.id;
+
+
+--
+-- TOC entry 214 (class 1259 OID 16730)
+-- Name: node_label; Type: TABLE; Schema: mtdmanager; Owner: mtdmanager
+--
+
+CREATE TABLE mtdmanager.node_label (
+    id integer NOT NULL,
+    key character varying(255),
+    value character varying(255),
+    id_node bigint NOT NULL
+);
+
+
+ALTER TABLE mtdmanager.node_label OWNER TO mtdmanager;
+
+--
+-- TOC entry 215 (class 1259 OID 16735)
+-- Name: node_label_id_seq; Type: SEQUENCE; Schema: mtdmanager; Owner: mtdmanager
+--
+
+CREATE SEQUENCE mtdmanager.node_label_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE mtdmanager.node_label_id_seq OWNER TO mtdmanager;
+
+--
+-- TOC entry 3427 (class 0 OID 0)
+-- Dependencies: 215
+-- Name: node_label_id_seq; Type: SEQUENCE OWNED BY; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER SEQUENCE mtdmanager.node_label_id_seq OWNED BY mtdmanager.node_label.id;
+
+
+--
+-- TOC entry 216 (class 1259 OID 16736)
+-- Name: parameter; Type: TABLE; Schema: mtdmanager; Owner: mtdmanager
+--
+
+CREATE TABLE mtdmanager.parameter (
+    id bigint NOT NULL,
+    key character varying(255) NOT NULL,
+    value character varying(255) NOT NULL
+);
+
+
+ALTER TABLE mtdmanager.parameter OWNER TO mtdmanager;
+
+--
+-- TOC entry 217 (class 1259 OID 16741)
+-- Name: parameter_id_seq; Type: SEQUENCE; Schema: mtdmanager; Owner: mtdmanager
+--
+
+CREATE SEQUENCE mtdmanager.parameter_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE mtdmanager.parameter_id_seq OWNER TO mtdmanager;
+
+--
+-- TOC entry 3428 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: parameter_id_seq; Type: SEQUENCE OWNED BY; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER SEQUENCE mtdmanager.parameter_id_seq OWNED BY mtdmanager.parameter.id;
+
+
+--
+-- TOC entry 218 (class 1259 OID 16742)
+-- Name: service_account; Type: TABLE; Schema: mtdmanager; Owner: mtdmanager
+--
+
+CREATE TABLE mtdmanager.service_account (
+    id integer NOT NULL,
+    name character varying,
+    namespace character varying,
+    deployment integer
+);
+
+
+ALTER TABLE mtdmanager.service_account OWNER TO mtdmanager;
+
+--
+-- TOC entry 219 (class 1259 OID 16747)
+-- Name: strategy; Type: TABLE; Schema: mtdmanager; Owner: mtdmanager
+--
+
+CREATE TABLE mtdmanager.strategy (
+    name character varying(255) NOT NULL,
+    enabled boolean NOT NULL,
+    scheduling character varying(255) NOT NULL,
+    id bigint NOT NULL
+);
+
+
+ALTER TABLE mtdmanager.strategy OWNER TO mtdmanager;
+
+--
+-- TOC entry 220 (class 1259 OID 16752)
+-- Name: strategy_id_seq; Type: SEQUENCE; Schema: mtdmanager; Owner: mtdmanager
+--
+
+CREATE SEQUENCE mtdmanager.strategy_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE mtdmanager.strategy_id_seq OWNER TO mtdmanager;
+
+--
+-- TOC entry 3429 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: strategy_id_seq; Type: SEQUENCE OWNED BY; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER SEQUENCE mtdmanager.strategy_id_seq OWNED BY mtdmanager.strategy.id;
+
+
+--
+-- TOC entry 221 (class 1259 OID 16753)
+-- Name: timeseries; Type: TABLE; Schema: mtdmanager; Owner: mtdmanager
+--
+
+CREATE TABLE mtdmanager.timeseries (
+    id_gateway character varying NOT NULL,
+    id_device character varying NOT NULL,
+    device_attribute character varying NOT NULL,
+    device_attribute_value character varying,
+    device_attribute_type character varying NOT NULL,
+    "timestamp" timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE mtdmanager.timeseries OWNER TO mtdmanager;
+
+--
+-- TOC entry 3236 (class 2604 OID 16801)
+-- Name: deployment id; Type: DEFAULT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.deployment ALTER COLUMN id SET DEFAULT nextval('mtdmanager.deployment_id_seq'::regclass);
+
+
+--
+-- TOC entry 3238 (class 2604 OID 16827)
+-- Name: node id; Type: DEFAULT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.node ALTER COLUMN id SET DEFAULT nextval('mtdmanager.node_id_seq'::regclass);
+
+
+--
+-- TOC entry 3239 (class 2604 OID 16761)
+-- Name: node_label id; Type: DEFAULT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.node_label ALTER COLUMN id SET DEFAULT nextval('mtdmanager.node_label_id_seq'::regclass);
+
+
+--
+-- TOC entry 3240 (class 2604 OID 16888)
+-- Name: parameter id; Type: DEFAULT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.parameter ALTER COLUMN id SET DEFAULT nextval('mtdmanager.parameter_id_seq'::regclass);
+
+
+--
+-- TOC entry 3241 (class 2604 OID 16914)
+-- Name: strategy id; Type: DEFAULT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.strategy ALTER COLUMN id SET DEFAULT nextval('mtdmanager.strategy_id_seq'::regclass);
+
+
+--
+-- TOC entry 3407 (class 0 OID 16717)
+-- Dependencies: 210
+-- Data for Name: deployment; Type: TABLE DATA; Schema: mtdmanager; Owner: mtdmanager
+--
+
+COPY mtdmanager.deployment (name, strategy, namespace, id, type, enabled) FROM stdin;
+cloud-app	1	default	1	cloud	t
+edge-gateway	1	default	19	edge	f
+edge-gateway2	1	default	21	edge	f
+\.
+
+
+--
+-- TOC entry 3409 (class 0 OID 16723)
+-- Dependencies: 212
+-- Data for Name: node; Type: TABLE DATA; Schema: mtdmanager; Owner: mtdmanager
+--
+
+COPY mtdmanager.node (hostname, ip_address, id, role, available, type) FROM stdin;
+edgenode2	192.168.1.57	12	edge	t	edge
+master	192.168.1.37	1	master	t	cloud
+worker	192.168.1.38	2	worker	t	cloud
+worker2	192.168.1.39	4	worker	t	cloud
+edgenode	10.0.2.15	3	edge	t	edge
+\.
+
+
+--
+-- TOC entry 3411 (class 0 OID 16730)
+-- Dependencies: 214
+-- Data for Name: node_label; Type: TABLE DATA; Schema: mtdmanager; Owner: mtdmanager
+--
+
+COPY mtdmanager.node_label (id, key, value, id_node) FROM stdin;
+1	name	master	1
+2	name	worker	2
+\.
+
+
+--
+-- TOC entry 3413 (class 0 OID 16736)
+-- Dependencies: 216
+-- Data for Name: parameter; Type: TABLE DATA; Schema: mtdmanager; Owner: mtdmanager
+--
+
+COPY mtdmanager.parameter (id, key, value) FROM stdin;
+1	period	60000
+\.
+
+
+--
+-- TOC entry 3415 (class 0 OID 16742)
+-- Dependencies: 218
+-- Data for Name: service_account; Type: TABLE DATA; Schema: mtdmanager; Owner: mtdmanager
+--
+
+COPY mtdmanager.service_account (id, name, namespace, deployment) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3416 (class 0 OID 16747)
+-- Dependencies: 219
+-- Data for Name: strategy; Type: TABLE DATA; Schema: mtdmanager; Owner: mtdmanager
+--
+
+COPY mtdmanager.strategy (name, enabled, scheduling, id) FROM stdin;
+service-account-shuffling	f	fixed	4
+dynamic-pod-replica	f	fixed	2
+node-migration	f	fixed	3
+ip-shuffling	f	fixed	1
+\.
+
+
+--
+-- TOC entry 3418 (class 0 OID 16753)
+-- Dependencies: 221
+-- Data for Name: timeseries; Type: TABLE DATA; Schema: mtdmanager; Owner: mtdmanager
+--
+
+COPY mtdmanager.timeseries (id_gateway, id_device, device_attribute, device_attribute_value, device_attribute_type, "timestamp") FROM stdin;
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:16:24.137
+gateway1	device1	temperature	22 °C	number	2023-03-16 23:16:29.109
+gateway1	device1	temperature	22 °C	number	2023-03-16 23:16:34.129
+gateway1	device1	temperature	20 °C	number	2023-03-16 23:16:39.145
+gateway1	device1	temperature	22 °C	number	2023-03-16 23:16:44.308
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:16:49.467
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:16:54.619
+gateway1	device1	temperature	23 °C	number	2023-03-16 23:16:59.78
+gateway1	device1	temperature	22 °C	number	2023-03-16 23:17:04.786
+gateway1	device1	temperature	22 °C	number	2023-03-16 23:17:09.791
+gateway1	device1	temperature	22 °C	number	2023-03-16 23:17:14.812
+gateway1	device1	temperature	20 °C	number	2023-03-16 23:17:19.802
+gateway1	device1	temperature	23 °C	number	2023-03-16 23:17:24.972
+gateway1	device1	temperature	22 °C	number	2023-03-16 23:17:30.152
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:17:35.303
+gateway1	device1	temperature	20 °C	number	2023-03-16 23:17:40.452
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:17:45.458
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:17:50.471
+gateway1	device1	temperature	23 °C	number	2023-03-16 23:17:55.489
+gateway1	device1	temperature	22 °C	number	2023-03-16 23:18:00.493
+gateway1	device1	temperature	22 °C	number	2023-03-16 23:18:05.652
+gateway1	device1	temperature	20 °C	number	2023-03-16 23:18:10.808
+gateway1	device1	temperature	23 °C	number	2023-03-16 23:18:15.968
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:18:21.118
+gateway1	device1	temperature	24 °C	number	2023-03-16 23:18:26.139
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:18:31.148
+gateway1	device1	temperature	22 °C	number	2023-03-16 23:18:36.162
+gateway1	device1	temperature	22 °C	number	2023-03-16 23:18:41.167
+gateway1	device1	temperature	20 °C	number	2023-03-16 23:18:51.606
+gateway1	device1	temperature	23 °C	number	2023-03-16 23:18:56.758
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:19:01.909
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:29:54.576
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:29:59.543
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:30:04.548
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:30:09.548
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:30:14.571
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:30:19.588
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:30:24.614
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:30:29.63
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:30:34.639
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:30:39.643
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:30:44.642
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:30:49.64
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:30:54.666
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:30:59.684
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:31:04.71
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:31:09.731
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:31:14.739
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:31:19.757
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:31:24.755
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:31:29.76
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:31:34.779
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:31:39.8
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:31:44.822
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:31:49.842
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:31:54.85
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:31:59.853
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:32:04.852
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:32:09.854
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:32:14.873
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:32:19.894
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:32:24.916
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:32:29.938
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:32:34.945
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:32:39.947
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:32:44.95
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:32:49.947
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:32:54.973
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:32:59.994
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:33:05.016
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:33:10.038
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:33:15.039
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:33:20.045
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:33:25.05
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:33:30.049
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:33:35.068
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:33:40.089
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:33:45.11
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:33:50.131
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:33:55.141
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:34:00.141
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:34:05.144
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:34:10.143
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:34:15.163
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:34:20.183
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:34:25.203
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:34:30.222
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:34:35.231
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:34:40.228
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:34:45.235
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:34:50.236
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:34:55.252
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:35:00.275
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:35:05.295
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:35:10.315
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:35:15.322
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:35:20.325
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:35:25.329
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:35:30.331
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:35:35.347
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:35:40.373
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:35:45.392
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:35:50.412
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:35:55.42
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:36:00.42
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:36:05.426
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:36:10.425
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:36:15.444
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:36:20.466
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:36:25.488
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:36:30.508
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:36:35.512
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:36:40.511
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:36:45.516
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:36:50.518
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:36:55.54
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:37:00.562
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:37:05.592
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:37:10.612
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:37:15.615
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:37:20.615
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:37:25.62
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:37:30.623
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:37:35.645
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:37:40.664
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:37:45.692
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:37:50.713
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:37:55.719
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:38:00.72
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:38:05.723
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:38:10.725
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:38:15.747
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:38:20.768
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:38:25.791
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:38:30.811
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:38:35.816
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:38:40.821
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:38:45.817
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:38:50.825
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:38:55.847
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:39:00.868
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:39:05.897
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:39:10.916
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:39:15.922
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:39:20.922
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:39:25.927
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:39:30.927
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:39:35.945
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:39:40.962
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:39:45.981
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:39:51.002
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:39:56.004
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:40:01.004
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:40:06.01
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:40:11.012
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:40:16.031
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:40:21.051
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:40:26.071
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:40:31.096
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:40:36.104
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:40:41.105
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:40:46.108
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:40:51.105
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:40:56.123
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:41:01.142
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:41:06.165
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:41:11.189
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:41:16.196
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:41:21.198
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:41:26.2
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:41:31.202
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:41:36.217
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:41:41.244
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:41:46.269
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:41:51.294
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:41:56.303
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:42:01.306
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:42:06.309
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:42:11.312
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:42:16.327
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:42:21.347
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:42:26.37
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:42:31.391
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:42:36.4
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:42:41.402
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:42:46.404
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:42:51.405
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:42:56.425
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:43:01.444
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:43:06.464
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:43:11.485
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:43:16.492
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:43:21.494
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:43:26.498
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:43:31.498
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:43:36.527
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:43:41.545
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:43:46.565
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:43:51.585
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:43:56.592
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:44:01.592
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:44:06.597
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:44:11.597
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:44:16.621
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:44:21.638
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:44:26.664
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:44:31.685
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:44:36.692
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:44:41.696
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:44:46.699
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:44:51.697
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:44:56.716
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:45:01.737
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:45:06.758
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:45:11.778
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:45:16.785
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:45:21.786
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:45:26.79
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:45:31.787
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:45:36.808
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:45:41.834
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:45:46.854
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:45:51.881
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:45:56.885
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:46:01.892
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:46:06.893
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:46:11.895
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:46:16.91
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:46:21.932
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:46:26.952
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:46:31.98
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:46:36.98
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:46:41.985
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:46:46.985
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:46:51.985
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:46:57.004
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:47:02.023
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:47:07.044
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:47:12.063
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:47:17.068
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:47:22.073
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:47:27.075
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:47:32.078
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:47:37.094
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:47:42.115
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:47:47.134
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:47:52.153
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:47:57.161
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:48:02.163
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:48:07.166
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:48:12.167
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:48:17.184
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:48:22.21
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:48:27.236
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:48:32.257
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:48:37.259
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:48:42.265
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:48:47.264
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:48:52.265
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:48:57.283
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:49:02.303
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:49:07.321
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:49:12.34
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:49:17.347
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:49:22.342
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:49:27.35
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:49:32.352
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:49:37.369
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:49:42.388
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:49:47.417
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:49:52.44
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:49:57.445
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:50:02.445
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:50:07.452
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:50:12.452
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:50:17.47
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:50:22.492
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:50:27.514
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:50:32.534
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:50:37.536
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:50:42.537
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:50:47.538
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:50:52.541
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:50:57.564
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:51:02.584
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:51:07.603
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:51:12.624
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:51:17.625
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:51:22.625
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:51:27.627
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:51:32.627
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:51:37.647
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:51:42.666
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:51:47.686
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:51:52.709
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:51:57.71
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:52:02.716
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:52:07.714
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:52:12.715
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:52:17.738
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:52:22.757
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:52:27.776
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:52:32.795
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:52:37.796
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:52:42.798
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:52:47.799
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:52:52.803
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:52:57.821
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:53:02.84
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:53:07.865
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:53:12.89
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:53:17.896
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:53:22.893
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:53:27.898
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:53:32.9
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:53:37.922
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:53:42.948
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:53:47.972
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:53:52.992
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:53:57.997
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:54:03
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:54:07.998
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:54:13.002
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:54:18.025
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:54:23.044
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:54:28.064
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:54:33.084
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:54:38.085
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:54:43.086
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:54:48.09
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:54:53.09
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:54:58.112
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:55:03.134
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:55:08.156
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:55:13.176
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:55:18.177
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:55:23.178
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:55:28.184
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:55:33.189
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:55:38.203
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:55:43.224
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:55:48.246
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:55:53.265
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:55:58.272
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:56:03.273
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:56:08.277
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:56:13.279
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:56:18.297
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:56:23.322
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:56:28.343
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:56:33.362
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:56:38.369
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:56:43.371
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:56:48.369
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:56:53.374
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:56:58.393
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:57:03.409
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:57:08.434
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:57:13.455
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:57:18.461
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:57:23.463
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:57:28.462
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:57:33.461
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:57:38.484
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:57:43.509
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:57:48.536
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:57:53.557
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:57:58.563
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:58:03.563
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:58:08.562
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:58:13.567
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:58:18.587
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:58:23.605
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:58:28.626
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:58:33.653
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:58:38.658
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:58:43.662
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:58:48.657
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:58:53.659
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:58:58.677
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:59:03.698
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:59:08.72
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:59:13.739
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:59:18.748
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:59:23.742
+gateway1	device1	temperature	21 °C	number	2023-03-16 22:59:28.742
+gateway1	device1	temperature	23 °C	number	2023-03-16 22:59:33.744
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:59:38.768
+gateway1	device1	temperature	24 °C	number	2023-03-16 22:59:43.786
+gateway1	device1	temperature	22 °C	number	2023-03-16 22:59:48.806
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:59:53.828
+gateway1	device1	temperature	20 °C	number	2023-03-16 22:59:58.828
+gateway1	device1	temperature	24 °C	number	2023-03-16 23:00:03.831
+gateway1	device1	temperature	20 °C	number	2023-03-16 23:00:08.83
+gateway1	device1	temperature	22 °C	number	2023-03-16 23:00:13.832
+gateway1	device1	temperature	24 °C	number	2023-03-16 23:00:18.85
+gateway1	device1	temperature	20 °C	number	2023-03-16 23:00:23.87
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:00:28.893
+gateway1	device1	temperature	24 °C	number	2023-03-16 23:00:33.914
+gateway1	device1	temperature	24 °C	number	2023-03-16 23:00:38.915
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:00:43.915
+gateway1	device1	temperature	23 °C	number	2023-03-16 23:00:48.916
+gateway1	device1	temperature	22 °C	number	2023-03-16 23:00:53.917
+gateway1	device1	temperature	24 °C	number	2023-03-16 23:00:58.947
+gateway1	device1	temperature	20 °C	number	2023-03-16 23:01:03.964
+gateway1	device1	temperature	22 °C	number	2023-03-16 23:01:08.982
+gateway1	device1	temperature	24 °C	number	2023-03-16 23:01:14
+gateway1	device1	temperature	23 °C	number	2023-03-16 23:01:19.002
+gateway1	device1	temperature	20 °C	number	2023-03-16 23:01:24.002
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:01:29.004
+gateway1	device1	temperature	24 °C	number	2023-03-16 23:01:34.004
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:01:39.025
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:01:44.042
+gateway1	device1	temperature	23 °C	number	2023-03-16 23:01:49.061
+gateway1	device1	temperature	20 °C	number	2023-03-16 23:01:54.08
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:01:59.082
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:02:04.082
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:02:09.083
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:02:14.084
+gateway1	device1	temperature	24 °C	number	2023-03-16 23:02:19.108
+gateway1	device1	temperature	24 °C	number	2023-03-16 23:02:24.13
+gateway1	device1	temperature	20 °C	number	2023-03-16 23:02:29.147
+gateway1	device1	temperature	23 °C	number	2023-03-16 23:02:34.167
+gateway1	device1	temperature	24 °C	number	2023-03-16 23:02:39.166
+gateway1	device1	temperature	22 °C	number	2023-03-16 23:02:44.17
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:02:49.172
+gateway1	device1	temperature	21 °C	number	2023-03-16 23:02:54.172
+gateway1	device1	temperature	20 °C	number	2023-03-16 23:02:59.19
+gateway1	device1	temperature	24 °C	number	2023-03-16 23:03:04.206
+gateway1	device1	temperature	23 °C	number	2023-03-16 23:03:09.224
+gateway1	device1	temperature	20 °C	number	2023-03-16 23:03:14.242
+gateway1	device1	temperature	23 °C	number	2023-03-16 23:03:19.244
+gateway1	device1	temperature	24 °C	number	2023-03-16 23:03:24.244
+gateway1	device1	temperature	22 °C	number	2023-03-16 23:03:29.245
+gateway1	device1	temperature	24 °C	number	2023-03-16 23:03:34.246
+gateway1	device1	temperature	20 °C	number	2023-03-16 23:03:39.267
+gateway1	device1	temperature	24 °C	number	2023-03-16 23:03:44.286
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:01:23.208
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:01:28.181
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:01:33.203
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:01:38.211
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:01:43.212
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:01:48.212
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:01:53.22
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:01:58.238
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:02:03.257
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:02:08.281
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:02:13.299
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:02:18.3
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:02:23.302
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:02:28.305
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:02:33.306
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:02:38.329
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:02:43.348
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:02:48.369
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:02:53.387
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:02:58.389
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:03:03.389
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:03:08.392
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:03:13.394
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:03:18.42
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:03:23.441
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:03:28.464
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:03:33.488
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:03:38.493
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:03:43.494
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:03:48.496
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:03:53.497
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:03:58.517
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:04:03.536
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:04:08.555
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:04:13.577
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:04:18.579
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:04:23.58
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:04:28.582
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:04:33.582
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:04:38.605
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:04:43.623
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:04:48.641
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:04:53.663
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:04:58.664
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:05:03.666
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:05:08.667
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:05:13.669
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:05:18.689
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:05:23.712
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:05:28.731
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:05:33.754
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:05:38.758
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:05:43.757
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:05:48.759
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:05:53.76
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:05:58.784
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:06:03.807
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:06:08.832
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:06:13.851
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:06:18.853
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:06:23.854
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:06:28.855
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:06:33.856
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:06:38.879
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:06:43.9
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:06:48.922
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:06:53.942
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:06:58.943
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:07:03.943
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:07:08.944
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:07:13.945
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:07:18.968
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:07:23.994
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:07:29.014
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:07:34.035
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:07:39.035
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:07:44.036
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:07:49.038
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:07:54.039
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:07:59.067
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:08:04.085
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:08:09.103
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:08:14.123
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:08:19.123
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:08:24.125
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:08:29.129
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:08:34.131
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:08:39.148
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:08:44.168
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:08:49.187
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:08:54.207
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:08:59.207
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:09:04.209
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:09:09.21
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:09:14.212
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:09:19.232
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:09:24.253
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:09:29.276
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:09:34.297
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:09:39.299
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:09:44.3
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:09:49.302
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:09:54.304
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:09:59.321
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:10:04.343
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:10:09.365
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:10:14.388
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:10:19.389
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:10:24.39
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:10:29.392
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:10:34.393
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:10:39.413
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:10:44.43
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:10:49.452
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:10:54.471
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:10:59.477
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:11:04.478
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:11:09.479
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:11:14.485
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:11:19.5
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:11:24.525
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:11:29.543
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:11:34.566
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:11:39.568
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:11:44.568
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:11:49.57
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:11:54.572
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:11:59.592
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:12:04.609
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:12:09.628
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:12:14.647
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:12:19.648
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:12:24.649
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:12:29.65
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:12:34.651
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:12:39.672
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:12:44.689
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:12:49.711
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:12:54.729
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:12:59.731
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:13:04.733
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:13:09.734
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:13:14.735
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:13:19.755
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:13:24.775
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:13:29.796
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:13:34.819
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:13:39.821
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:13:44.82
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:13:49.823
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:13:54.823
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:13:59.846
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:14:04.865
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:14:09.885
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:14:14.904
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:14:19.906
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:14:24.908
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:14:29.908
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:14:34.909
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:14:39.928
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:14:44.949
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:14:49.971
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:14:54.991
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:14:59.993
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:15:04.994
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:15:09.993
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:15:14.998
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:15:20.018
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:15:25.037
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:15:30.059
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:15:35.08
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:15:40.08
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:15:45.082
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:15:50.084
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:15:55.084
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:16:00.109
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:16:05.13
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:16:10.15
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:16:15.172
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:16:20.173
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:16:25.174
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:16:30.175
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:16:35.176
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:16:40.197
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:16:45.218
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:16:50.242
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:16:55.265
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:17:00.267
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:17:05.272
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:17:10.269
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:17:15.271
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:17:20.293
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:17:25.312
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:17:30.329
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:17:35.35
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:17:40.351
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:17:45.353
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:17:50.354
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:17:55.355
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:18:00.374
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:18:05.396
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:18:10.415
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:18:15.436
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:18:20.437
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:18:25.438
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:18:30.439
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:18:35.44
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:18:40.46
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:18:45.478
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:18:50.5
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:18:55.524
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:19:00.525
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:19:05.526
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:19:10.527
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:19:15.53
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:19:20.552
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:19:25.569
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:19:30.589
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:19:35.609
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:19:40.611
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:19:45.612
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:19:50.614
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:19:55.614
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:20:00.637
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:20:05.658
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:20:10.682
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:20:15.702
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:20:20.703
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:20:25.704
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:20:30.707
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:20:35.707
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:20:40.726
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:20:45.75
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:20:50.77
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:20:55.789
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:21:00.79
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:21:05.791
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:21:10.794
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:21:15.794
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:21:20.814
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:21:25.833
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:21:30.852
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:21:35.873
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:21:40.874
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:21:45.876
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:21:50.877
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:21:55.878
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:22:00.898
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:22:05.917
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:22:10.938
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:22:15.961
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:22:20.961
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:22:25.962
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:22:30.963
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:22:35.965
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:22:40.986
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:22:46.003
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:22:51.02
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:22:56.041
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:23:01.041
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:23:06.043
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:23:11.044
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:23:16.045
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:23:21.065
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:23:26.086
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:23:31.108
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:23:36.129
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:23:41.129
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:23:46.13
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:23:51.132
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:23:56.134
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:24:01.152
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:24:06.171
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:24:11.189
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:24:16.212
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:24:21.215
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:24:26.215
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:24:31.218
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:24:36.218
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:24:41.238
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:24:46.256
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:24:51.275
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:24:56.294
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:25:01.294
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:25:06.295
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:25:11.298
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:25:16.297
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:25:21.318
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:25:26.34
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:25:31.36
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:25:36.382
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:25:41.385
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:25:46.385
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:25:51.389
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:25:56.388
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:26:01.408
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:26:06.428
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:26:11.448
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:26:16.473
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:26:21.488
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:26:26.489
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:26:31.491
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:26:36.491
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:26:41.516
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:26:46.539
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:26:51.559
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:26:56.578
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:27:01.579
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:27:06.58
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:27:11.583
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:27:16.583
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:27:21.605
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:27:26.626
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:27:31.647
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:27:36.671
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:27:41.671
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:27:46.672
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:27:51.673
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:27:56.676
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:28:01.699
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:28:06.721
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:28:11.74
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:28:16.759
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:28:21.761
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:28:26.762
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:28:31.763
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:28:36.764
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:28:41.785
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:28:46.809
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:28:51.827
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:28:56.846
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:29:01.85
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:29:06.853
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:29:11.859
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:29:16.854
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:29:21.88
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:29:26.924
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:29:31.944
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:29:36.965
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:29:41.97
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:29:46.97
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:29:51.971
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:29:56.976
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:30:01.993
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:30:07.02
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:30:12.026
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:30:17.051
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:30:22.059
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:30:27.058
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:30:32.058
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:30:37.061
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:30:42.093
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:30:47.116
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:30:52.142
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:30:57.164
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:31:02.166
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:31:07.17
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:31:12.169
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:31:17.174
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:31:22.194
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:31:27.214
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:31:32.241
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:31:37.262
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:31:42.255
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:31:47.256
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:31:52.257
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:31:57.259
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:32:02.276
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:32:07.3
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:32:12.319
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:32:17.344
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:32:22.351
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:32:27.353
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:32:32.357
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:32:37.358
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:32:42.376
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:32:47.392
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:32:52.413
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:32:57.444
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:33:02.449
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:33:07.449
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:33:12.452
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:33:17.45
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:33:22.474
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:33:27.492
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:33:32.517
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:33:37.537
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:33:42.545
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:33:47.545
+gateway1	device1	temperature	22 °C	number	2023-03-17 09:33:52.548
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:33:57.548
+gateway1	device1	temperature	24 °C	number	2023-03-17 09:34:02.577
+gateway1	device1	temperature	20 °C	number	2023-03-17 09:34:07.593
+gateway1	device1	temperature	21 °C	number	2023-03-17 09:34:12.617
+gateway1	device1	temperature	23 °C	number	2023-03-17 09:34:17.642
+\.
+
+
+--
+-- TOC entry 3430 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: deployment_id_seq; Type: SEQUENCE SET; Schema: mtdmanager; Owner: mtdmanager
+--
+
+SELECT pg_catalog.setval('mtdmanager.deployment_id_seq', 21, true);
+
+
+--
+-- TOC entry 3431 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: node_id_seq; Type: SEQUENCE SET; Schema: mtdmanager; Owner: mtdmanager
+--
+
+SELECT pg_catalog.setval('mtdmanager.node_id_seq', 12, true);
+
+
+--
+-- TOC entry 3432 (class 0 OID 0)
+-- Dependencies: 215
+-- Name: node_label_id_seq; Type: SEQUENCE SET; Schema: mtdmanager; Owner: mtdmanager
+--
+
+SELECT pg_catalog.setval('mtdmanager.node_label_id_seq', 2, true);
+
+
+--
+-- TOC entry 3433 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: parameter_id_seq; Type: SEQUENCE SET; Schema: mtdmanager; Owner: mtdmanager
+--
+
+SELECT pg_catalog.setval('mtdmanager.parameter_id_seq', 1, true);
+
+
+--
+-- TOC entry 3434 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: strategy_id_seq; Type: SEQUENCE SET; Schema: mtdmanager; Owner: mtdmanager
+--
+
+SELECT pg_catalog.setval('mtdmanager.strategy_id_seq', 5, true);
+
+
+--
+-- TOC entry 3244 (class 2606 OID 16803)
+-- Name: deployment deployment_pkey; Type: CONSTRAINT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.deployment
+    ADD CONSTRAINT deployment_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3246 (class 2606 OID 16850)
+-- Name: node node_ip_address_key; Type: CONSTRAINT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.node
+    ADD CONSTRAINT node_ip_address_key UNIQUE (ip_address);
+
+
+--
+-- TOC entry 3250 (class 2606 OID 16769)
+-- Name: node_label node_label_pkey; Type: CONSTRAINT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.node_label
+    ADD CONSTRAINT node_label_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3248 (class 2606 OID 16829)
+-- Name: node node_pkey; Type: CONSTRAINT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.node
+    ADD CONSTRAINT node_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3252 (class 2606 OID 16899)
+-- Name: parameter parameter_key_key; Type: CONSTRAINT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.parameter
+    ADD CONSTRAINT parameter_key_key UNIQUE (key);
+
+
+--
+-- TOC entry 3254 (class 2606 OID 16890)
+-- Name: parameter parameter_pkey; Type: CONSTRAINT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.parameter
+    ADD CONSTRAINT parameter_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3256 (class 2606 OID 16777)
+-- Name: service_account service_account_pkey; Type: CONSTRAINT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.service_account
+    ADD CONSTRAINT service_account_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3258 (class 2606 OID 16930)
+-- Name: strategy strategy_name_key; Type: CONSTRAINT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.strategy
+    ADD CONSTRAINT strategy_name_key UNIQUE (name);
+
+
+--
+-- TOC entry 3260 (class 2606 OID 16916)
+-- Name: strategy strategy_pkey; Type: CONSTRAINT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.strategy
+    ADD CONSTRAINT strategy_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3262 (class 2606 OID 16783)
+-- Name: timeseries timeseries_pkey; Type: CONSTRAINT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.timeseries
+    ADD CONSTRAINT timeseries_pkey PRIMARY KEY ("timestamp");
+
+
+--
+-- TOC entry 3264 (class 2606 OID 16785)
+-- Name: timeseries timeseries_timestamp_key; Type: CONSTRAINT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.timeseries
+    ADD CONSTRAINT timeseries_timestamp_key UNIQUE ("timestamp");
+
+
+--
+-- TOC entry 3265 (class 2606 OID 16917)
+-- Name: deployment deployment_strategy_id_fk; Type: FK CONSTRAINT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.deployment
+    ADD CONSTRAINT deployment_strategy_id_fk FOREIGN KEY (strategy) REFERENCES mtdmanager.strategy(id);
+
+
+--
+-- TOC entry 3266 (class 2606 OID 16865)
+-- Name: node_label node_label_node_id_fk; Type: FK CONSTRAINT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.node_label
+    ADD CONSTRAINT node_label_node_id_fk FOREIGN KEY (id_node) REFERENCES mtdmanager.node(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3267 (class 2606 OID 16804)
+-- Name: service_account service_account_deployment_id_fk; Type: FK CONSTRAINT; Schema: mtdmanager; Owner: mtdmanager
+--
+
+ALTER TABLE ONLY mtdmanager.service_account
+    ADD CONSTRAINT service_account_deployment_id_fk FOREIGN KEY (deployment) REFERENCES mtdmanager.deployment(id);
+
+
+-- Completed on 2024-10-24 16:16:39 CEST
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- Database "postgres" dump
+--
+
+\connect postgres
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.13 (Ubuntu 14.13-0ubuntu0.22.04.1)
+-- Dumped by pg_dump version 14.13 (Ubuntu 14.13-0ubuntu0.22.04.1)
+
+-- Started on 2024-10-24 16:16:39 CEST
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+-- Completed on 2024-10-24 16:16:40 CEST
+
+--
+-- PostgreSQL database dump complete
+--
+
+-- Completed on 2024-10-24 16:16:40 CEST
+
+--
+-- PostgreSQL database cluster dump complete
+--
+
