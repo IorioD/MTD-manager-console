@@ -288,7 +288,7 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
  	```
 3. `127.0.0.1/pgadmin4` is the url to connecto to the db dashboard
 4. If necessary create a new server named localhost with `localhost` as adress, `5432` as port and `postgres` as username
-	4.1.  if necessary set a password for the postgres username with the following commands:
+4.1.  if necessary set a password for the postgres username with the following commands:
  	```sh
 	sudo -u postgres psql
  	```
