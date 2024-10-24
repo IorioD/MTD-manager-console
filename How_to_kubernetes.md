@@ -297,7 +297,7 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
  	ALTER USER postgres PASSWORD 'postgres';
  	```
  	and use the new password in the pgadmin UI in the proper field
-6. Create new user mtdmanager
+6. Create new user mtdmanager with all the privileges
 7. Create new db named mtdmanager with  mtdmanager as owner
 8. Modify the `pgadmin.sql` (row 307-309 with the IP of the nodes of the cluster) in `/miscConfig`
 9. To solve some conflicts delete (delete force) the mtdmanager db and recreate it again using the file via the query tool of pgadmin.
