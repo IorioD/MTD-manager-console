@@ -20,6 +20,6 @@ In `ClusterService`:
 In `ClusrterController`:
   - eventually change the frontend origin (row 24) if you plan to deploy the application on something different from `http://localhost:8080`
 
-Once everything is set, just execute `./build-and-rin.sh` to perform:
+Once everything is set, just execute `./build-and-run.sh` to perform:
   - building: mvn clean install
   - execution: java -jar ./target/mtd-manager.jar
