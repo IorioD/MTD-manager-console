@@ -11,7 +11,7 @@ In `application.properties`:
 To make the application able to collect node metrics:
   - apply a permanent port forwarding with `NodePortPromete.yaml` (in mtd-manager/miscConfig) using the command
     ```sh
-    kubectl apply -f NodePortPromete.yaml
+    kubectl apply -f NodePortProme.yaml
     ```
     
 In `ClusterService`:
