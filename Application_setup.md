@@ -26,6 +26,6 @@ sudo chmod +x build-and-run.sh
 ```
 and then run `./build-and-run.sh` to perform:
   - building: mvn clean install
-  - execution: java -jar ./target/mtd-manager.jar\
+  - execution: java -jar ./target/mtd-manager.jar \
 
 Now you can connect to http://localhost:8080 to access the MTD console.
