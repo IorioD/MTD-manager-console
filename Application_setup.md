@@ -17,6 +17,10 @@ To make the application able to collect node metrics:
 In `ClusterService`:
   - change the ip of `PROMETHEUS_URL` to the master node IP
 
+To see the metrics without using the app, you can visit 
+  - http://<MASTER_NODE_IP>:30090/graph to perform the queries
+  - http://<MASTER_NODE_IP>:30090/targets to see the targets installed on each node
+
 In `ClusrterController`:
   - eventually change the frontend origin (row 24) if you plan to deploy the application on something different from http://localhost:8080
 
