@@ -9,7 +9,7 @@ In `application.properties`:
       ```
       
 To make the application able to collect node metrics:
-  - apply a permanent port forwarding with `NodePortPromete.yaml` (in mtd-manager/miscConfig) using the command
+  - apply a permanent port forwarding with `NodePortProme.yaml` (in mtd-manager/miscConfig) using the command
     ```sh
     kubectl apply -f NodePortProme.yaml
     ```
@@ -18,8 +18,13 @@ In `ClusterService`:
   - change the ip of `PROMETHEUS_URL` to the master node IP
 
 In `ClusrterController`:
-  - eventually change the frontend origin (row 24) if you plan to deploy the application on something different from `http://localhost:8080`
+  - eventually change the frontend origin (row 24) if you plan to deploy the application on something different from http://localhost:8080
 
-Once everything is set, just execute `./build-and-run.sh` to perform:
+Once everything is set, execute the following command in the main folder:
+```sh
+sudo chmod +x build-and-run.sh
+```
+and then run `./build-and-run.sh` to perform:
   - building: mvn clean install
   - execution: java -jar ./target/mtd-manager.jar
+Now you can connect to http://localhost:8080 to access the MTD console.
