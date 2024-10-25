@@ -125,7 +125,7 @@ e.g.
 From now on, you’ll have a cluster with 3 cloud-nodes and 1 edge-node with the kubesphere console installed on the master node (if you need more than one edge, repeat steps 2 and 3).
 
 ## 5. Cloud-app-db setup
-(To be installed on one or more worker)
+To be installed on one or more worker. From now on, every installation process must be executed on the master node via the kubesphere console. 
 1. Create new workload (`application workloads ->workloads`) cloud-app-db:
 	- Basic info:
 	- Name: `cloud-app-db`
