@@ -3,7 +3,7 @@
 - To use this configuration, you need a host machine with at least 32 GB of RAM and a CPU that supports vierualization.
 - Each listed command must be executed in superuser mode.
 
-## 1. VM Setup
+## 1. VM Setup minimum requirements
 
 | VM       | CPU | RAM (GB) | Disk (GB) | OS        |
 |----------|-----|----------|-----------|-----------|
