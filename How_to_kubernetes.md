@@ -170,7 +170,7 @@ This app simulates a situation in which the edge node sends temperature to the n
 	- The port 31215 is the one of the cloud-db-service (`application workloads ->service`)
 
 ## 7. Temperature mapper setup
-This app simulates a temperature sensor on the edge node that sends data to the cluster. The code used is `temp-demo.go` in `/miscConfig/edge`.
+This app simulates a temperature sensor on the edge node that sends data to the cluster. The code used is `temp-demo.go` in `/miscConfig/edge` (for deployment reference see [Deploymetn of Kube-edge temperature mapper](https://blog.csdn.net/w13657909078/article/details/120342636) and for architectural details see [KubeEdge environment](https://blog.csdn.net/w13657909078/article/details/120141490?spm=1001.2014.3001.5501)).
 1. Create a new workload as before:
 	- Name: `temp-mapper`
 	- Project: `default`
