@@ -150,7 +150,7 @@ To be installed on one or more worker. From now on, every installation process m
 	```
  
 ## 6. Cloud-app setup
-This app simulates a situation in which the edge node sends temperature to the node that processes the information.
+This app simulates a situation in which the edge node sends temperature to the node that processes the information (source [Cloud-app-demo](https://github.com/vittolibre/mtd-cloud-app)).
 1. Create new workload (application workloads ->workloads) cloud-app as before: 
 	- Name: `cloud-app`
 	- Project: `default`
