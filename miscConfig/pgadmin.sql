@@ -100,6 +100,7 @@ CREATE TABLE mtdmanager.node (
     id integer NOT NULL,
     role character varying,
     available boolean DEFAULT false
+    type character varying
 );
 
 
@@ -304,9 +305,9 @@ ALTER TABLE ONLY mtdmanager.strategy ALTER COLUMN id SET DEFAULT nextval('mtdman
 -- Data for Name: node; Type: TABLE DATA; Schema: mtdmanager; Owner: mtdmanager
 --
 
-INSERT INTO mtdmanager.node VALUES ('master', '192.168.1.37', 1, 'master', true);
-INSERT INTO mtdmanager.node VALUES ('worker', '192.168.1.38', 2, 'worker', true);
-INSERT INTO mtdmanager.node VALUES ('edge', '10.0.2.15', 3, 'edge', true);
+INSERT INTO mtdmanager.node VALUES ('master', '192.168.1.37', 1, 'master', true, cloud);
+INSERT INTO mtdmanager.node VALUES ('worker', '192.168.1.38', 2, 'worker', true, cloud);
+INSERT INTO mtdmanager.node VALUES ('edge', '10.0.2.15', 3, 'edge', true, edge);
 
 
 --
