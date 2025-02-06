@@ -14,7 +14,7 @@
 | Edge_2   | 2   | 2        | 30        | Linux Lite|
 
 - For each VM, set a bridged network card.
-- Ensure that the IP of each VM is static.
+- Only if needed set the IP of each VM as static.
 - Install Docker on each VM.
 
 ## 2. Cluster Installation
