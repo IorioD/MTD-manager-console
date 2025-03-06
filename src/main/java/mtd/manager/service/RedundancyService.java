@@ -6,7 +6,6 @@ import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import mtd.manager.entity.Node;
 import mtd.manager.entity.Parameter;
 import mtd.manager.entity.Strategy;
 import mtd.manager.repository.*;
@@ -28,8 +27,6 @@ public class RedundancyService implements Runnable {
     private String masterUrl;
     @Autowired
     private DeploymentRepository deploymentRepository;
-    @Autowired
-    private NodeRepository nodeRepository;
     @SuppressWarnings("unused")
     @Autowired
     private NodeLabelRepository nodeLabelRepository;
@@ -93,16 +90,5 @@ public class RedundancyService implements Runnable {
 
     private int calculateDesiredReplicas(mtd.manager.entity.Deployment deployment) {
         return 2;
-    }
-
-    @SuppressWarnings("unused")
-    private void changeDeploymentNode(Deployment runningDeployment) {
-        Node node = nodeRepository.findRandomNode();
-
-        runningDeployment.getSpec()
-                .getTemplate()
-                .getSpec()
-                .setNodeName(node.getHostname());
-        log.info("Deployment node changed to: {}", node.getHostname());
     }
 }
