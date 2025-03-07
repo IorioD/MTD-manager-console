@@ -43,7 +43,7 @@ async function addDeployment(event) {
     }
 
     if (!isValidStrategy(data.strategy)) {
-        alert("Invalid strategy. Please select a valid strategy (between 1 and 4).");
+        alert("Invalid strategy. Please select a valid strategy.");
         return;
     }
 
