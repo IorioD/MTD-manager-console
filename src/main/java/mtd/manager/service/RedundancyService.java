@@ -27,9 +27,6 @@ public class RedundancyService implements Runnable {
     private String masterUrl;
     @Autowired
     private DeploymentRepository deploymentRepository;
-    @SuppressWarnings("unused")
-    @Autowired
-    private NodeLabelRepository nodeLabelRepository;
     @Autowired
     private StrategyRepository strategyRepository;
     @Autowired
