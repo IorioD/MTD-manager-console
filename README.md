@@ -40,7 +40,7 @@ the user can manage the deployment lifecycle (using add, edit and delete functio
 the user can enable one or more strtategy that will affect the enabled deployment.
 In this case the user cannot edit the strategy directly in the UI but needs to modify the source code to change/add implementation logic.
 Whenever a new strategy is created, the following steps are needed:
-1. the new .java file implementing the technique must be stored in the `service` folder
+1. the new classNameService.java file implementing the technique must be stored in the `service` folder
 2. insert in the PGAdmin database the new corresponding technique using
    ```sh
    INSERT INTO mtdmanager.strategy VALUES ('techniqueName', false, 'fixed', n);
@@ -51,7 +51,11 @@ Whenever a new strategy is created, the following steps are needed:
    <option value="n" ${deployment.strategy === n ? 'selected' : ''}>techniqueName</option>
    ```
    after row 35.
-4. in `add-deployment.js` update the function `isValidStrategy` (row 14) adding the number of the new technique 
+4. in `add-deployment.js` update the function `isValidStrategy` (row 14) adding the number of the new technique
+5. in `MTDStrategyService` add the new related thread to activate the service itself upon startup with
+   ```sh
+   new Thread(classNameService, "name_alias").start();
+   ```
 
 - In the `Parameter` page
 
