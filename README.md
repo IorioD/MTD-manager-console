@@ -51,6 +51,7 @@ Whenever a new strategy is created, the following steps are needed:
    <option value="n" ${deployment.strategy === n ? 'selected' : ''}>techniqueName</option>
    ```
    after row 35.
+4. in `add-deployment.js` update the function `isValidStrategy` (row 14) adding the number of the new technique 
 
 - In the `Parameter` page
 
