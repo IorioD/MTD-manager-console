@@ -53,7 +53,7 @@ Whenever a new strategy is created, the following steps are needed:
    after row 35.
 4. in `strats.js` script add the strategy description with the ID provided in the `strategyDescriptions` const:
    ```sh
-   ID: 'Strategy description'
+   ID: 'Strategy description',
    ```
 5. in `add-deployment.js` update the function `isValidStrategy` (row 14) adding the number of the new technique
 6. in `MTDStrategyService.java` add the new related thread to activate the service itself upon startup with
