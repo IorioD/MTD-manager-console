@@ -65,9 +65,10 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l 'app
 4. In Custom Resources, click on the right of `ks-installer` and select `Edit YAML`.
 5. In this YAML file, navigate to `edgeruntime` (around row 71).
 6. Change the value of `enabled` from `false` to `true`.
-7. Change the `advertiseAddress` to the IP of the master node to enable all KubeEdge components.
-8. Click `OK`.
-9. Run the following command to verify the installation:
+7. Change the value of `enabled` of `edgeruntime.kubeedge` from `false` to `true`.
+8. Change the `advertiseAddress` to the IP of the master node to enable all KubeEdge components.
+9. Click `OK`.
+10. Run the following command to verify the installation:
     ```sh
     kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l 'app in (ks-install, ks-installer)' -o jsonpath='{.items[0].metadata.name}') -f
     ```
@@ -137,7 +138,7 @@ To be installed on one or more worker. From now on, every installation process m
 	- No articular storage settings
 	- Advanced settings:
 		- select node on which the pod will be installed (`worker`)
-2. Click on the pod, go to `edit yaml` and add in `spec.container` (same indent of ports on row 29)
+2. In the workloads section, click on the pod, go to `edit yaml` and add in `spec.container` (same indent of ports on row 29)
 	```sh
         envFrom:
           - configMapRef:
