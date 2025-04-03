@@ -1,6 +1,58 @@
 # The following operations must be performed to correctly setup the environment to use the application. 
 N.B. You need to install the cluster first (follow the "[How to Kubernetes](How_to_kubernetes.md)" file).
 
+# The following operations must be performed to correctly setup the environment to use the application. 
+N.B. You need to install the cluster first (follow the "[How to Kubernetes](How_to_kubernetes.md)" file).
+
+## PGAdmin database setup
+
+Use PostgreSQL db with PGAdmin interface to manage the information about the cluster.
+1. Install postgreSQL
+	```sh	
+ 	apt install postgresql
+ 	```
+2. Install PGadmin:
+	- Install the public key for the repository (if not done previously):
+	```sh	
+ 	curl -fsS https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo gpg --dearmor -o /usr/share/keyrings/packages-pgadmin-org.gpg
+ 	```
+ 	- Create the repository configuration file:
+	```sh
+	sudo sh -c 'echo "deb [signed-by=/usr/share/keyrings/packages-pgadmin-org.gpg] https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'
+ 	```
+	- Install pgadmin for both desktop and web modes:
+	```sh
+ 	sudo apt install pgadmin4
+ 	```
+	- Install for desktop mode only:
+	```sh
+	sudo apt install pgadmin4-desktop
+ 	```
+	- Install for web mode only:
+	```sh
+	sudo apt install pgadmin4-web
+ 	```
+	- Configure the webserver, if you installed pgadmin4-web:
+	```sh
+	sudo /usr/pgadmin4/bin/setup-web.sh
+ 	```
+3. `127.0.0.1/pgadmin4` is the url to connecto to the db dashboard
+4.If necessary set a password for the postgres username with the following commands:
+ 	```sh
+	sudo -u postgres psql
+ 	```
+	then
+ 	```sh
+ 	ALTER USER postgres PASSWORD 'postgres';
+ 	```
+ 	and use the new password in the pgadmin UI in the proper field
+5. If necessary create a new server named localhost with `localhost` as adress, `5432` as port and `postgres` as username
+7. Create new user called `mtdmanager` with all the privileges (in the privileges panel of the user properties) and set `mtdmanager` as password (in the description panel in the user properties)
+8. Create new db named `mtdmanager` with  mtdmanager as owner
+9. Modify the `pgadmin.sql` (in `/miscConfig` row 307-309) with the IP of the nodes of the cluster and the names provided in the cluster configuration.
+10. To solve some conflicts delete (delete force) the mtdmanager db and recreate it again using the file via the query tool of pgadmin (button on the top left corner of the UI).
+
+## Code setup
 In `application.properties`:
   - `spring.datasource.url`=jdbc:postgresql://localhost:5432/mtdmanager simply indicates the endpoint of the PGAdmin db installed on the local master machine
   - `kubernetes.master.url`=https://192.168.1.37:6443 indicates the IP of the master node and the port to connect to the cluster obtained using
