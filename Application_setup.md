@@ -1,7 +1,7 @@
 # The following operations must be performed to correctly setup the environment to use the application. 
 N.B. You need to install the cluster first (follow the "[How to Kubernetes](How_to_kubernetes.md)" file).
 
-## PGAdmin database setup
+## 1. PGAdmin database setup
 
 Use PostgreSQL db with PGAdmin interface to manage the information about the cluster.
 1. Install postgreSQL
@@ -49,7 +49,7 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
 9. Modify the `pgadmin.sql` (in `/miscConfig` row 307-309) with the IP of the nodes of the cluster and the names provided in the cluster configuration.
 10. To solve some conflicts delete (delete force) the mtdmanager db and recreate it again using the file via the query tool of pgadmin (button on the top left corner of the UI).
 
-## Code setup
+## 2. Code setup
 In `application.properties`:
   - `spring.datasource.url`=jdbc:postgresql://localhost:5432/mtdmanager simply indicates the endpoint of the PGAdmin db installed on the local master machine
   - `kubernetes.master.url`=https://192.168.1.37:6443 indicates the IP of the master node and the port to connect to the cluster obtained using
