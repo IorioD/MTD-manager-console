@@ -1,9 +1,6 @@
 # The following operations must be performed to correctly setup the environment to use the application. 
 N.B. You need to install the cluster first (follow the "[How to Kubernetes](How_to_kubernetes.md)" file).
 
-# The following operations must be performed to correctly setup the environment to use the application. 
-N.B. You need to install the cluster first (follow the "[How to Kubernetes](How_to_kubernetes.md)" file).
-
 ## PGAdmin database setup
 
 Use PostgreSQL db with PGAdmin interface to manage the information about the cluster.
