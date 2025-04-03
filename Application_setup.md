@@ -34,7 +34,7 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
 	sudo /usr/pgadmin4/bin/setup-web.sh
  	```
 3. `127.0.0.1/pgadmin4` is the url to connecto to the db dashboard
-4.If necessary set a password for the postgres username with the following commands:
+4. Set a password for the postgres username with the following commands:
  	```sh
 	sudo -u postgres psql
  	```
@@ -43,7 +43,7 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
  	ALTER USER postgres PASSWORD 'postgres';
  	```
  	and use the new password in the pgadmin UI in the proper field
-5. If necessary create a new server named localhost with `localhost` as adress, `5432` as port and `postgres` as username
+5. Create a new server named localhost with `localhost` as adress, `5432` as port and `postgres` as username and password
 7. Create new user called `mtdmanager` with all the privileges (in the privileges panel of the user properties) and set `mtdmanager` as password (in the description panel in the user properties)
 8. Create new db named `mtdmanager` with  mtdmanager as owner
 9. Modify the `pgadmin.sql` (in `/miscConfig` row 307-309) with the IP of the nodes of the cluster and the names provided in the cluster configuration.
