@@ -1,6 +1,6 @@
 # In this file will be provided a guide to setup the Kubernetes cluster.
 
-- To use this configuration, you need a host machine with at least 32 GB of RAM and a CPU that supports vierualization.
+- To use this configuration, you need a host machine with at least 32 GB of RAM and a CPU that supports virtualization.
 - Each listed command must be executed in superuser mode.
 
 ## 1. VM Setup minimum requirements
@@ -16,6 +16,8 @@
 - For each VM, set a bridged network card.
 - Only if needed set the IP of each VM as static.
 - Install Docker on each VM.
+
+If you want better performances, you can use virtual machines with Ubuntu server installed.
 
 ## 2. Cluster Installation
 - Follow the guide: [KubeSphere Multi-node Installation](https://kubesphere.io/docs/v3.4/installing-on-linux/introduction/multioverview/)
@@ -53,6 +55,8 @@ with the IP matches with the IP of the master node.
 ```sh
 kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l 'app in (ks-install, ks-installer)' -o jsonpath='{.items[0].metadata.name}') -f
 ```
+
+If you want to install a custom application on the cluster not requiring edge nodes, you can skip to the [Application setup](Application_setup.md).
 
 ## 4. Adding an Edge Node in the Cluster
 [Add Edge Nodes Guide](https://www.kubesphere.io/docs/v3.4/installing-on-linux/cluster-operation/add-edge-nodes/)
