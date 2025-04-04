@@ -17,7 +17,7 @@
 - Only if needed set the IP of each VM as static.
 - Install Docker on each VM.
 
-If you want better performances, you can use virtual machines with Ubuntu server installed.
+If you want better performance, you can use virtual machines with Ubuntu server installed following [Ubuntu server guide](Ubuntu_Server.md).
 
 ## 2. Cluster Installation
 - Follow the guide: [KubeSphere Multi-node Installation](https://kubesphere.io/docs/v3.4/installing-on-linux/introduction/multioverview/)
