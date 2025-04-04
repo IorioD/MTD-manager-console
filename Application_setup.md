@@ -94,7 +94,7 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
 	./build-and-run.sh
 	```
 	to perform:
-  		- building: mvn clean install
-  		- execution: java -jar ./target/mtd-manager.jar  
+  	- building: mvn clean install
+  	- execution: java -jar ./target/mtd-manager.jar  
 
 	Now you can connect to http://localhost:8080 (or http://<MASTER_NODE_IP>:8080) to access the MTD console.
