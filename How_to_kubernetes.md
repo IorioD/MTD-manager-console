@@ -143,7 +143,7 @@ To be installed on one or more worker. From now on, every installation process m
 	- Advanced settings:
 		- select node on which the pod will be installed (`worker`)
 2. In the workloads section, click on the pod, go to `edit yaml` and add in `spec.container` (same indent of ports on row 29)
-	```sh
+	```yaml
         envFrom:
           - configMapRef:
               name: cloud-db-credentials
@@ -162,7 +162,7 @@ This app simulates a situation in which the edge node sends temperature to the n
 	- Docker hub: `vittolibre/cloud-app`
 	- Select the same `worker` node as before
 2. Click on the pod, go to `edit yaml` and add in `spec.container` (same indent of image on row 29)
-   	```sh
+   	```yaml
           env:
             - name: DB_URL
               value: 'jdbc:postgresql://192.168.1.38:31215/cloud'
@@ -224,7 +224,7 @@ This app simulates a temperature sensor on the edge node that sends data to the 
 	- Set the port to `5432` as port settings
 	- Select the `edge node` in the advanced settings
 2. Click on the pod, go to `edit yaml` and add in `spec.container` (same indent of ports on row 29)
-   	```sh
+   	```yaml
           envFrom:
             - configMapRef:
                 name: cloud-db-credentials
