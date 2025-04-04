@@ -31,7 +31,9 @@ the user can manage the node lifecycle (using add, edit and delete function).
 
 ![Alt text](miscConfig/addDeplo.png "Add Deployment Form")
 
-the user can manage the deployment lifecycle (using add, edit and delete function) and can decide on which deplyment enable the MTD.  
+the user can manage the deployment lifecycle (using add, edit and delete function) and can decide on which deplyment enable the MTD. 
+
+N.B. The name of the deployment is the corresponding workload. 
 
 - In the `Strategies List` page
 
