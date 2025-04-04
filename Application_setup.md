@@ -50,7 +50,7 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
 10. To solve some conflicts delete (delete force) the mtdmanager db and recreate it again using the file via the query tool of pgadmin (button on the top left corner of the UI).
 
 ## 2. Code setup
-In `application.properties`:
+In `application.properties` (src/main/resources/application.properties):
   - `spring.datasource.url`=jdbc:postgresql://localhost:5432/mtdmanager simply indicates the endpoint of the PGAdmin db installed on the local master machine
   - `kubernetes.master.url`=https://192.168.1.37:6443 indicates the IP of the master node and the port to connect to the cluster obtained using
       ```sh
@@ -63,15 +63,17 @@ To make the application able to collect node metrics:
     kubectl apply -f NodePortProme.yaml
     ```
     
-In `ClusterService`:
+In `ClusterService` (src/main/java/mtd/manager/service/ClusterService.java):
   - change the ip of `PROMETHEUS_URL` to the master node IP
 
 To see the metrics without using the app, you can visit 
   - http://<MASTER_NODE_IP>:30090/graph to perform the queries
   - http://<MASTER_NODE_IP>:30090/targets to see the targets installed on each node
 
-In `ClusrterController`:
+In `ClusrterController` (src/main/java/mtd/manager/controller/ClusterController.java):
   - eventually change the frontend origin (row 24) if you plan to deploy the application on something different from http://localhost:8080
+
+N.B. If you are using the server configuration, you need to connect to http://<MASTER_NODE_IP>:8080
 
 Once everything is set, execute the following command in the main folder:
 ```sh
