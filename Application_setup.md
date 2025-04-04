@@ -50,37 +50,51 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
 10. To solve some conflicts delete (delete force) the mtdmanager db and recreate it again using the file via the query tool of pgadmin (button on the top left corner of the UI).
 
 ## 2. Code setup
-In `application.properties` (src/main/resources/application.properties):
-  - `spring.datasource.url`=jdbc:postgresql://localhost:5432/mtdmanager simply indicates the endpoint of the PGAdmin db installed on the local master machine
-  - `kubernetes.master.url`=https://192.168.1.37:6443 indicates the IP of the master node and the port to connect to the cluster obtained using
-      ```sh
-      kubectl describe svc kubernetes
-      ```
+1. In `application.properties` (src/main/resources/application.properties):
+  	- `spring.datasource.url`=jdbc:postgresql://localhost:5432/mtdmanager simply indicates the endpoint of the PGAdmin db installed on the local master machine
+  	- `kubernetes.master.url`=https://192.168.1.37:6443 indicates the IP of the master node and the port to connect to the cluster obtained using
+      	```sh
+      	kubectl describe svc kubernetes
+      	```
       
-To make the application able to collect node metrics:
-  - apply a permanent port forwarding with `NodePortProme.yaml` (in mtd-manager/miscConfig) using the command
-    ```sh
-    kubectl apply -f NodePortProme.yaml
-    ```
+	To make the application able to collect node metrics:
+  	- apply a permanent port forwarding with `NodePortProme.yaml` (in mtd-manager/miscConfig) using the command
+    	```sh
+    	kubectl apply -f NodePortProme.yaml
+    	```
     
-In `ClusterService` (src/main/java/mtd/manager/service/ClusterService.java):
-  - change the ip of `PROMETHEUS_URL` to the master node IP
+3. In `ClusterService` (src/main/java/mtd/manager/service/ClusterService.java):
+	- change the ip of `PROMETHEUS_URL` to the master node IP
 
-To see the metrics without using the app, you can visit 
-  - http://<MASTER_NODE_IP>:30090/graph to perform the queries
-  - http://<MASTER_NODE_IP>:30090/targets to see the targets installed on each node
+	To see the metrics without using the app, you can visit 
+  	- http://<MASTER_NODE_IP>:30090/graph to perform the queries
+  	- http://<MASTER_NODE_IP>:30090/targets to see the targets installed on each node
 
-In `ClusrterController` (src/main/java/mtd/manager/controller/ClusterController.java):
-  - eventually change the frontend origin (row 24) if you plan to deploy the application on something different from http://localhost:8080
+4. In `ClusrterController` (src/main/java/mtd/manager/controller/ClusterController.java):
+  	- eventually change the frontend origin (row 24) if you plan to deploy the application on something different from http://localhost:8080
 
-N.B. If you are using the server configuration, you need to connect to http://<MASTER_NODE_IP>:8080
+	N.B. If you are using the server configuration, you need to connect to http://<MASTER_NODE_IP>:8080
 
-Once everything is set, execute the following command in the main folder:
-```sh
-sudo chmod +x build-and-run.sh
-```
-and then run `./build-and-run.sh` to perform:
-  - building: mvn clean install
-  - execution: java -jar ./target/mtd-manager.jar  
+5. Once everything is set, execute the following commands to use java 17 version:
+	```sh
+	sudo apt install openjdk-17-jdk
+	```
+	to install and 
+	```sh
+	sudo update-alternatives --config java
+	```
+	to select the java 17 version
 
-Now you can connect to http://localhost:8080 to access the MTD console.
+6. Afterwards, execute the following commands in the main folder:
+	```sh
+	sudo chmod +x build-and-run.sh
+	```
+	and then run
+	```sh
+	./build-and-run.sh
+	```
+	to perform:
+  		- building: mvn clean install
+  		- execution: java -jar ./target/mtd-manager.jar  
+
+	Now you can connect to http://localhost:8080 (or http://<MASTER_NODE_IP>:8080) to access the MTD console.
