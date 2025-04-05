@@ -42,24 +42,24 @@ N.B. The name of the deployment is the corresponding workload.
 the user can enable one or more strtategy that will affect the enabled deployment.
 In this case the user cannot edit the strategy directly in the UI but needs to modify the source code to change/add implementation logic.
 Whenever a new strategy is created, the following steps are needed:
-1. the new classNameService.java file implementing the technique must be stored in the `service` folder
-2. insert in the `PGAdmin database` the new corresponding technique using
-   ```sh
+1. the new classNameService.java file implementing the technique must be stored in the `src/main/java/mtd/manager/service` folder
+2. insert in the `PGAdmin database` the new corresponding technique using the following query in the proper tool of the web page 
+   ```sql
    INSERT INTO mtdmanager.strategy VALUES ('techniqueName', false, 'fixed', n);
    ```
    where n is the progressive technique number 
-3. modify `deplo.js` script to adapt the dropdown menu to the new scenario adding
-   ```sh
+3. modify `src/main/resources/public/deplo.js` script to adapt the dropdown menu to the new scenario, adding
+   ```js
    <option value="n" ${deployment.strategy === n ? 'selected' : ''}>techniqueName</option>
    ```
    after row 35.
-4. in `strats.js` script add the strategy description with the ID provided in the `strategyDescriptions` const:
-   ```sh
+4. in `src/main/resources/public/strats.js` script add the strategy description with the ID provided in `const strategyDescriptions`:
+   ```js
    ID: 'Strategy description',
    ```
-5. in `add-deployment.js` update the function `isValidStrategy` (row 14) adding the number of the new technique
-6. in `MTDStrategyService.java` add the new related thread to activate the service itself upon startup with
-   ```sh
+5. in `src/main/resources/public/add-deployment.js` update the function `isValidStrategy` (row 14), adding the numbers of the new technique.
+6. in `src/main/java/mtd/manager/service/MTDStrategyService.java` add a new related thread to activate the service itself upon startup with
+   ```java
    new Thread(classNameService, "name_alias").start();
    ```
 
