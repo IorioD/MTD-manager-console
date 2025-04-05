@@ -45,6 +45,6 @@ To avoid the changing of the IP of the VMs, you can set a static IP as follows:
 4. Now your machine configuration is complete.
 
 ## 3. Advanced management
-If you want to ease the VMs management, you can install a tool such as [MobaXTerm](https://mobaxterm.mobatek.net/). Once installed, you can create a session for each VM using the selected static IP and use the VM credentials to access.
+If you are using a Windows machine as host and want to ease the VMs management, you can install a tool such as [MobaXTerm](https://mobaxterm.mobatek.net/). Once installed, you can create a session for each VM using the selected static IP and use the VM credentials to access it. Furthermore, you can access all the dashboards from the browser of the host machine.
 
 Now you can continue with step 2 of [How to Kubernetes](How_to_kubernetes.md).
