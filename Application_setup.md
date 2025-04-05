@@ -33,7 +33,7 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
 	```sh
 	sudo /usr/pgadmin4/bin/setup-web.sh
  	```
-3. `127.0.0.1/pgadmin4` is the url to connecto to the db dashboard
+3. `127.0.0.1/pgadmin4` (<MASTER_IP>/pgadmin4 if you are using the server configuration) is the url to connecto to the db dashboard.
 4. Set a password for the postgres username with the following commands:
  	```sh
 	sudo -u postgres psql
@@ -44,21 +44,20 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
  	```
  	and use the new password in the pgadmin UI in the proper field
 5. Create a new server named localhost with `localhost` as adress, `5432` as port and `postgres` as username and password
-7. Create new user called `mtdmanager` with all the privileges (in the privileges panel of the user properties) and set `mtdmanager` as password (in the description panel in the user properties)
-8. Create new db named `mtdmanager` with  mtdmanager as owner
+7. Create a new user called `mtdmanager` with all the privileges (in the privileges panel of the user properties) and set `mtdmanager` as password (in the description panel in the user properties).
+8. Create new db named `mtdmanager` with mtdmanager as owner
 9. Modify the `pgadmin.sql` (in `/miscConfig` row 307-309) with the IP of the nodes of the cluster and the names provided in the cluster configuration.
-10. To solve some conflicts delete (delete force) the mtdmanager db and recreate it again using the file via the query tool of pgadmin (button on the top left corner of the UI).
 
 ## 2. Code setup
 1. In `application.properties` (src/main/resources/application.properties):
-  	- `spring.datasource.url`=jdbc:postgresql://localhost:5432/mtdmanager simply indicates the endpoint of the PGAdmin db installed on the local master machine
+  	- `spring.datasource.url`=jdbc:postgresql://localhost:5432/mtdmanager simply indicates the endpoint of the PGAdmin db installed on the local master machine.
   	- `kubernetes.master.url`=https://192.168.1.37:6443 indicates the IP of the master node and the port to connect to the cluster obtained using
       	```sh
       	kubectl describe svc kubernetes
       	```
       
 	To make the application able to collect node metrics:
-  	- apply a permanent port forwarding with `NodePortProme.yaml` (in mtd-manager/miscConfig) using the command
+  	- apply permanent port forwarding with `NodePortProme.yaml` (in mtd-manager/miscConfig) using the command
     	```sh
     	kubectl apply -f NodePortProme.yaml
     	```
@@ -75,7 +74,7 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
 
 	N.B. If you are using the server configuration, you need to connect to http://<MASTER_NODE_IP>:8080
 
-5. Once everything is set, execute the following commands to use java 17 version:
+5. Once everything is set, execute the following commands to use the Java 17 version:
 	```sh
 	sudo apt install openjdk-17-jdk
 	```
@@ -83,9 +82,9 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
 	```sh
 	sudo update-alternatives --config java
 	```
-	to select the java 17 version
+	to select the Java 17 version
 
-6. Afterwards, execute the following commands in the main folder:
+6. Afterward, execute the following commands in the main folder:
 	```sh
 	sudo chmod +x build-and-run.sh
 	```
