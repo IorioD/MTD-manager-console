@@ -33,7 +33,7 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
 	```sh
 	sudo /usr/pgadmin4/bin/setup-web.sh
  	```
-3. `127.0.0.1/pgadmin4` (<MASTER_IP>/pgadmin4 if you are using the server configuration) is the url to connecto to the db dashboard.
+3. `127.0.0.1/pgadmin4` (<MASTER_NODE_IP>/pgadmin4 if you are using the server configuration) is the url to connecto to the db dashboard.
 4. Set a password for the postgres username with the following commands:
  	```sh
 	sudo -u postgres psql
