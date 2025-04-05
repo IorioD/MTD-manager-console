@@ -131,7 +131,7 @@ Depending on the names of your workers and how you connect to the cluster (via t
    ```
    
 3. Use of the `HOST BROWSER` and nodes are named `master`, `worker1` and `worker2`: 
-   go to `C:\Windows\System32\drivers\etc\hosts` and add the IP and the names master, worker1, worker2:
+   go to `C:\Windows\System32\drivers\etc\hosts` and add the IP and the names master, worker1, worker2 (use TAB to space):
    ```yaml
 	# Copyright (c) 1993-2009 Microsoft Corp.
 	…
@@ -151,7 +151,7 @@ Depending on the names of your workers and how you connect to the cluster (via t
    ```
 
 4. Use of the `HOST BROWSER` and nodes are named differently than `master`, `worker1` and `worker2`: 
-   go to `C:\Windows\System32\drivers\etc\hosts` and add the IP and the names master, worker1, worker2:
+   go to `C:\Windows\System32\drivers\etc\hosts` and add the IP and the names master, worker1, worker2 (use TAB to space):
    ```yaml
 	# Copyright (c) 1993-2009 Microsoft Corp.
 	…
