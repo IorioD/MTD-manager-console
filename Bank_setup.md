@@ -164,7 +164,7 @@ Depending on the names of your workers and how you connect to the cluster (via t
 	<IP_WORKER2>	worker2 
 	------
    ```
-   then enter the `/etc/hosts` file on your master machine and add the machine name on the same row where kybekey hosts are specified
+   then enter the `/etc/hosts` file on your master machine and add the machine name on the same row where kubekey hosts are specified
    changing from this
    ```yaml
    # kubekey hosts BEGIN
