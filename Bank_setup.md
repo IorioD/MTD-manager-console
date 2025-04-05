@@ -101,7 +101,7 @@ The following image describes how the application is intended to be deployed usi
 
 ## 2. Front & back end deployment
 
-Depending on the names of your workers and how you connect to the cluster (via the VM browser if you used the linux lite configuration or via the host browser if you are using the server configuration with windows host), you need to perform only one of the following action.
+Depending on the names of your workers and how you connect to the cluster (via the VM browser if you used the linux lite configuration or via the host browser if you are using the server configuration with windows host), you need to perform only one of the following steps.
 
 1. Use of the `VM BROWSER` and nodes are named `master`, `worker1` and `worker2`: 
    on the master run
