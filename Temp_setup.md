@@ -1,5 +1,5 @@
 # This guide helps you install a simple temperature sensor simulator on the edges sending encrypted information to the cloud.
-
+Every action must be done on the master.
 ## 1. Cloud-app-db setup
 To be installed on one or more worker. From now on, every installation process must be executed on the master node via the kubesphere console.
 1. Create new workload (`application workloads ->workloads`) cloud-app-db:
