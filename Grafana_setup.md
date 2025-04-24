@@ -11,7 +11,7 @@ The following actions must be performed on the master node.
         --set adminPassword='admin' \
         --set service.type=NodePort
    ```
-    to install the Grafana system, create the monitoring namespace, and set up the environment.
+  to install the Grafana system, create the monitoring namespace, and set up the environment.
   
   2. to grant persistence to the pod, create the following yaml file in the PVC section of the KubeSphere console
    ```yaml
