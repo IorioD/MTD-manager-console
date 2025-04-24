@@ -47,6 +47,8 @@ The following actions must be performed on the master node.
   3. you can change the refresh period of the query by changing the `Refresh` value on top of the diagram.
   4. save the dashboard, rename it, and then the query diagram will appear in the dashboard section of Grafana.
 
+You can import a dashboard using the menu `Dashboard` -> `New` -> `Import` and selecting a json file or copy-pasting the code (`miscConfig/grafana-cluster-metrics.json` is the file for the cluster metrics dashboard).
+
 The following queries are for CPU, Memory and Disk usage.
 ```sh
 100 - (avg by (instance)(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
