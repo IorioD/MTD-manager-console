@@ -186,3 +186,10 @@ Depending on the names of your workers and how you connect to the cluster (via t
 It is important that you use `master`, `worker1` and `worker2` as machine names in the DNS files to keep consistency between frontend and backend callbacks.
 
 After checking that every service is installed and running using the kubesphere console, you can connect to http://worker1:31566/ to access the main login page of the application.
+
+## 3. Application metrics retrieval using GRAFANA
+
+It is now possible to introduce the Grafana interface to manage and visualize all the metrics related to the cluster itself and the single pods.
+
+1. sad 
+
