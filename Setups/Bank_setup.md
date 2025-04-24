@@ -2,7 +2,7 @@
 To install this application on the cluster, you need the yaml files in `miscConfig/bank`.
 
 The following image describes at high level how the application is intended to be deployed using MACM formalism.
-![Alt text](miscConfig/App_MACM.png "MACM")
+![Alt text](../miscConfig/App_MACM.png "MACM")
 
 ## 1. Database setup
 1. download the `mysql-deployment.yaml` file on your master
@@ -189,7 +189,7 @@ After checking that every service is installed and running using the kubesphere 
 
 ## 3. Application metrics retrieval using Grafana
 
-If you installed [Grafana](Grafana_setup.md) it is now possible to manage and visualize all the metrics related to the single pods. To use such a mechanism, you need to set up the proper exporters.
+If you installed [Grafana](Setups/Grafana_setup.md) it is now possible to manage and visualize all the metrics related to the single pods. To use such a mechanism, you need to set up the proper exporters.
 
 ### 1. MySQL metrics
    1. To setup the environment run:
