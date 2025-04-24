@@ -130,4 +130,3 @@ e.g.
 From now on, you’ll have a cluster with 3 cloud-nodes and 1 edge-node with the kubesphere console installed on the master node (if you need more than one edge, repeat steps 2 and 3).
 
 As an example of an application using edge nodes, you can refer to the [temperature application](Temp_setup.md) that provides a simple application to collect simulated temperature values from the edges.
-Performance test explaination can be found in [Performance test](Performance_test.md).
