@@ -14,7 +14,7 @@
      apt install -y sqlmap
      apt install -y apache2-utils
    ```
-3.  find the IP and the SERVICE PORT of the target pod and then you can run for example:
+3. find the IP and the SERVICE PORT of the target pod and then you can run for example:
    ```sh
      curl http://<POD_IP>:<SERVICE_PORT>
      nmap -p 1-65535 <POD_IP>
