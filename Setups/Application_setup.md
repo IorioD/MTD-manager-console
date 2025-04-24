@@ -1,5 +1,5 @@
 # The following operations must be performed to correctly setup the environment to use the application. 
-N.B. You need to install the cluster first (follow the "[How to Kubernetes](../How_to_kubernetes.md)" file).
+N.B. You need to install the cluster first (follow the "[How to Kubernetes](Setups/How_to_kubernetes.md)" file).
 
 ## 1. PGAdmin database setup
 
