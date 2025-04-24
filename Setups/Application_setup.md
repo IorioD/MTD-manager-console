@@ -1,5 +1,5 @@
 # The following operations must be performed to correctly setup the environment to use the application. 
-N.B. You need to install the cluster first (follow the "[How to Kubernetes](Setups/How_to_kubernetes.md)" file).
+N.B. You need to install the cluster first (follow the "[How to Kubernetes](How_to_kubernetes.md)" file).
 
 ## 1. PGAdmin database setup
 
@@ -98,4 +98,4 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
 
 	Now you can connect to http://localhost:8080 (or http://<MASTER_NODE_IP>:8080) to access the MTD console.
 
-You can now install [Grafana](Setups/Grafana_setup.md) and [Falco](Setups/Falco_setup.md).
+You can now install [Grafana](Grafana_setup.md) and [Falco](Falco_setup.md).
