@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Banking App | Your Account </title>
+    <link rel="icon" href="logo.png" type="image/png">
+    <link rel="shortcut icon" href="logo.png" type="logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const name = decodeURIComponent(urlParams.get('name') || '');
+            const token = urlParams.get('token');
+         
+            if (!name || !token) {
+                window.location.href = 'index.html';
+                return;
+            }
+         
+            fetch(`http://worker2:30080/dashboard?token=${token}`)
+            .then(response => response.json())
+            .then(data => {
+                 const titleElement = document.querySelector('h2');
+                 if (titleElement) {
+                     titleElement.innerHTML = `
+                         Welcome ${name}, your balance is: <span class="text-success">€${data.balance?.toFixed(2) || '0.00'}</span>
+                         <hr>
+                         <div class="mt-2" style="font-size: 1.5rem;">Your transactions:</div>
+                     `;
+                 }
+                 
+                 const transactions = data.data || [];
+                 const container = document.querySelector('.list-group');
+                 
+                 if (transactions.length === 0) {
+                     container.innerHTML = `
+                         <div class="alert alert-info">No transactions found</div>
+                     `;
+                     return;
+                 }
+                 
+                 container.innerHTML = transactions.map(t => {
+                     const isIncoming = t.transaction_direction === 'incoming';
+                     const amountClass = isIncoming ? 'text-success' : 'text-danger';
+                     const amountSign = isIncoming ? '+' : '-';
+                     
+                     return `
+                        <div class="list-group-item d-flex justify-content-between align-items-center shadow-sm rounded-4 mb-3">
+                            <div>
+                                <strong>${t.description || 'No description'}</strong><br>
+                                <small class="text-muted">
+                                    ${isIncoming ? 'From' : 'To'}: ${isIncoming ? t.email_sender : t.email_receiver}
+                                </small><br>
+                                <small class="text-muted">Date: ${t.formatted_date}</small>
+                            </div>
+                            <span class="${amountClass} fw-bold">
+                                ${amountSign}€${Math.abs(t.amount).toFixed(2)}
+                            </span>
+                        </div>
+                     `;
+                 }).join('');
+             })
+             .catch(error => {
+                 console.error('Error:', error);
+                 document.querySelector('.list-group').innerHTML = `
+                     <div class="alert alert-danger">Error loading data</div>
+                 `;
+             });
+             
+             const logoutBtn = document.querySelector('.btn[style*="background-color: #EE775F"]');
+             if (logoutBtn) {
+                 logoutBtn.addEventListener('click', function(e) {
+                     e.preventDefault();
+                     window.location.href = 'http://worker2:30080/logout';
+                 });
+             }
+         
+             const transferBtn = document.querySelector('.btn[style*="background-color: #228ECF"]');
+             if (transferBtn) {
+                 transferBtn.addEventListener('click', function(e) {
+                     e.preventDefault();
+                     const urlParams = new URLSearchParams(window.location.search);
+                     const name = urlParams.get('name');
+                     const token = urlParams.get('token');
+                     window.location.href = `transfer.html?token=${token}&name=${name}`;
+                 });
+             }
+        });
+    </script>
+</head>
+<body style="background-color: #61BFA2; display: flex; justify-content: center; align-items: center; height: 100vh;">
+    <div class="w-75 p-4 shadow bg-white rounded-5 d-flex flex-column position-relative" style="min-height: 80vh;">
+        <h2 class="text-center fw-bold"></h2>
+        <div class="flex-grow-1 overflow-auto" style="flex-grow: 1; min-height: 250px; max-height: calc(60vh - 100px); margin: 15px 0; padding: 0 5px;">
+            <div class="list-group" style="gap: 8px;"></div>
+        </div>
+        <div class="buttons-container position-absolute start-0 end-0 bottom-0">
+            <button class="btn page-specific-btn flex-fill rounded-0 py-3 fw-bold w-100" style="background-color: #228ECF; color: white; border: none; border-radius: 0 !important;">Transfer</button>
+            <button class="btn page-specific-btn w-100 rounded-top-0 py-3 fw-bold" style="background-color: #EE775F; color: white; border: none; border-bottom-left-radius: 0.5rem !important; border-bottom-right-radius: 0.5rem !important;">
+                Logout
+            </button>
+        </div>
+    </div>
+</body>
+</html>

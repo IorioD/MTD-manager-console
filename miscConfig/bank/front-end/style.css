@@ -1,0 +1,89 @@
+.btn-hover:hover {
+    background-color: #1a6f9d;
+    color: white
+    transform: scale(1.02);
+    transition: background-color 0.3s, transform 0.1s ease-in-out;
+}
+
+.btn-hover:active {
+    color: white
+    background-color: #15678a;
+    transform: scale(0.98);
+}
+
+.page-specific-btn:hover {
+    filter: brightness(1.1);
+    transition: all 0.2s ease-in-out;
+}
+
+.page-specific-btn:active {
+    filter: brightness(0.9);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-login:hover, .btn-register:hover {
+    filter: brightness(1.1);
+    color: white;
+    transform: scale(1.02);
+}
+
+.btn-login:active, .btn-register:active {
+    filter: brightness(0.9);
+    color: white;
+    transform: scale(0.98);
+}
+
+.btn-register:hover {
+    background-color: #55a98e;
+}
+
+.register-page, .transfer-page {
+    background-color: #61BFA2;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin: 0;
+}
+
+.register-container, .transfer-container {
+    width: 100%;
+    max-width: 500px;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.register-title, .transfer-title {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.register-subtitle, .transfer-subtitle {
+    font-size: 16px;
+    color: #6c757d;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.btn-register, .btn-transfer {
+    background-color: #61BFA2;
+    color: white;
+    width: 100%;
+    border: none;
+    padding: 10px;
+    font-weight: 500;
+}
+
+.btn-transfer {
+    background-color: #228ECF;
+    color: white;
+}
+
+.btn-transfer:hover {
+    background-color: #1a6f9d;
+    color: white;
+}
