@@ -1,0 +1,13 @@
+mysql:
+  host: "mysql-service.default.svc.cluster.local"   
+  user: "root"
+  port: 3306
+  pass: "rootpassword"
+  
+  
+serviceMonitor:
+  enabled: true
+  interval: 30s
+  scrapeTimeout: 10s
+  additionalLabels:
+    release: prometheus
