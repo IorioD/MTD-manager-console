@@ -43,4 +43,4 @@ This component consumes event flows and evaluates security rules to detect anoma
     kubectl apply -f metricsExporter-falco.yaml.yaml
    ```
 
-You can now try introducing a malicious pod on the cluster following the [attack guide](Attack.md).
+You can now try introducing a malicious pod on the cluster following the [attack guide](Setups/Attack.md).
