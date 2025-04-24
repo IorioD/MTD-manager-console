@@ -38,7 +38,7 @@ This component consumes event flows and evaluates security rules to detect anoma
       --set webui.enabled=false \
       --set config.prometheus.enabled=true
    ```
-   2. apply the exporter:
+   2. apply the exporter (in `miscConfig/bank/metrics/metricsExporter-falco.yaml`):
    ```sh
     kubectl apply -f metricsExporter-falco.yaml.yaml
    ```
