@@ -1,0 +1,7 @@
+Flask==2.0.1
+Flask-MySQL==1.5.1
+mysqlclient==2.1.0
+werkzeug==2.0.1
+flask-cors==3.0.10
+gunicorn==23.0.0
+prometheus-flask-exporter
