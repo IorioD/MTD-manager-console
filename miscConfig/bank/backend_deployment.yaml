@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: backend-deployment
 spec:
-  replicas: 1  
+  replicas: 1
   selector:
     matchLabels:
       app: backend
@@ -11,14 +11,16 @@ spec:
     metadata:
       labels:
         app: backend
+        monitoring: enabled  # Label for Prometheus on Pod
     spec:
       nodeSelector:
-        kubernetes.io/hostname: worker2
+        kubernetes.io/hostname: worker02
       containers:
         - name: backend
           image: mtdunina/backend-app:latest
           ports:
             - containerPort: 5000
+              name: http      # Ensure the app port has a name
           env:
             # Variabili per il database
             - name: MYSQL_HOST
@@ -32,7 +34,7 @@ spec:
                   key: db_password
             - name: MYSQL_DB
               value: "bankdb"
-            
+
             # Configurazioni di sicurezza
             - name: SECRET_KEY
               valueFrom:
@@ -41,54 +43,71 @@ spec:
                   key: secret_key
             - name: USE_SSL
               value: "false"
-            
+
             # Configurazioni aggiuntive
             - name: FLASK_ENV
               value: "production"
             - name: FLASK_DEBUG
               value: "0"
-            
+
             # Limitazioni risorse
-          resources:
-            limits:
-              cpu: "1"
-              memory: "512Mi"
-            requests:
-              cpu: "0.5"
-              memory: "256Mi"
-          
+          resources: {}
+            #limits:
+              #cpu: "2"
+              #memory: "1Gi"
+            #requests:
+              #cpu: "1"
+              #memory: "512Mi"
+
           # Health checks
-          livenessProbe:
-            httpGet:
-              path: /login
-              port: 5000
-            initialDelaySeconds: 30
-            periodSeconds: 10
           readinessProbe:
             httpGet:
-              path: /healthz  # Usa il nuovo endpoint
+              path: /healthz
               port: 5000
             initialDelaySeconds: 5
             periodSeconds: 5
-
           livenessProbe:
             httpGet:
-              path: /healthz  # Usa il nuovo endpoint
+              path: /healthz
               port: 5000
             initialDelaySeconds: 15
             periodSeconds: 20
-
 ---
+# --- Main Application Service ---
 apiVersion: v1
 kind: Service
 metadata:
   name: backend-service
+  labels:
+    app: backend
+    monitoring: enabled  # <<< ADD THIS LABEL for ServiceMonitor selection
 spec:
   selector:
     app: backend
   ports:
-    - protocol: TCP
+    - name: http          # <<< This name is used by ServiceMonitor
+      protocol: TCP
       port: 5000
-      targetPort: 5000
+      targetPort: 5000 # Can also use targetPort: http if containerPort is named http
       nodePort: 30080
   type: NodePort
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: backend-servicemonitor
+  namespace: default # Ensure this matches your Prometheus/App namespace if not default
+  labels:
+    release: prometheus # Or labels appropriate for your Prometheus Operator install
+spec:
+  selector:
+    matchLabels:
+      app: backend
+      monitoring: enabled  # <<< Selects the main backend-service now
+  namespaceSelector:
+    matchNames:
+      - default # Ensure this matches your Prometheus/App namespace if not default
+  endpoints:
+    - port: http          # <<< CHANGE: Use the name of the port in backend-service (port 5000)
+      path: /metrics      # Standard path for metrics
+      interval: 15s
