@@ -187,9 +187,8 @@ It is important that you use `master`, `worker1` and `worker2` as machine names 
 
 After checking that every service is installed and running using the kubesphere console, you can connect to http://worker1:31566/ to access the main login page of the application.
 
-## 3. Application metrics retrieval using GRAFANA
+## 3. Application metrics retrieval using Grafana
 
-It is now possible to introduce the Grafana interface to manage and visualize all the metrics related to the cluster itself and the single pods.
+If you installed [Grafana](Grafana_setup.md) it is now possible to manage and visualize all the metrics related to the single pods. To use such a mechanism, you need to set up the proper exporters.
 
-1. sad 
-
+### 1. MySQL metrics
