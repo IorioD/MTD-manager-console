@@ -98,4 +98,4 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
 
 	Now you can connect to http://localhost:8080 (or http://<MASTER_NODE_IP>:8080) to access the MTD console.
 
-You can now install [Grafana](Grafana_setup.md).
+You can now install [Grafana](Grafana_setup.md) and [Falco](Falco_setup.md).
