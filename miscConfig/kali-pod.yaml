@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kali
+spec:
+  containers:
+  - name: kali
+    image: kalilinux/kali-rolling
+    command: ["/bin/bash", "-c", "sleep infinity"]
+    securityContext:
+      privileged: true
+  restartPolicy: Never
