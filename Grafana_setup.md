@@ -26,7 +26,7 @@ The following actions must be performed on the master node.
           requests:
             storage: 1Gi
    ```
-    and modify the yaml file of the deployment adding the volumes:
+  and modify the yaml file of the deployment by adding just the volumes:
    ```yaml
             volumeMounts:
               - mountPath: /var/lib/grafana
@@ -43,5 +43,14 @@ The following actions must be performed on the master node.
 
 ## 2. Cluster metrics visualization
   1. in the Grafana menu, go to `Dashboard` -> `New` -> `New dashboard` -> `Add visualization`, and choose `Prometheus` as data source
-  2. from the panel that opens you can compose your query in the lower section; click on `Code` to input the sting manually and then `Run queries` to test:
+  2. from the panel that opens, you can compose your query in the lower section; click on `Code` to input the sting manually and then `Run queries` to test it
+  3. you can change the refresh period of the query by changing the `Refresh` value on top of the diagram.
+  4. save the dashboard, rename it, and then the query diagram will appear in the dashboard section of Grafana.
+
+The following queries are for CPU, Memory and Disk usage.
+```sh
+100 - (avg by (instance)(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+100 * (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes))
+100 - (avg by (instance) (node_filesystem_free_bytes{fstype!="tmpfs",fstype!="overlay"}) / avg by (instance) (node_filesystem_size_bytes{fstype!="tmpfs",fstype!="overlay"})) * 100
+```
      
