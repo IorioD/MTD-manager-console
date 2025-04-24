@@ -130,3 +130,4 @@ If you want to use multiple edge nodes and build multiple instances of the app, 
 	docker build -t <account_name>/<container_name> .
 	docker push <account_name>/<container_name>
    	```
+ Performance test explaination can be found in [Performance test](Performance_test.md).
