@@ -1,4 +1,4 @@
-# This file provides a guide to attacking a pod in the cluster
+# This file provides a guide to attack a pod in the cluster
 
 1. Install a kali (yaml file in `miscConfig/kali-pod.yaml`) pod and access it:
    ```sh
