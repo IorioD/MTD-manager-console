@@ -1,7 +1,7 @@
 # MTD-manager-console
 This is a JAVA application for managing the Moving Target Defense in cloud environment developed in collaboration with `University of Naples Federico II` in the context of [DEFEDGE - PRIN PNRR 2022 Project](https://github.com/DEFEDGE).
  
-To use this application, you need to install a kubernetes cluster following this file [How to Kubernetes](Setups/How_to_kubernetes.md) and setup the environment following [Application setup](Setups/Application_setup.md).
+To use this application, you need to install a kubernetes cluster following this file [How to Kubernetes](Setups/How_to_kubernetes.md) and setup the environment following [Framework setup](Setups/Framework_setup.md).
 
 The implemented techniques are:
 1. `IP shuffling` (Changes the IP of the pod for the selected deployment making it restart)
