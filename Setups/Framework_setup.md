@@ -1,4 +1,4 @@
-# The following operations must be performed to correctly setup the environment to use the application. 
+# The following operations must be performed to correctly setup the environment to use the Framework application. 
 N.B. You need to install the cluster first (follow the "[How to Kubernetes](How_to_kubernetes.md)" file).
 
 ## 1. PGAdmin database setup
