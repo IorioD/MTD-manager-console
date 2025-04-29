@@ -46,7 +46,7 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
 5. Create a new server named localhost with `localhost` as adress, `5432` as port and `postgres` as username and password
 7. Create a new user called `mtdmanager` with all the privileges (in the privileges panel of the user properties) and set `mtdmanager` as password (in the description panel in the user properties).
 8. Create new db named `mtdmanager` with mtdmanager as owner
-9. Modify the `pgadmin.sql` (in `/miscConfig` row 307-309) with the IP of the nodes of the cluster and the names provided in the cluster configuration.
+9. Modify the `pgadmin.sql` (in `/miscConfig` row 307-309) with the IP of the nodes of the cluster and the names provided in the cluster configuration and apply it using the query tool to build the database schema.
 
 ## 2. Code setup
 1. In `application.properties` (src/main/resources/application.properties):
