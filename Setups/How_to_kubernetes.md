@@ -15,6 +15,7 @@
 
 - For each VM, set a bridged network card.
 - Only if needed set the IP of each VM as static.
+
 On each VM install
 - Docker [official guide](https://docs.docker.com/engine/install/ubuntu/).
 - `conntrack` and `socat` dependencies
