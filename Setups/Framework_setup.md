@@ -84,7 +84,12 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
 	```
 	to select the Java 17 version
 
-6. Afterward, execute the following commands in the main folder:
+6. Install maven
+	```sh
+	sudo apt install maven -y
+	```
+ 
+7. Afterward, execute the following commands in the main folder:
 	```sh
 	sudo chmod +x build-and-run.sh
 	```
