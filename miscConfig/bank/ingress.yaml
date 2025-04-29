@@ -1,0 +1,66 @@
+# Ingress per il Frontend (file statici: index.html, logo.png, style.css, dashboard.html, ecc.)
+# NON ha l'annotazione di rewrite, quindi non interferisce con i percorsi dei file statici.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bank-ingress-frontend # Nome diverso per questa risorsa Ingress
+  namespace: bank-project
+  annotations:
+    kubesphere.io/creator: project-regular
+    # NESSUNA ANNOTAZIONE DI REWRITE QUI. Questo Ingress serve solo il frontend statico.
+spec:
+  tls:
+    # Mantieni la sezione TLS anche qui se vuoi l'accesso HTTPS diretto al frontend.
+    - hosts:
+        - bank.local
+      secretName: https-secret # Assicurati che questo Secret esista nel namespace 'bank-project'.
+  rules:
+    - host: bank.local
+      http:
+        paths:
+          # Questa regola gestisce tutti i percorsi che iniziano con '/'
+          # e che NON matchano la regola più specifica '/api' definita nell'altro Ingress.
+          - path: /
+            pathType: Prefix # Usa 'Prefix' per gestire tutti i percorsi sotto la root
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 80 # Porta del Service del frontend
+
+--- # Questo è un separatore per definire un'altra risorsa nello stesso file YAML
+
+# Ingress per il Backend (API: /api/login, /api/dashboard, /api/transfer, ecc.)
+# Questo Ingress ha l'annotazione di rewrite e gestisce SOLO i percorsi che iniziano con '/api'.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bank-ingress-backend # Nome diverso per questa risorsa Ingress
+  namespace: bank-project
+  annotations:
+    kubesphere.io/creator: project-regular
+    # L'ANNOTAZIONE DI REWRITE VA QUI (nel metadata di questo Ingress dedicato al backend).
+    # Questo Ingress gestisce SOLO i percorsi che matchano la sua regola,
+    # quindi la rewrite si applica solo ai percorsi /api/....
+    nginx.ingress.kubernetes.io/rewrite-target: /$2 
+spec:
+  tls:
+    # Mantieni la sezione TLS anche qui se vuoi l'accesso HTTPS alle API.
+    - hosts:
+        - bank.local
+      secretName: https-secret # Assicurati che questo Secret esista nel namespace 'bank-project'.
+  rules:
+    - host: bank.local
+      http:
+        paths:
+          # Questa regola specifica gestisce solo i percorsi che iniziano con '/api'.
+          # Usiamo la REGEX nel path per far funzionare il '$2' nella rewrite annotation.
+          # pathType: ImplementationSpecific è corretto da usare con le regex.
+          - path: /api(/|$)(.*) # Usa questa REGEX nel path
+            pathType: ImplementationSpecific # Usa ImplementationSpecific qui
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 5000 # Porta del Service del backend
+            # NON mettere il blocco 'annotations' qui. È invalido in v1.

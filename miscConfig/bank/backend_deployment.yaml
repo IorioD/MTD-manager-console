@@ -2,6 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-deployment
+  namespace: bank-project # Assicurati che il namespace sia corretto
+  annotations:
+    # Rimosse annotazioni non necessarie o obsolete
+    deployment.kubernetes.io/revision: '1' # Aggiorna la revisione se necessario
 spec:
   replicas: 1
   selector:
@@ -11,53 +15,50 @@ spec:
     metadata:
       labels:
         app: backend
-        monitoring: enabled  # Label for Prometheus on Pod
+        monitoring: enabled
+      # Rimosse annotazioni non necessarie o obsolete
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: worker02
       containers:
         - name: backend
-          image: mtdunina/backend-app:latest
+          image: 'mtdunina/backend-app:latest' # Assicurati che questa sia l'immagine aggiornata con le modifiche al codice (variabili d'ambiente, CORS, redirect)
           ports:
             - containerPort: 5000
-              name: http      # Ensure the app port has a name
+              name: http
           env:
-            # Variabili per il database
+            # Variabili per il database (invariate - ottima pratica usare il Service Name)
             - name: MYSQL_HOST
-              value: "mysql-service"
+              value: mysql-service
             - name: MYSQL_USER
-              value: "root"
+              value: root
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: backend-secrets
+                  name: backend-secrets # Assicurati che il Secret esista nel namespace
                   key: db_password
             - name: MYSQL_DB
-              value: "bankdb"
+              value: bankdb
 
-            # Configurazioni di sicurezza
+            # Configurazioni di sicurezza (invariate)
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: backend-secrets
+                  name: backend-secrets # Assicurati che il Secret esista nel namespace
                   key: secret_key
             - name: USE_SSL
-              value: "false"
+              value: 'false'
 
-            # Configurazioni aggiuntive
+            # Configurazioni aggiuntive (invariate)
             - name: FLASK_ENV
-              value: "production"
+              value: production
             - name: FLASK_DEBUG
-              value: "0"
+              value: '0'
 
-            # Limitazioni risorse
-          resources: {}
-            #limits:
-              #cpu: "2"
-              #memory: "1Gi"
-            #requests:
-              #cpu: "1"
-              #memory: "512Mi"
+            # Variabili per la comunicazione con il frontend tramite Ingress (AGGIUNTE/CONFERMATE)
+            # Usate nel backend per i reindirizzamenti (es. dopo login) e la configurazione CORS
+            - name: FRONTEND_REDIRECT_URL
+              value: "https://bank.local:<MODIFY HERE>" # Punta al nome host definito in /etc/hosts e nell'Ingress
+            - name: CORS_ALLOWED_ORIGIN
+              value: "https://bank.local:<MODIFY HERE>" # Permette richieste CORS da questo host
 
           # Health checks
           readinessProbe:
@@ -72,31 +73,60 @@ spec:
               port: 5000
             initialDelaySeconds: 15
             periodSeconds: 20
+
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always # Usa Always se l'immagine latest cambia spesso
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        kubernetes.io/hostname: worker2 # Forza l'esecuzione su Worker2
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+
 ---
-# --- Main Application Service ---
 apiVersion: v1
 kind: Service
 metadata:
   name: backend-service
+  namespace: bank-project # Assicurati che il namespace sia corretto e corrisponda al deployment
+  annotations:
+    # Rimosse annotazioni non necessarie o obsolete
+    kubesphere.io/creator: project-regular
   labels:
     app: backend
-    monitoring: enabled  # <<< ADD THIS LABEL for ServiceMonitor selection
+    monitoring: enabled
 spec:
-  selector:
-    app: backend
   ports:
-    - name: http          # <<< This name is used by ServiceMonitor
+    - name: http
       protocol: TCP
-      port: 5000
-      targetPort: 5000 # Can also use targetPort: http if containerPort is named http
-      nodePort: 30080
-  type: NodePort
+      port: 5000 # La porta del Service a cui l'Ingress (e potenzialmente il frontend) si connetterà
+      targetPort: 5000 # La porta del container
+  selector:
+    app: backend # Seleziona i pod con questo label
+  # clusterIP: 10.233.X.Y # Questo IP viene assegnato automaticamente da Kubernetes, non specificarlo nel YAML
+  # clusterIPs:
+  #   - 10.233.X.Y
+  type: ClusterIP  # Impostato come richiesto per l'utilizzo con Ingress
+  sessionAffinity: None
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  internalTrafficPolicy: Cluster
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: backend-servicemonitor
-  namespace: default # Ensure this matches your Prometheus/App namespace if not default
+  namespace: bank-project # Ensure this matches your Prometheus/App namespace if not default
   labels:
     release: prometheus # Or labels appropriate for your Prometheus Operator install
 spec:
@@ -106,7 +136,7 @@ spec:
       monitoring: enabled  # <<< Selects the main backend-service now
   namespaceSelector:
     matchNames:
-      - default # Ensure this matches your Prometheus/App namespace if not default
+      - bank-project # Ensure this matches your Prometheus/App namespace if not default
   endpoints:
     - port: http          # <<< CHANGE: Use the name of the port in backend-service (port 5000)
       path: /metrics      # Standard path for metrics

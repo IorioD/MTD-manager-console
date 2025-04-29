@@ -1,7 +1,11 @@
-apiVersion: apps/v1
 kind: Deployment
+apiVersion: apps/v1
 metadata:
   name: front-end
+  namespace: bank-project
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+    kubesphere.io/creator: project-regular
 spec:
   replicas: 1
   selector:
@@ -9,10 +13,37 @@ spec:
       app: front-end
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: front-end
-        monitoring: enabled  # Aggiunta per Prometheus
+        monitoring: enabled
+      annotations:
+        kubesphere.io/creator: project-regular
     spec:
+      containers:
+        - name: front-end
+          image: 'mtdunina/front-end:latest' # Assicurati che questa sia l'immagine aggiornata con le modifiche al codice
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          env:
+            # Questa variabile d'ambiente punta al service interno del backend (corretta per Ingress)
+            - name: BACKEND_URL
+              value: 'http://backend-service:5000'
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+        - name: nginx-exporter
+          image: nginx/nginx-prometheus-exporter:0.11.0
+          args:
+            - "--nginx.scrape-uri=http://127.0.0.1/nginx_status"
+          ports:
+            - containerPort: 9113
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -21,41 +52,44 @@ spec:
                   - key: kubernetes.io/hostname
                     operator: In
                     values:
-                      - worker1
-      containers:
-        - name: front-end
-          image: mtdunina/front-end:latest
-          ports:
-            - containerPort: 80
-          env:
-            - name: BACKEND_URL
-              value: "http://backend-service:5000"
-        - name: nginx-exporter
-          image: nginx/nginx-prometheus-exporter:0.11.0
-          args:
-            - "--nginx.scrape-uri=http://127.0.0.1/nginx_status"
-          ports:
-            - containerPort: 9113
-
+                      - worker1  # Forza l'esecuzione su Worker1
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
 ---
-apiVersion: v1
 kind: Service
+apiVersion: v1
 metadata:
   name: frontend-service
+  namespace: bank-project
+  annotations:
+    kubesphere.io/creator: project-regular
   labels:
     app: front-end
-    monitoring: enabled  # Aggiunta per match con il ServiceMonitor
+    monitoring: enabled
 spec:
-  selector:
-    app: front-end
   ports:
     - name: http
       protocol: TCP
-      port: 80
-      targetPort: 80
-      nodePort: 31566
+      port: 80 # La porta del Service a cui l'Ingress si connetterà
+      targetPort: 80 # La porta del container
     - name: metrics
       protocol: TCP
       port: 9113
       targetPort: 9113
-  type: NodePort
+  selector:
+    app: front-end
+  clusterIP: 10.233.50.108 # Questo IP viene assegnato automaticamente da Kubernetes
+  clusterIPs:
+    - 10.233.50.108
+  type: ClusterIP  # Esattamente come richiesto
+  sessionAffinity: None
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  internalTrafficPolicy: Cluster
