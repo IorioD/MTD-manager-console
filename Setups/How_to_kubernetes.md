@@ -47,7 +47,7 @@ If you want better performance, you can use virtual machines with Ubuntu server 
     ```
 At the end something like this will be shown:
 
-![Alt text](miscConfig/kube.png)
+![Alt text](../miscConfig/kube.png)
 
 with the IP matches with the IP of the master node.
 
