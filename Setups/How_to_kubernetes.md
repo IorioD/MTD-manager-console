@@ -15,7 +15,27 @@
 
 - For each VM, set a bridged network card.
 - Only if needed set the IP of each VM as static.
-- Install Docker on each VM [official guide](https://docs.docker.com/engine/install/ubuntu/).
+On each VM install
+- Docker [official guide](https://docs.docker.com/engine/install/ubuntu/).
+- `conntrack` and `socat` dependencies
+    ```sh
+    # Add Docker's official GPG key:
+    sudo apt-get update
+    sudo apt-get install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add the repository to Apt sources:
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+      $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+
+    sudo apt install conntrak
+    sudo apt install socat
+    ```
 
 If you want better performance, you can use virtual machines with Ubuntu server installed following [Ubuntu server guide](Ubuntu_Server.md).
 
@@ -25,22 +45,21 @@ If you want better performance, you can use virtual machines with Ubuntu server 
 
 ### Steps:
 1. Pay attention to node requirements (mainly on SSH connection).
-2. Install `conntrack` and `socat` dependencies.
-3. Install KubeKey:
+2. Install KubeKey:
 
     ```sh
     curl -sfL https://get-kk.kubesphere.io | VERSION=v3.0.13 sh -
     chmod +x kk
     ```
 
-4. Create cluster config:
+3. Create cluster config:
 
     ```sh
     ./kk create config --with-kubernetes v1.23.10 --with-kubesphere v3.4.1
     ```
 
-5. Edit configuration properly setting `specs.hosts` and `specs.roleGroups` as explained in the guide.
-6. Create cluster:
+4. Edit configuration properly setting `specs.hosts` and `specs.roleGroups` as explained in the guide.
+5. Create cluster:
 
     ```sh
     ./kk create cluster -f <config-name>.yaml
