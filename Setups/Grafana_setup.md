@@ -12,6 +12,12 @@ The following actions must be performed on the master node.
         --set service.type=NodePort
    ```
   to install the Grafana system, create the monitoring namespace, and set up the environment.
+    
+  Wait a few moments for Grafana pods to start. Check their status:
+   ```bash
+   kubectl get pods -n monitoring -l app.kubernetes.io/name=grafana
+   ```
+   Wait until the pod shows a Running status.
   
   2. to grant persistence to the pod, create the following yaml file in the PVC section of the KubeSphere console
    ```yaml
