@@ -56,7 +56,7 @@ with the IP matches with the IP of the master node.
 kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l 'app in (ks-install, ks-installer)' -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
-If you want to install a custom application on the cluster that does not require edge nodes, you can skip the following steps and start the [setup of the framework](Application_setup.md) itself. As an example of a cloud application, you can refer to the [bank application](Bank_setup.md) that provides a simple high level money transfer mechanism like PayPal.
+If you want to install a custom application on the cluster that does not require edge nodes, you can skip the following steps and start the [setup of the framework](Framework_setup.md) itself. As an example of a cloud application, you can refer to the [bank application](Bank_setup.md) that provides a simple high level money transfer mechanism like PayPal.
 
 ## 4. Adding an Edge Node in the Cluster
 [Add Edge Nodes Guide](https://www.kubesphere.io/docs/v3.4/installing-on-linux/cluster-operation/add-edge-nodes/)
