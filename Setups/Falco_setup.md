@@ -5,22 +5,26 @@ This component consumes event flows and evaluates security rules to detect anoma
 ## 1. Install Falco
    1. add the Helm repository using:
    ```sh
-     helm repo add falcosecurity https://falcosecurity.github.io/charts
-     helm repo update
+   helm repo add falcosecurity https://falcosecurity.github.io/charts
+   helm repo update
    ```   
    2. install the component with a dedicated namespace
    ```sh
-     helm install --replace falco --namespace falco --create-namespace --set tty=true falcosecurity/falco
+   helm install --replace falco --namespace falco --create-namespace --set tty=true falcosecurity/falco
    ```
-   3. now wait for the pods to set up and run and then, Falco is successfully installed.
+   3. now wait for the pods to set up and run
+   ```sh
+   watch kubectl get pods -n falco
+   ```
+   now Falco is successfully installed.
 
 ## 2. Test Falco
    1. install a test pod and use it to generate potential malicious events (open a shell and expose sensitive data)
    ```sh
-     kubectl run test-pod --image=alpine --command -- sleep 3600
-     kubectl exec -it test-pod -- sh
-     touch /bin/evil.sh
-     sh -c 'cat /etc/shadow'
+   kubectl run test-pod --image=alpine --command -- sleep 3600
+   kubectl exec -it test-pod -- sh
+   touch /bin/evil.sh
+   sh -c 'cat /etc/shadow'
    ```
    2. after that, you can access the logs of the Falco pod (via the Kubephere console or via `kubectl logs -n falco <FALCO_POD_NAME> -c falco`)  showing something like
    ```sh
