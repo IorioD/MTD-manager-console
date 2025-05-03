@@ -16,6 +16,8 @@
 - For each VM, set a bridged network card.
 - Only if needed set the IP of each VM as static.
 
+If you want better performance, you can use virtual machines with Ubuntu server installed following [Ubuntu server guide](Ubuntu_Server.md).
+
 On each VM install
 - Docker [official guide](https://docs.docker.com/engine/install/ubuntu/).
 - `conntrack` and `socat` dependencies
