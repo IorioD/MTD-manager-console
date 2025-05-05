@@ -39,7 +39,7 @@ This component consumes event flows and evaluates security rules to detect anoma
    ```sh
     helm install falcosidekick falcosecurity/falcosidekick \
       --namespace falco \
-      --set webui.enabled=false \
+      --set webui.enabled=true \
       --set config.prometheus.enabled=true
    ```
    2. apply the exporter (in `miscConfig/bank/metrics/metricsExporter-falco.yaml`):
