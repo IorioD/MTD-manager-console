@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: frontend-servicemonitor
-  namespace: default
+  namespace: bank-project
   labels:
     release: prometheus
 spec:
@@ -11,8 +11,9 @@ spec:
       monitoring: enabled
   namespaceSelector:
     matchNames:
-      - default
+      - bank-project
   endpoints:
     - port: metrics
       path: /metrics
       interval: 15s
+
