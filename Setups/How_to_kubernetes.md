@@ -39,7 +39,7 @@ On each VM install
     sudo apt install conntrack
     sudo apt install socat
     ```
-    
+---    
 ## 2. Cluster Installation
 - Follow the guide: [KubeSphere Multi-node Installation](https://kubesphere.io/docs/v3.4/installing-on-linux/introduction/multioverview/)
 - Video guide: [YouTube Video Guide](https://www.youtube.com/watch?v=nYOYk3VTSgo)
@@ -71,6 +71,7 @@ At the end something like this will be shown:
 
 with the IP matches with the IP of the master node.
 
+---
 ## 3. Check Installation:
 ```sh
 kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l 'app in (ks-install, ks-installer)' -o jsonpath='{.items[0].metadata.name}') -f
@@ -78,6 +79,7 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l 'app
 
 If you want to install a custom application on the cluster that does not require edge nodes, you can skip the following steps and start the [setup of the framework](Framework_setup.md) itself. As an example of a cloud application, you can refer to the [bank application](Bank_setup.md) that provides a simple high level money transfer mechanism like PayPal.
 
+---
 ## 4. Adding an Edge Node in the Cluster
 [Add Edge Nodes Guide](https://www.kubesphere.io/docs/v3.4/installing-on-linux/cluster-operation/add-edge-nodes/)
 
