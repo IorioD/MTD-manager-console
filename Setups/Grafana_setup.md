@@ -4,48 +4,20 @@ The following actions must be performed on the master node.
 
 ## 1. Grafana setup
   1. execute:
-   ```sh
-      helm repo add grafana https://grafana.github.io/helm-charts
-      helm install grafana grafana/grafana \
-        --namespace monitoring --create-namespace \
-        --set adminPassword='admin' \
-        --set service.type=NodePort
+   ```bash
+      kubectl apply -f grafana-deployment.yaml --namespace=monitoring
    ```
-  to install the Grafana system, create the monitoring namespace, and set up the environment.
-    
+  to install the Grafana system, persistent volume claims and service within the monitoring namespace. `grafana-deployment.yaml` is in `miscConfig` folder.
+  
   Wait a few moments for Grafana pods to start. Check their status:
    ```bash
-   kubectl get pods -n monitoring -l app.kubernetes.io/name=grafana
+   kubectl get pods -n monitoring
    ```
    Wait until the pod shows a Running status.
   
-  2. to grant persistence to the pod, create the following yaml file in the PVC section of the KubeSphere console
-   ```yaml
-      apiVersion: v1
-      kind: PersistentVolumeClaim
-      metadata:
-        name: grafana-pvc
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 1Gi
-   ```
-  and modify the yaml file of the deployment by adding just the volumes:
-   ```yaml
-            volumeMounts:
-              - mountPath: /var/lib/grafana
-                name: grafana-pv
-        volumes:
-          - name: grafana-pv
-            persistentVolumeClaim:
-              claimName: grafana-pvc
-   ```
+  2. Once the service is up and running, in the services' menu of the KubeSphere console, retrieve the exposed port and connect to `http://<MASTER_IP>:<PORT>` to access the UI with `admin` as username and password (after the first access you are forced to change it).
   
-  3. once the service is up and running, in the services' menu of the KubeSphere console, retrieve the exposed port and connect to `http://<MASTER_IP>:<PORT>` to access the UI with `admin` as username and password (after the first access you are forced to change it).
-  
-  4. in the Grafana menu, go to `Connection` -> `Data Source` -> `Add data source` and choose `Prometheus`. In the tab just add `http://<MASTER_IP>:<PROMETHEUS_PORT>` in the `Connection` field then click `Save & test` to apply. Now Grafana is connected to Prometheus and allows metrics visualization.
+  3. in the Grafana menu, go to `Connection` -> `Data Source` -> `Add data source` and choose `Prometheus`. In the tab just add `http://<MASTER_IP>:<PROMETHEUS_PORT>` in the `Connection` field then click `Save & test` to apply (PROMETHEUS_PORT can be found in the services menu under prometheus-nodeport). Now Grafana is connected to Prometheus and allows metrics visualization.
 
 ## 2. Cluster metrics visualization
   1. in the Grafana menu, go to `Dashboard` -> `New` -> `New dashboard` -> `Add visualization`, and choose `Prometheus` as data source
