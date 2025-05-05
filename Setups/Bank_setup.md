@@ -188,7 +188,7 @@ Now we will deploy the application components and configure the Ingress Resource
 3.  Apply the Ingress Resource in the `bank-project` project. This will create the rules to route traffic from the Ingress Controller to the appropriate services.
 
     ```bash
-    kubectl apply -f ingress.yaml -n bank-project
+    kubectl apply -f bank_ingress.yaml -n bank-project
     ```
 
 4.  Determine the NodePort assigned to the Ingress Resource. Return to the Kubesphere UI.
