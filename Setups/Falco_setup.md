@@ -26,7 +26,7 @@ This component consumes event flows and evaluates security rules to detect anoma
    touch /bin/evil.sh
    sh -c 'cat /etc/shadow'
    ```
-   2. after that, you can access the logs of the Falco pod (via the Kubephere console or via `kubectl logs -n falco <FALCO_POD_NAME> -c falco`)  showing something like
+   2. after that, you can access the logs of the Falco pod (via the Kubephere console or via `kubectl logs -n falco <FALCO_POD_NAME> -c falco` where FALCO_POD_NAME is the name of the falco pod on the same node on which the test pod has been installed)  showing something like
    ```sh
      10:57:56.364143568: Notice A shell was spawned in a container with an attached terminal (evt_type=execve user=root user_uid=0 user_loginuid=-1 process=sh proc_exepath=/bin/busybox parent=containerd-shim command=sh terminal=34816 exe_flags=EXE_WRITABLE|EXE_LOWER_LAYER container_id=c77ad69b9b96 container_image=alpine container_image_tag=latest container_name=k8s_test-pod_test-pod_default_ef73d4c1-fe2b-49e7-9437-486561d95c9d_0 k8s_ns=<NA> k8s_pod_name=<NA>)
 
