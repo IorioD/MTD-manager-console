@@ -12,7 +12,7 @@ The implemented techniques are:
 The application is intuitive and easy to use.
 - The `landing page` is the following:
 
-
+![Alt text](img/Home.png "Home page")
 
 in which information about the cluster and the single node are automatically retrieved.
 
