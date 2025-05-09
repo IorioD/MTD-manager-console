@@ -67,7 +67,7 @@ On each VM install
     ```
 At the end something like this will be shown:
 
-![Alt text](../miscConfig/kube.png)
+![Alt text](../img/kube.png)
 
 with the IP matches with the IP of the master node.
 
