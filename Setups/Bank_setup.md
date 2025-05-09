@@ -4,7 +4,7 @@ This application simulates a money transfer system between registered users.
 To install this application on the cluster, you need the yaml files in `miscConfig/bank`.
 
 The following image describes at high level how the application is intended to be deployed using MACM formalism.
-![Alt text](../miscConfig/App_MACM.png "MACM")
+![Alt text](../img/App_MACM.png "MACM")
 
 ## 1. Initial Configuration in Kubesphere
 Configuration of the necessary workspaces and projects within Kubesphere.
