@@ -79,7 +79,7 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l 'app
 
 If you want to install a custom application on the cluster that does not require edge nodes, you can skip the following steps and start the [setup of the framework](Framework_setup.md) itself. As an example of a cloud application, you can refer to the [bank application](Bank_setup.md) that provides a simple high level money transfer mechanism like PayPal.
 
-In any case, you can follow the [Application environment setup guide](Application_environment.md) to create the proper workspace for your application in the cluster since it is intended to be multi-tenant.
+In any case, you can follow the [Application environment setup guide](Applications_environment.md) to create the proper workspace for your application in the cluster since it is intended to be multi-tenant.
 
 ---
 ## 4. Adding an Edge Node in the Cluster
