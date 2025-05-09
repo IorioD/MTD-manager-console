@@ -12,23 +12,23 @@ The implemented techniques are:
 The application is intuitive and easy to use.
 - The `landing page` is the following:
 
-![Alt text](miscConfig/Home.png "Home page")
+![Alt text](img/Home.png "Home page")
 
 in which information about the cluster and the single node are automatically retrieved.
 
 - In the `Nodes List` page
 
-![Alt text](miscConfig/List-node.png "Nodes")
+![Alt text](img/List-node.png "Nodes")
 
-![Alt text](miscConfig/addNode.png "Add Node Form")
+![Alt text](img/addNode.png "Add Node Form")
 
 the user can manage the node lifecycle (using add, edit and delete function).
 
 - In the `Deployment List` page
 
-![Alt text](miscConfig/List-deplo.png "Deployments")
+![Alt text](img/List-deplo.png "Deployments")
 
-![Alt text](miscConfig/addDeplo.png "Add Deployment Form")
+![Alt text](img/addDeplo.png "Add Deployment Form")
 
 the user can manage the deployment lifecycle (using add, edit and delete function) and can decide on which deplyment enable the MTD. 
 
@@ -36,7 +36,7 @@ N.B. The name of the deployment is the corresponding workload.
 
 - In the `Strategies List` page
 
-![Alt text](miscConfig/List-strat.png "Strategies")
+![Alt text](img/List-strat.png "Strategies")
 
 the user can enable one or more strtategy that will affect the enabled deployment.
 In this case the user cannot edit the strategy directly in the UI but needs to modify the source code to change/add implementation logic.
@@ -64,6 +64,6 @@ Whenever a new strategy is created, the following steps are needed:
 
 - In the `Parameter` page
 
-![Alt text](miscConfig/Param.png "Parameter")
+![Alt text](img/Param.png "Parameter")
 
 the user can set the preferred execution window.
