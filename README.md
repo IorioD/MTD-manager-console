@@ -67,3 +67,7 @@ Whenever a new strategy is created, the following steps are needed:
 ![Alt text](img/Param.png "Parameter")
 
 the user can set the preferred execution window.
+
+---
+## Reference
+[1] Casola, V., De Benedictis, A., Iorio, D., Migliaccio, S.: A moving target defense framework to improve resilience of cloud-edge systems. In: Barolli, L. (ed.) Advanced Information Networking and Applications. pp. 243–252. Springer Nature Switzerland, Cham (2025). [DOI](https://doi.org/10.1007/978-3-031-87778-0_24)
