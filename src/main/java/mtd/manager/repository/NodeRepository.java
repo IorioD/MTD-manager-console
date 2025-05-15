@@ -23,4 +23,5 @@ public interface NodeRepository extends JpaRepository<Node, Long>, JpaSpecificat
 
     List<Node> findAllByType(String type);
 
+    boolean existsByIpAddress(String ipAddress);
 }
