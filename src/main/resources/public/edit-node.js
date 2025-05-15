@@ -1,3 +1,5 @@
+let originalIpAddress = null;
+
 async function getNodeById(id) {
     try {
         const response = await fetch(`/node/${id}`);
@@ -24,6 +26,19 @@ async function loadNodeData() {
         document.getElementById('role').value = node.role;
         document.getElementById('type').value = node.type;
         document.getElementById('available').value = node.available;
+        originalIpAddress = node.ipAddress;
+    }
+}
+
+async function isIPAddressUnique(ip) {
+    try {
+        const response = await fetch(`/node/check-ip?ip=${encodeURIComponent(ip)}`);
+        if (!response.ok) throw new Error('Failed to check IP uniqueness');
+        const result = await response.json();
+        return result.unique === true;
+    } catch (error) {
+        console.error('Error checking IP uniqueness:', error);
+        return false; // Per sicurezza blocca l’invio se fallisce
     }
 }
 
@@ -73,6 +88,14 @@ async function updateNode(event) {
     if (!isValidIPAddress(data.ipAddress)) {
         alert("Invalid IP Address.");
         return;
+    }
+
+    if (data.ipAddress !== originalIpAddress) {
+        const unique = await isIPAddressUnique(data.ipAddress);
+        if (!unique) {
+            alert("IP Address already exists. Please provide a unique IP.");
+            return;
+        }
     }
 
     if (!isValidRole(data.role)) {
