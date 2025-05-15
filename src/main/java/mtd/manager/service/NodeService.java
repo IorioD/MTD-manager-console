@@ -77,4 +77,8 @@ public class NodeService {
         nodeRepository.findAllByType(EDGE).forEach(node -> list.add(toDTO(node)));
         return list;
     }
+
+    public boolean isIpUnique(String ipAddress) {
+        return !nodeRepository.existsByIpAddress(ipAddress);
+    }
 }
