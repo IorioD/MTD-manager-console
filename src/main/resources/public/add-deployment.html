@@ -48,12 +48,22 @@
                 <input type="text" class="form-control" id="namespace" name="namespace" required>
             </div>
             <div class="form-group">
-                <label for="type">Type (edge/cloud)</label>
-                <input type="text" class="form-control" id="type" name="type" required>
+                <label for="type">Type</label>
+                <select class="form-control" id="type" name="type" required>
+                    <option value="">-- Select Type --</option>
+                    <option value="cloud">Cloud</option>
+                    <option value="edge">Edge</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="strategy">Strategy</label>
-                <input type="text" class="form-control" id="strategy" name="strategy" required>
+                <select class="form-control" id="strategy" name="strategy" required>
+                    <option value="">-- Select strategy --</option>
+                    <option value="1">IP shuffling</option>
+                    <option value="2">Dynamic Pod Replica</option>
+                    <option value="3">Node Migration</option>
+                    <option value="4">Service Account Shuffling</option>
+                </select>
             </div>
             <button type="submit" class="btn btn-success">Add Deployment</button>
         </form>
