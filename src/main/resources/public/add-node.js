@@ -23,7 +23,7 @@ function isValidAvailable(available) {
 
 async function isIPAddressUnique(ip) {
     try {
-        const response = await fetch(`/api/nodes/check-ip?ip=${encodeURIComponent(ip)}`);
+        const response = await fetch(`/node/check-ip?ip=${encodeURIComponent(ip)}`);
         if (!response.ok) throw new Error('Failed to check IP uniqueness');
         const result = await response.json();
         return result.unique === true;
