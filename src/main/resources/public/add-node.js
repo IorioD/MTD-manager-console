@@ -21,6 +21,18 @@ function isValidAvailable(available) {
     return available === 'true' || available === 'false';
 }
 
+async function isIPAddressUnique(ip) {
+    try {
+        const response = await fetch(`/api/nodes/check-ip?ip=${encodeURIComponent(ip)}`);
+        if (!response.ok) throw new Error('Failed to check IP uniqueness');
+        const result = await response.json();
+        return result.unique === true;
+    } catch (error) {
+        console.error('Error checking IP uniqueness:', error);
+        return false; // Per sicurezza blocca l’invio se fallisce
+    }
+}
+
 async function addNode(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -40,6 +52,12 @@ async function addNode(event) {
 
     if (!isValidIPAddress(data.ipAddress)) {
         alert("Invalid IP Address.");
+        return;
+    }
+
+    const unique = await isIPAddressUnique(data.ipAddress);
+    if (!unique) {
+        alert("IP Address already exists. Please provide a unique IP.");
         return;
     }
 
