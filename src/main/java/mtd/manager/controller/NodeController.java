@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
+import java.util.Collections;
 
 @Validated
 @RestController
@@ -63,8 +65,14 @@ public class NodeController {
     }
 
     @PutMapping("/{id}")
-	public void update(@Valid @RequestBody NodeUpdateVO vO, @PathVariable Long id) {
+    public void update(@Valid @RequestBody NodeUpdateVO vO, @PathVariable Long id) {
 		vO.setId(id); // Set the ID to the VO
 		nodeService.update(vO);
+    }
+
+    @GetMapping("/check-ip")
+    public Map<String, Boolean> checkIpUniqueness(@RequestParam String ip) {
+        boolean unique = nodeService.isIpUnique(ip);
+        return Collections.singletonMap("unique", unique);
     }
 }
