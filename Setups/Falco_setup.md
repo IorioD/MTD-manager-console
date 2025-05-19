@@ -44,7 +44,7 @@ This component consumes event flows and evaluates security rules to detect anoma
    ```
    2. apply the exporter (in `miscConfig`):
    ```sh
-    kubectl apply -f metricsExporter-falco.yaml.yaml
+    kubectl apply -f metricsExporter-falco.yaml
    ```
 
 You can now try introducing a malicious pod on the cluster following the [attack guide](Attack.md).
