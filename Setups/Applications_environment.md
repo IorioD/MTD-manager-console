@@ -34,7 +34,7 @@ To enable secure access via HTTPS, a TLS certificate is needed. We will create a
 1.  On the master node execute the following command to generate a self-signed certificate and private key (not best practice, just as example):
 
     ```bash
-    openssl req -x509 -nodes -newkey rsa:2048 -keyout tls.key -out tls.crt -days 365 -subj "/CN=bank.local"
+    openssl req -x509 -nodes -newkey rsa:2048 -keyout tls.key -out tls.crt -days 365 -subj "/CN=<custom_name>"
     ```
     
     This command will create two files in the current directory: `tls.crt` (the certificate) and `tls.key` (the private key).
