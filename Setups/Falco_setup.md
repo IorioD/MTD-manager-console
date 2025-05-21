@@ -51,7 +51,7 @@ This component consumes event flows and evaluates security rules to detect anoma
    ```
    once it is done, a node port will be assigned to the service.
    
-   4. you can now connect to `http://<MASTER_IP>:<NODE_PORT>` to access the UI
+   4. you can now connect to `http://<MASTER_IP>:<NODE_PORT>` to access the UI with `admin` as username and password.
 
 Alternatively, you can edit the setting by locating the service in the Kubesphere UI and change the yaml.
 
