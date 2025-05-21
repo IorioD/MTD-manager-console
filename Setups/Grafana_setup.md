@@ -16,7 +16,7 @@ The following actions must be performed on the master node.
    ```
    Wait until the pod shows a Running status.
   
-  2. Once the service is up and running, in the services' menu of the KubeSphere console, retrieve the exposed port and connect to `http://<MASTER_IP>:<PORT>` to access the UI with `admin` as username and password (after the first access you are forced to change it).
+  2. Once the service is up and running, in the services' menu of the KubeSphere console, retrieve the exposed port and connect to `http://<MASTER_IP>:<PORT>` (<PORT> can be found in the related service) to access the UI with `admin` as username and password (after the first access you are forced to change it).
   
   3. in the Grafana menu, go to `Connection` -> `Data Source` -> `Add data source` and choose `Prometheus`. In the tab just add `http://<MASTER_IP>:<PROMETHEUS_PORT>` in the `Connection` field then click `Save & test` to apply (PROMETHEUS_PORT can be found in the services menu under prometheus-nodeport). Now Grafana is connected to Prometheus and allows metrics visualization.
 
