@@ -35,16 +35,24 @@ This component consumes event flows and evaluates security rules to detect anoma
   showing that a shell was created with sensitive files opened 
   
 ## 3. Monitor Falco
-   1. install the `falcosidekick` component
+   1. install the `falcosidekick` component to get the UI
    ```sh
-    helm install falcosidekick falcosecurity/falcosidekick \
-      --namespace falco \
-      --set webui.enabled=true \
-      --set config.prometheus.enabled=true
+    helm upgrade --namespace falco falco falcosecurity/falco --set falcosidekick.enabled=true --set falcosidekick.webui.enabled=true
    ```
-   2. apply the exporter (in `miscConfig`):
+
+   2. run the following command to identify the name of the ui service
    ```sh
-    kubectl apply -f metricsExporter-falco.yaml
+   kubectl -n falco get svc
    ```
+   
+   3. run the following command and change the `spec.type` from `ClusterIP` to `NodePort`.
+   ```sh
+   kubectl edit svc <SERVICE_NAME> -n falco
+   ```
+   once it is done, a node port will be assigned to the service.
+   
+   4. you can now connect to `http://<MASTER_IP>:<NODE_PORT>` to access the UI
+
+Alternatively, you can edit the setting by locating the service in the Kubesphere UI and change the yaml.
 
 You can now try introducing a malicious pod on the cluster following the [attack guide](Attack.md).
