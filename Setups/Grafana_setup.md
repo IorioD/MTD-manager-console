@@ -5,7 +5,8 @@ The following actions must be performed on the master node.
 ## 1. Grafana setup
   1. execute:
    ```bash
-      kubectl apply -f grafana-deployment.yaml --namespace=monitoring
+   kubectl create namespace monitoring
+   kubectl apply -f grafana-deployment.yaml --namespace=monitoring
    ```
   to install the Grafana system, persistent volume claims and service within the monitoring namespace. `grafana-deployment.yaml` is in `miscConfig` folder.
   
