@@ -4,7 +4,7 @@
    ```sh
    kubectl create namespace attack
    kubectl apply -f kali-pod.yaml --namespace attack
-   kubectl exec -it kali -- bash
+   kubectl exec -it kali -n attack -- bash
    ```
 2. since it is an attacker used to test the system run:
    ```sh
