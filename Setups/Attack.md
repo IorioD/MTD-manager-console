@@ -2,8 +2,9 @@
 
 1. Install a kali (yaml file in `miscConfig/kali-pod.yaml`) pod and access it:
    ```sh
-     kubectl apply -f kali-pod.yaml
-     kubectl exec -it kali -- bash
+   kubectl create namespace attack
+   kubectl apply -f kali-pod.yaml --namespace attack
+   kubectl exec -it kali -- bash
    ```
 2. since it is an attacker used to test the system run:
    ```sh
