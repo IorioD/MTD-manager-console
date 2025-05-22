@@ -20,7 +20,7 @@ in which information about the cluster and the single node are automatically ret
 
 ![Alt text](img/List-node.png "Nodes")
 
-![Alt text](img/addNode.png "Add Node Form")
+![Alt text](img/Add_node.png "Add Node Form")
 
 the user can manage the node lifecycle (using add, edit and delete function).
 
@@ -28,7 +28,7 @@ the user can manage the node lifecycle (using add, edit and delete function).
 
 ![Alt text](img/List-deplo.png "Deployments")
 
-![Alt text](img/addDeplo.png "Add Deployment Form")
+![Alt text](img/Add_deplo.png "Add Deployment Form")
 
 the user can manage the deployment lifecycle (using add, edit and delete function) and can decide on which deplyment enable the MTD. 
 
