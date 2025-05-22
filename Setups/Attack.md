@@ -21,4 +21,4 @@
      nmap -p 1-65535 <POD_IP>
      timeout 6000 ab -n 1000000 -c 100 http://<POD_IP>:<SERVICE_PORT>/
    ```
-   the last command simulates a DoS attack.
+   <POD_IP> is located in the attributes of the pod itself while the <SERVICE_PORT> can be found in the related service tab. The last command simulates a DoS attack.
