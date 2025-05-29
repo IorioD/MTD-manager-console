@@ -3,6 +3,9 @@ This is a JAVA application for managing the Moving Target Defense in cloud envir
  
 To use this application, you need to install a kubernetes cluster following this file [How to Kubernetes](Setups/How_to_kubernetes.md) and setup the environment following [Framework setup](Setups/Framework_setup.md).
 
+The connection between the cluster and the framework can be described as follows.
+![Alt text](img/MTDmanager.png "MTD")
+
 The implemented techniques are:
 1. `IP shuffling` (Changes the IP of the pod for the selected deployment making it restart)
 2. `Service Account shuffling` (Changes the Service Account of the pod for the selected deployment)
