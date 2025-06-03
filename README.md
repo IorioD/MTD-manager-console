@@ -41,7 +41,7 @@ N.B. The name of the deployment is the corresponding workload.
 
 ![Alt text](img/List-strat.png "Strategies")
 
-the user can enable one (or more) strtategy that will affect the enabled deployment.
+the user can enable one (or more) strategy that will affect the enabled deployment.
 In this case, the user cannot edit the strategy directly in the UI but needs to modify the source code to change/add implementation logic.
 Whenever a new strategy is created, the following steps are needed:
 1. the new classNameService.java file implementing the technique must be stored in the `src/main/java/mtd/manager/service` folder
