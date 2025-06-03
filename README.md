@@ -1,13 +1,13 @@
 # MTD-manager-console
-This is a JAVA application for managing the Moving Target Defense in cloud environment developed in collaboration with `University of Naples Federico II` in the context of [DEFEDGE - PRIN PNRR 2022 Project](https://github.com/DEFEDGE).
+This is a JAVA application for managing the Moving Target Defense in a cloud environment developed in collaboration with `University of Naples Federico II` in the context of [DEFEDGE - PRIN PNRR 2022 Project](https://github.com/DEFEDGE).
  
-To use this application, you need to install a kubernetes cluster following this file [How to Kubernetes](Setups/How_to_kubernetes.md) and setup the environment following [Framework setup](Setups/Framework_setup.md).
+To use this application, you need to install a kubernetes cluster following this file [How to Kubernetes](Setups/How_to_kubernetes.md) and set up the environment following [Framework setup](Setups/Framework_setup.md).
 
 The connection between the cluster and the framework can be described as follows.
 ![Alt text](img/MTDmanager.png "MTD")
 
 The implemented techniques are:
-1. `IP shuffling` (Changes the IP of the pod for the selected deployment making it restart)
+1. `IP shuffling` (Changes the IP of the pod for the selected deployment, making it restart)
 2. `Service Account shuffling` (Changes the Service Account of the pod for the selected deployment)
 3. `Dynamic Replica` (Creates a new replica of the pod for the selected deployment)
 4. `Node Migration` (Migrate the pod of the selected deployment to another node matching the origin node type)
@@ -17,7 +17,7 @@ The application is intuitive and easy to use.
 
 ![Alt text](img/Home.png "Home page")
 
-in which information about the cluster and the single node are automatically retrieved.
+in which information about the cluster and the single node is automatically retrieved.
 
 - In the `Nodes List` page
 
@@ -25,7 +25,7 @@ in which information about the cluster and the single node are automatically ret
 
 ![Alt text](img/Add_node.png "Add Node Form")
 
-the user can manage the node lifecycle (using add, edit and delete function).
+the user can manage the node lifecycle (using add, edit and delete functions).
 
 - In the `Deployment List` page
 
@@ -33,7 +33,7 @@ the user can manage the node lifecycle (using add, edit and delete function).
 
 ![Alt text](img/Add_deplo.png "Add Deployment Form")
 
-the user can manage the deployment lifecycle (using add, edit and delete function) and can decide on which deplyment enable the MTD. 
+the user can manage the deployment lifecycle (using add, edit and delete functions) and can decide on which deployment will enable the MTD. 
 
 N.B. The name of the deployment is the corresponding workload. 
 
@@ -41,8 +41,8 @@ N.B. The name of the deployment is the corresponding workload.
 
 ![Alt text](img/List-strat.png "Strategies")
 
-the user can enable one or more strtategy that will affect the enabled deployment.
-In this case the user cannot edit the strategy directly in the UI but needs to modify the source code to change/add implementation logic.
+the user can enable one (or more) strtategy that will affect the enabled deployment.
+In this case, the user cannot edit the strategy directly in the UI but needs to modify the source code to change/add implementation logic.
 Whenever a new strategy is created, the following steps are needed:
 1. the new classNameService.java file implementing the technique must be stored in the `src/main/java/mtd/manager/service` folder
 2. insert in the `PGAdmin database` the new corresponding technique using the following query in the proper tool of the web page 
