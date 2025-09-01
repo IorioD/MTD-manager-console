@@ -5,7 +5,7 @@ The hardware requirements are the same as reported in [How to Kubernetes](How_to
 1. Visit the [official web page](https://ubuntu.com/download/server) to download the iso.
 2. You can use both `VMware workstation` or `Virtual Box` or any other hypervisor to create and manage the VMs.
 3. During the installation process, leave all the default settings and select "install the OpenSSH Server".
-4. Once the installation is performed, access the machine and run:
+4. Once the installation is performed, access each machine and run:
      ```sh
     sudo apt update
     sudo apt upgrade
