@@ -44,6 +44,8 @@ To avoid the changing of the IP of the VMs, you can set a static IP as follows:
     ```
 4. Now your machine configuration is complete.
 
+N.B. If you're using the NAT+HOST ONLY configuration, check the gateway IP of the ethernet adapter (192.168.56.x) to set the static IP.
+
 ## 3. Advanced management
 If you are using a Windows machine as host and want to ease the VMs management, you can install a tool such as [MobaXTerm](https://mobaxterm.mobatek.net/). 
 On each VM check if the ssh server is running:
