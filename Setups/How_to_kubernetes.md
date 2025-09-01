@@ -15,6 +15,7 @@
 
 - For each VM, set a bridged network card.
 - Only if needed set the IP of each VM as static.
+- If you're installing the cluster on a local machine and you are using VirtulBox it is suggested to set 2 network interfaces: one NAT and the other HOST ONLY.
 
 If you want better performance, you can use virtual machines with Ubuntu server installed following [Ubuntu server guide](Ubuntu_Server.md).
 
