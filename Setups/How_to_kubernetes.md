@@ -60,7 +60,7 @@ On each VM install
     ./kk create config --with-kubernetes v1.23.10 --with-kubesphere v3.4.1
     ```
 
-4. Edit configuration properly setting `specs.hosts` and `specs.roleGroups` as explained in the guide.
+4. Edit configuration properly by setting `specs.hosts` with the name and the IPs, user, and password of the machine you set `specs.roleGroups` accordingly (etcd and control-plane must be set to the master node).
 5. Create cluster:
 
     ```sh
