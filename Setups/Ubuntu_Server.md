@@ -75,4 +75,4 @@ sudo systemctl enable ssh
 
 Once everything is setup, you can create a MobaxTerm session for each VM using the selected static IP and use the VM credentials to access it. Furthermore, you can access all the dashboards from the browser of the host machine.
 
-Now you can continue with step 2 of [How to Kubernetes](How_to_kubernetes.md).
+Now you can continue installing docker on each machine and with step 2 of [How to Kubernetes](How_to_kubernetes.md).
