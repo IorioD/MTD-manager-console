@@ -38,11 +38,24 @@ To avoid the changing of the IP of the VMs, you can set a static IP as follows:
             addresses: [8.8.8.8, 8.8.4.4]
     ```
     where `ens33` is the name of the network card, `<VM_Address>` is the IP that you want for your machine (use the same provided when running `ip a` in your terminal) and `<GatewayIP>` is the IP that allows you to connect to your router dashboard.
-3. run:
+    If you are using the natted process:
+    ```yaml
+    network:
+      version: 2
+      ethernets:
+        enp0s3:
+          dhcp: true
+        enp0s8:
+          dhcp: no
+          addresses: [<VM_Address>/24]
+          nameservers:
+            addresses: [8.8.8.8, 1.1.1.1]
+    ```
+4. run:
     ```sh
     sudo netplan apply
     ```
-4. Now your machine configuration is complete.
+5. Now your machine configuration is complete.
 
 N.B. If you're using the NAT+HOST ONLY configuration, check the gateway IP of the ethernet adapter (192.168.56.x) to set the static IP.
 
