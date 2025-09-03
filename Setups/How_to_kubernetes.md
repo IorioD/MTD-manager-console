@@ -61,6 +61,22 @@ On each VM install
     ```
 
 4. Edit configuration properly by setting `specs.hosts` with the name and the IPs, user, and password of the machine you set `specs.roleGroups` accordingly (etcd and control-plane must be set to the master node).
+    ```yaml
+    spec:
+      hosts:
+      - {name: <master_node_name>, address: <master_ip>, internalAddress: <master_ip>, user: <master_username>, password: "<password>"}
+      - {name: <worker_name>, address: <worker_ip>, internalAddress: <worker_ip>, user: <worker_username>, password: "<password>"}
+      # Add more worker entries as needed
+      roleGroups:
+        etcd:
+        - <master_node_name>
+        control-plane:
+        - <master_node_name>
+        worker:
+        - <worker_name_1>
+        # Add more worker names as needed
+    # ... rest of the file
+    ```
 5. Create cluster:
 
     ```sh
