@@ -37,8 +37,7 @@ On each VM install
       sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     sudo apt-get update
 
-    sudo apt install conntrack
-    sudo apt install socat
+    sudo apt install -y socat conntrack ebtables ipset
     ```
 ---    
 ## 2. Cluster Installation
