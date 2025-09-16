@@ -6,7 +6,7 @@ N.B. You need to install the cluster first (follow the "[How to Kubernetes](How_
 Use PostgreSQL db with PGAdmin interface to manage the information about the cluster.
 1. Install postgreSQL
 	```sh	
- 	apt install postgresql
+ 	sudo apt install -y postgresql
  	```
 2. Install PGadmin:
 	- Install the public key for the repository (if not done previously):
