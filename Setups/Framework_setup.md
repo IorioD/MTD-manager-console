@@ -108,9 +108,9 @@ select * from mtdmanager.node;
    	kubectl get pods -n kubernetes-monitoring-system
    	```
    
-4. When all the pods are up and unning, apply permanent port forwarding with `Prometheus_port_FWD.yaml` (in mtd-manager/miscConfig) using the command
+4. When all the pods are up and unning, apply permanent port forwarding with `PrometheusPortFWD.yaml` (in mtd-manager/miscConfig) using the command
     ```sh
-    kubectl apply -f NodePortProme.yaml
+    kubectl apply -f PrometheusPortFWD.yaml
     ```
    
 	To see the metrics, you can visit: 
@@ -118,7 +118,12 @@ select * from mtdmanager.node;
   	- http://<MASTER_NODE_IP>:30090/targets to see the targets installed on each node
     in any case, they are automatically retrieved by the framework.
 
-## 4.FInal steps
+5. If the node port doesn't work, check whether the name, instance and prometheus values in the yaml file are corresponding to the lables returned by:	
+	```sh
+   	kubectl get pods -n kubernetes-monitoring-system --show-labels
+ 	```
+
+## 4.Final steps
 1. Once everything is set, execute the following commands to install the Java 17 version
 	```sh
 	sudo apt install openjdk-17-jdk
