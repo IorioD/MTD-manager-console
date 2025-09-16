@@ -1,4 +1,4 @@
-# This file will provide some useful KubeKey commands for node management.
+# This file will provide some useful KubeKey commands for cluster management.
 
 [Official GitHub guide](https://github.com/kubesphere/kubekey)
 
