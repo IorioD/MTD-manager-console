@@ -108,15 +108,14 @@ select * from mtdmanager.node;
 
 	N.B. If you are using the server configuration, you need to connect to http://<MASTER_NODE_IP>:8080
 
-5. Once everything is set, execute the following commands to use the Java 17 version:
+5. Once everything is set, execute the following commands to install the Java 17 version
 	```sh
 	sudo apt install openjdk-17-jdk
 	```
-	to install and 
+	and to select it 
 	```sh
 	sudo update-alternatives --config java
 	```
-	to select the Java 17 version
 
 6. Install maven
 	```sh
