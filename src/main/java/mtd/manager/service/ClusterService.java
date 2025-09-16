@@ -58,7 +58,8 @@ public class ClusterService {
 
         // Cluster nodes list
         V1NodeList nodeList = api.listNode(null, null, null, null, null, null, null, null, null, false);
-        
+        List<V1Node> nodes = nodeList.getItems();
+
         // Obtain dynamically cluster name
         /*try{    
             V1ConfigMap configMap = api.readNamespacedConfigMap("cluster-info", "default", null, null, null);
@@ -92,32 +93,39 @@ public class ClusterService {
         }
 
         // Nodes number
-        List<V1Node> nodes = nodeList.getItems();
         clusterDTO.setNodeCount(nodes.size());
+
+        Map<String, NodeInfo> nodeInfoMap = new HashMap<>();
+        Map<String, String> ipToNodeNameMap = new HashMap<>();
 
         // Architecture and OS of each node
         if (!nodes.isEmpty()) {
-            Map<String, NodeInfo> nodeInfoMap = new HashMap<>();
             for (V1Node node : nodes) {
                 String nodeName = node.getMetadata().getName();
                 String architecture = node.getStatus().getNodeInfo().getArchitecture();
                 String operatingSystem = node.getStatus().getNodeInfo().getOperatingSystem();
+
                 nodeInfoMap.put(nodeName, new NodeInfo(architecture, operatingSystem));
+
+                 node.getStatus().getAddresses().forEach(address -> {
+                    if ("InternalIP".equals(address.getType())) {
+                        ipToNodeNameMap.put(address.getAddress(), nodeName);
+                    }
+                });
             }
             clusterDTO.setNodeInfoMap(nodeInfoMap);
         } else{
             logger.warn("Cluster list is empty.");
-            Map<String, NodeInfo> nodeInfoMap = new HashMap<>();
             nodeInfoMap.put(null, new NodeInfo(null, null));
         }
         
         // Retrieve node metrics
-        retrieveNodeMetrics(clusterDTO);
+        retrieveNodeMetrics(clusterDTO, ipToNodeNameMap);
 
         return clusterDTO;
     }
 
-    private void retrieveNodeMetrics(ClusterDTO clusterDTO) {
+    private void retrieveNodeMetrics(ClusterDTO clusterDTO, Map<String, String> ipToNodeNameMap) {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -138,14 +146,15 @@ public class ClusterService {
         // Metrics map
         Map<String, ClusterDTO.NodeMetrics> nodeMetricsMap = new HashMap<>();
 
-        fetchAndProcessMetrics(cpuUrl, "cpuUsage", nodeMetricsMap, objectMapper, httpClient);
-        fetchAndProcessMetrics(memUrl, "memUsage", nodeMetricsMap, objectMapper, httpClient);
-        fetchAndProcessMetrics(diskUrl, "diskUsage", nodeMetricsMap, objectMapper, httpClient);
+        fetchAndProcessMetrics(cpuUrl, "cpuUsage", nodeMetricsMap, objectMapper, httpClient, ipToNodeNameMap);
+        fetchAndProcessMetrics(memUrl, "memUsage", nodeMetricsMap, objectMapper, httpClient, ipToNodeNameMap);
+        fetchAndProcessMetrics(diskUrl, "diskUsage", nodeMetricsMap, objectMapper, httpClient, ipToNodeNameMap);
 
         clusterDTO.setNodeMetricsMap(nodeMetricsMap);
     }
 
-    private void fetchAndProcessMetrics(String url, String metricType, Map<String, ClusterDTO.NodeMetrics> nodeMetricsMap, ObjectMapper objectMapper, CloseableHttpClient httpClient) {
+    private void fetchAndProcessMetrics(String url, String metricType, Map<String, ClusterDTO.NodeMetrics> nodeMetricsMap, 
+                                        ObjectMapper objectMapper, CloseableHttpClient httpClient, Map<String, String> ipToNodeNameMap) {
         try (CloseableHttpResponse response = httpClient.execute(new HttpGet(url))) {
             int statusCode = response.getStatusLine().getStatusCode();
             String responseBody = EntityUtils.toString(response.getEntity());
@@ -161,7 +170,16 @@ public class ClusterService {
             JsonNode data = root.path("data").path("result");
     
             for (JsonNode node : data) {
-                String nodeName = node.path("metric").path("instance").asText();
+
+                String instance = node.path("metric").path("instance").asText(); // es. "192.168.1.37:9100"
+                String ip = instance.split(":")[0];
+                String nodeName = ipToNodeNameMap.get(ip);
+
+                if (nodeName == null) {
+                    logger.warn("No Kubernetes node found for instance {}", instance);
+                    continue;
+                }
+                
                 String metricValueStr = node.path("value").get(1).asText();
                 BigDecimal metricValue = new BigDecimal(metricValueStr).setScale(2, RoundingMode.HALF_UP);
                 
@@ -193,7 +211,7 @@ public class ClusterService {
                 case "diskUsage":
                     return value.toString() + " %";
                 case "memUsage":
-                    return value.toString() + " bytes";
+                    return value.toString() + " %";
                 default:
                     return value.toString(); // fallback in case metricType is unknown
             }
