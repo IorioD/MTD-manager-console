@@ -88,27 +88,38 @@ select * from mtdmanager.node;
       	```sh
       	kubectl describe svc kubernetes
       	```
-      
-	To make the application able to collect node metrics:
-  	- apply permanent port forwarding with `NodePortProme.yaml` (in mtd-manager/miscConfig) using the command
-    	```sh
-     	kubectl create namespace kubernetes-monitoring-system
-    	kubectl apply -f NodePortProme.yaml
-    	```
-    
-3. In `ClusterService` (src/main/java/mtd/manager/service/ClusterService.java):
-	- change the IP of `PROMETHEUS_URL` (row 44) to the master node IP.
-
-	To see the metrics without using the app, you can visit 
-  	- http://<MASTER_NODE_IP>:30090/graph to perform the queries
-  	- http://<MASTER_NODE_IP>:30090/targets to see the targets installed on each node
-
-4. In `ClusrterController` (src/main/java/mtd/manager/controller/ClusterController.java):
+5. In `ClusrterController` (src/main/java/mtd/manager/controller/ClusterController.java):
   	- eventually change the frontend origin (row 24) if you plan to deploy the application on something different from http://localhost:8080
 
 	N.B. If you are using the server configuration, you need to connect to http://<MASTER_NODE_IP>:8080
 
-5. Once everything is set, execute the following commands to install the Java 17 version
+## 3. Metrics collection
+1. In `ClusterService` (src/main/java/mtd/manager/service/ClusterService.java) change the IP of `PROMETHEUS_URL` (row 44) to the master node IP.
+
+2. Install Prometheus:
+	```sh
+	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    helm repo update
+   	helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack --namespace kubernetes-monitoring-system --create-namespace
+    ```
+   
+   To check the pod status:
+	```sh
+   	kubectl get pods -n kubernetes-monitoring-system
+   	```
+   
+4. When all the pods are up and unning, apply permanent port forwarding with `Prometheus_port_FWD.yaml` (in mtd-manager/miscConfig) using the command
+    ```sh
+    kubectl apply -f NodePortProme.yaml
+    ```
+   
+	To see the metrics, you can visit: 
+  	- http://<MASTER_NODE_IP>:30090/graph to perform the queries
+  	- http://<MASTER_NODE_IP>:30090/targets to see the targets installed on each node
+    in any case, they are automatically retrieved by the framework.
+
+## 4.FInal steps
+1. Once everything is set, execute the following commands to install the Java 17 version
 	```sh
 	sudo apt install openjdk-17-jdk
 	```
@@ -117,12 +128,12 @@ select * from mtdmanager.node;
 	sudo update-alternatives --config java
 	```
 
-6. Install maven
+2. Install maven
 	```sh
 	sudo apt install maven -y
 	```
  
-7. Afterward, execute the following commands in the main folder:
+3. Afterward, execute the following commands in the main folder:
 	```sh
 	sudo chmod +x build-and-run.sh
 	```
