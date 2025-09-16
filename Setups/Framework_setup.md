@@ -21,14 +21,7 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
 	```sh
  	sudo apt install pgadmin4
  	```
-	- Install for desktop mode only:
-	```sh
-	sudo apt install pgadmin4-desktop
- 	```
-	- Install for web mode only:
-	```sh
-	sudo apt install pgadmin4-web
- 	```
+	If you want, you can install desktop `sudo apt install pgadmin4-desktop` or web `sudo apt install pgadmin4-web` mode only.
 	- Configure the webserver, if you installed pgadmin4-web:
 	```sh
 	sudo /usr/pgadmin4/bin/setup-web.sh
