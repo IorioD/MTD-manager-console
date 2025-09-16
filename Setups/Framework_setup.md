@@ -92,6 +92,7 @@ select * from mtdmanager.node;
 	To make the application able to collect node metrics:
   	- apply permanent port forwarding with `NodePortProme.yaml` (in mtd-manager/miscConfig) using the command
     	```sh
+     	kubectl create namespace kubernetes-monitoring-system
     	kubectl apply -f NodePortProme.yaml
     	```
     
