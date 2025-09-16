@@ -59,7 +59,7 @@ On each VM install
     ```sh
     ./kk create config --with-kubernetes v1.33.4
     ```
-The command using Kubesphere `./kk create config --with-kubernetes v1.23.10 --with-kubesphere v3.4.1` is not available anymore.
+Refer to [the official GitHub page](https://github.com/kubesphere/kubekey/blob/master/docs/kubernetes-versions.md) to check the latest Kubernetes supported version. The command using Kubesphere `./kk create config --with-kubernetes v1.23.10 --with-kubesphere v3.4.1` is not available anymore.
 
 4. Edit configuration properly by setting `specs.hosts` with the name and the IPs, user, and password of the machine you set `specs.roleGroups` accordingly (etcd and control-plane must be set to the master node).
     ```yaml
