@@ -83,7 +83,7 @@ function fetchClusterInfo() {
                             <tr>
                                 <th>Node Name</th>
                                 <th>CPU Usage (%)</th>
-                                <th>Memory Usage (bytes)</th>
+                                <th>Memory Usage (%)</th>
                                 <th>Disk Usage (%)</th>
                             </tr>
                         </thead>
