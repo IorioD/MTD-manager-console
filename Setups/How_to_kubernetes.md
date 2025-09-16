@@ -89,6 +89,8 @@ If you used Kubesphere, at the end something like this will be shown:
 
 with the IP matches with the IP of the master node.
 
+Refer to [this file](KubeKey_CMD.md) if you need more KubeKey management commands.
+
 ---
 ## 3. Check Installation:
 ```sh
