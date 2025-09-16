@@ -97,7 +97,7 @@ select * from mtdmanager.node;
     	```
     
 3. In `ClusterService` (src/main/java/mtd/manager/service/ClusterService.java):
-	- change the ip of `PROMETHEUS_URL` to the master node IP
+	- change the IP of `PROMETHEUS_URL` (row 44) to the master node IP.
 
 	To see the metrics without using the app, you can visit 
   	- http://<MASTER_NODE_IP>:30090/graph to perform the queries
