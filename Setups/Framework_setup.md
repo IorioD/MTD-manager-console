@@ -22,7 +22,7 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
  	sudo apt install pgadmin4
  	```
 	If you want, you can install desktop `sudo apt install pgadmin4-desktop` or web `sudo apt install pgadmin4-web` mode only.
-	- Configure the webserver, if you installed pgadmin4-web:
+	- Configure the webserver credentials, if you installed pgadmin4-web or both versions:
 	```sh
 	sudo /usr/pgadmin4/bin/setup-web.sh
  	```
@@ -34,9 +34,9 @@ Use PostgreSQL db with PGAdmin interface to manage the information about the clu
  	```sh
  	ALTER USER postgres PASSWORD 'postgres';
  	```
- 	and use the new password in the pgadmin UI in the proper field
-4. `127.0.0.1/pgadmin4` (<MASTER_NODE_IP>/pgadmin4 if you are using the server configuration) is the url to connecto to the db dashboard.
-5. Create a new server named localhost with `localhost` as adress, `5432` as port and `postgres` as username and password
+4. `127.0.0.1/pgadmin4` (<MASTER_NODE_IP>/pgadmin4 if you are using the server configuration) is the url to connect to the db dashboard.
+5. Access with the credentials you inserted;
+6. Create a new server (`Right click on servers->register->server `) named `localhost` and in the `connection` tab set `localhost` as address, `5432` as port and `postgres` as username and password
 7. Create a new user called `mtdmanager` with all the privileges (in the privileges panel of the user properties) and set `mtdmanager` as password (in the description panel in the user properties).
 8. Create new db named `mtdmanager` with mtdmanager as owner
 9. Modify the `pgadmin.sql` (in `/miscConfig` row 307-309) with the IP of the nodes of the cluster and the names provided in the cluster configuration and apply it using the query tool to build the database schema.
