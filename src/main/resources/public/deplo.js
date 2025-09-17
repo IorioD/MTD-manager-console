@@ -12,7 +12,6 @@ async function fetchDeployments() {
         deploymentData.forEach(deployment => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${deployment.id}</td>
                 <td>${deployment.name}</td>
                 <td>${deployment.namespace}</td>
                 <td>${deployment.type}</td>
