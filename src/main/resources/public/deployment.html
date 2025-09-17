@@ -18,7 +18,7 @@
                     script-src  'self';
         " />
     <link rel="icon" type="image/png" href="mtd.png" sizes="64x64">
-    <title>MTD Manager - Deployments</title>
+    <title>MTD Manager - Pods</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -29,7 +29,7 @@
 <body>
     <div class="container">
 
-        <h1 class="text-center">Deployments List</h1>
+        <h1 class="text-center">Pods List</h1>
         <div class="button-container">
             <a href="index.html" class="button">Home</a>
             <a href="nodes.html" class="button">Nodes</a>
@@ -43,7 +43,6 @@
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Name</th>
                     <th>Namespace</th>
                     <th>Type</th>
@@ -58,7 +57,7 @@
 
         <br>
 
-        <button id="addDeploymentButton" class="btn btn-success">Add Deployment</button>
+        <button id="addDeploymentButton" class="btn btn-success">Add Pod</button>
 
         <br><br>
     </div>
@@ -67,4 +66,5 @@
 </body>
 
 </html>
+
 
