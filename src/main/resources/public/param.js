@@ -13,7 +13,6 @@ async function fetchParameters() {
             const isRandom = parameter.value === 'random';
             const selectedValue = isRandom ? 'random' : parameter.value;
             row.innerHTML = `
-                <td>${parameter.id}</td>
                 <td>${parameter.key}</td>
                 <td>
                     <select data-id="${parameter.id}">
