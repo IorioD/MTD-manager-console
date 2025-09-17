@@ -49,7 +49,7 @@ public class ServiceAccountStrategyService implements Runnable {
             Strategy saShuffling = strategyRepository.findByName(SERVICE_ACCOUNT_SHUFFLING_CONTAINER).orElseThrow(EntityNotFoundException::new);
 
             List<Deployment> deployments = deploymentRepository.findAll();
-            log.info("deployments found: {}", deployments.size());
+            log.info("Deployments found: {}", deployments.size());
             for (Deployment deployment : deployments) {
                 if(Boolean.TRUE.equals(saShuffling.getEnabled()) && Integer.valueOf(4).equals(deployment.getStrategy()) && deployment.isEnabled()){
                     io.fabric8.kubernetes.api.model.apps.Deployment runningDeployment = kubernetesClient.apps().deployments().inNamespace(deployment.getNamespace()).withName(deployment.getName()).get();
