@@ -12,7 +12,6 @@ async function fetchNodes() {
         nodesData.forEach(node => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${node.id}</td>
                 <td>${node.hostname}</td>
                 <td>${node.ipAddress}</td>
                 <td>${node.role}</td>
