@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface NodeRepository extends JpaRepository<Node, Long>, JpaSpecificationExecutor<Node> {
 
@@ -24,4 +25,6 @@ public interface NodeRepository extends JpaRepository<Node, Long>, JpaSpecificat
     List<Node> findAllByType(String type);
 
     boolean existsByIpAddress(String ipAddress);
+
+    Optional<Node> findByIpAddress(String ipAddress);
 }
