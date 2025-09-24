@@ -13,7 +13,7 @@ public class NodeDTO implements Serializable {
     private Long id;
     private String role;
     private String type;
-    private Boolean available;
+    private String available;
 
 
     public String gethostname() {
@@ -48,11 +48,11 @@ public class NodeDTO implements Serializable {
         this.type = type;
     }
     
-    public Boolean getAvailable() {
+    public String getAvailable() {
         return available;
     }                  
 
-    public void setAvailable (Boolean available) {
+    public void setAvailable (String available) {
         this.available = available;
     }
 }
