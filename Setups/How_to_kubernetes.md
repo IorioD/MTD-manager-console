@@ -46,22 +46,23 @@ On each VM install
 - Video guide: [YouTube Video Guide](https://www.youtube.com/watch?v=nYOYk3VTSgo)
 
 ### Steps:
-1. Pay attention to node requirements (mainly on SSH connection).
-2. Download KubeKey and make it executable:
+1. Download KubeKey and make it executable:
 
     ```sh
     curl -sfL https://get-kk.kubesphere.io | sh -
     chmod +x kk
     ```
 
-3. Create cluster config:
+2. Create cluster config:
 
     ```sh
     ./kk create config --with-kubernetes v1.33.4
     ```
-Refer to [the official GitHub page](https://github.com/kubesphere/kubekey/blob/master/docs/kubernetes-versions.md) to check the latest Kubernetes supported version. The command using Kubesphere `./kk create config --with-kubernetes v1.23.10 --with-kubesphere v3.4.1` is not available anymore.
 
-4. Edit configuration properly by setting `specs.hosts` with the name and the IPs, user, and password of the machine you set `specs.roleGroups` accordingly (etcd and control-plane must be set to the master node).
+Refer to [the official GitHub page](https://github.com/kubesphere/kubekey/blob/master/docs/kubernetes-versions.md) to check the latest Kubernetes supported version.
+The command using Kubesphere `./kk create config --with-kubernetes v1.23.10 --with-kubesphere v3.4.1` is not available anymore.
+
+3. Edit configuration properly by setting `specs.hosts` with the name and the IPs, user, and password of the machine you set `specs.roleGroups` accordingly (etcd and control-plane must be set to the master node).
     ```yaml
     spec:
       hosts:
@@ -78,24 +79,14 @@ Refer to [the official GitHub page](https://github.com/kubesphere/kubekey/blob/m
         # Add more worker names as needed
     # ... rest of the file
     ```
-5. Create cluster:
+4. Create cluster:
 
     ```sh
     ./kk create cluster -f <config-name>.yaml
     ```
-If you used Kubesphere, at the end something like this will be shown:
-
-![Alt text](../img/kube.png)
-
-with the IP matches with the IP of the master node.
-
 Refer to [this file](KubeKey_CMD.md) if you need more KubeKey cluster management commands.
 
 ---
-## 3. Check Installation:
-```sh
-kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l 'app in (ks-install, ks-installer)' -o jsonpath='{.items[0].metadata.name}') -f
-```
 
 If you want to install a custom application on the cluster that does not require edge nodes, you can skip the following steps and start the [setup of the framework](Framework_setup.md) itself. As an example of a cloud application, you can refer to the [bank application](Bank_setup.md) that provides a simple high level money transfer mechanism like PayPal.
 
