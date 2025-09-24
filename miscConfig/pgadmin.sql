@@ -99,7 +99,7 @@ CREATE TABLE mtdmanager.node (
     ip_address character varying NOT NULL,
     id integer NOT NULL,
     role character varying,
-    available boolean DEFAULT false,
+    status character varying NOT NULL,
     type character varying
 );
 
