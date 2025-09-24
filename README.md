@@ -1,5 +1,5 @@
 # MTD-manager-console
-This is a JAVA application for managing the Moving Target Defense in a cloud environment developed in collaboration with `University of Naples Federico II` in the context of [DEFEDGE - PRIN PNRR 2022 Project](https://github.com/DEFEDGE).
+This is a JAVA application for managing the Moving Target Defense in a cloud environment developed in collaboration with `University of Naples Federico II` in the context of [DEFEDGE - PRIN PNRR 2022 Project](https://github.com/DEFEDGE) (reference author daniele.iorio2@unina.it).
  
 To use this application, you need to install a kubernetes cluster following this file [How to Kubernetes](Setups/How_to_kubernetes.md) and set up the environment following [Framework setup](Setups/Framework_setup.md).
 
@@ -19,23 +19,13 @@ The application is intuitive and easy to use.
 
 in which information about the cluster and the single node is automatically retrieved.
 
-- In the `Nodes List` page
+- In the `Nodes List` page, the user can access the information of the active nodes in the cluster.
 
-![Alt text](img/List-node.png "Nodes")
+![Alt text](img/NodeList.png "Nodes")
 
-![Alt text](img/Add_node.png "Add Node Form")
+- In the `Pods List` page, the user can access the information for each pod installed in the cluster and can decide on which of them MTD will be enabled.
 
-the user can manage the node lifecycle (using add, edit and delete functions).
-
-- In the `Deployment List` page
-
-![Alt text](img/List-deplo.png "Deployments")
-
-![Alt text](img/Add_deplo.png "Add Deployment Form")
-
-the user can manage the deployment lifecycle (using add, edit and delete functions) and can decide on which deployment will enable the MTD. 
-
-N.B. The name of the deployment is the corresponding workload. 
+![Alt text](img/PodList.png "Deployments")  
 
 - In the `Strategies List` page
 
@@ -73,4 +63,4 @@ the user can set the preferred execution window.
 
 ---
 ## Reference
-[1] Casola, V., De Benedictis, A., Iorio, D., Migliaccio, S.: A moving target defense framework to improve resilience of cloud-edge systems. In: Barolli, L. (ed.) Advanced Information Networking and Applications. pp. 243–252. Springer Nature Switzerland, Cham (2025). [DOI](https://doi.org/10.1007/978-3-031-87778-0_24)
+[1] Casola, V., De Benedictis, A., Iorio, D., Migliaccio, S.: A moving target defense framework to improve resilience of cloud-edge systems. In: Barolli, L. (ed.) Advanced Information Networking and Applications. pp. 243–252. Springer Nature Switzerland, Cham (2025). [DOI](https://doi.org/10.1007/978-3-031-87778-0_24) 
