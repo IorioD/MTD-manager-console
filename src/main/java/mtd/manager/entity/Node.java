@@ -27,7 +27,7 @@ public class Node implements Serializable {
     private String type;
 
     @Column(name = "available")
-    private Boolean available;
+    private String available;
 
 //    @OneToMany(mappedBy = "node")
 //    private List<NodeLabel> nodeLabels = new ArrayList<>();
