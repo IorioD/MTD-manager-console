@@ -1,8 +1,8 @@
-let deploymentData = []; // Variabile globale per mantenere i dati dei nodi
+let deploymentData = [];
 
 async function fetchDeployments() {
     try {
-        const response = await fetch('/deployment/all'); // Assicurati che l'endpoint sia corretto
+        const response = await fetch('/deployment/all');
         if (!response.ok) {
             throw new Error(`Errore HTTP: ${response.status}`);
         }
@@ -13,17 +13,16 @@ async function fetchDeployments() {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${deployment.name}</td>
+                <td>${deployment.podIp}</td>
                 <td>${deployment.namespace}</td>
                 <td>${deployment.type}</td>
+                <td>${deployment.status}</td>
+                <td>${deployment.nodeName}</td>
                 <td></td>
                 <td>
                     <div class="slide-button" data-id="${deployment.id}" data-enabled="${deployment.enabled}">
                         <div class="slider" id="slider_${deployment.id}"></div>
                     </div>
-                </td>
-                <td>
-                    <button class="btn btn-warning edit-button" data-id="${deployment.id}">Edit</button>
-                    <button class="btn btn-danger delete-button" data-id="${deployment.id}">Delete</button>
                 </td>
             `;
             const select = document.createElement('select');
@@ -36,15 +35,14 @@ async function fetchDeployments() {
                 <option value="3" ${deployment.strategy === 3 ? 'selected' : ''}>Node Migration</option>
                 <option value="4" ${deployment.strategy === 4 ? 'selected' : ''}>Service Account Shuffling</option>
             `;
-            row.children[4].appendChild(select); // Aggiunge il select alla quinta colonna della riga
+            row.children[6].appendChild(select);
             tableBody.appendChild(row);
         });
 
-        addEventListeners(); // Aggiungi gli event listeners dopo aver creato gli elementi
+        addEventListeners();
 
     } catch (error) {
-        console.error('Errore nel recupero dei deployment:', error);
-        // Gestisci l'errore in modo appropriato
+        console.error('Error in fetching deployments:', error);
     }
 }
 
@@ -74,31 +72,14 @@ async function toggleEnabled(id) {
         const message = deployment.enabled ? `MTD enabled for ${deployment.name}` : `MTD disabled for ${deployment.name}`;
         alert(message);
 
-        fetchDeployments(); // Aggiorna l'elenco dei deployment dopo l'aggiornamento
+        fetchDeployments();
 
     } catch (error) {
-        console.error('Errore nel toggle dell\'abilitazione MTD:', error);
-        // Gestisci l'errore in modo appropriato
+        console.error('Error in toggling MTD enablement:', error);
     }
 }
 
 function addEventListeners() {
-    document.querySelectorAll('.edit-button').forEach(button => {
-        button.addEventListener('click', function() {
-            editDeployment(this.getAttribute('data-id'));
-        });
-    });
-
-    document.querySelectorAll('.delete-button').forEach(button => {
-        button.addEventListener('click', function() {
-            deleteDeployment(this.getAttribute('data-id'));
-        });
-    });
-
-    document.getElementById('addDeploymentButton').addEventListener('click', function() {
-        window.location.href = 'add-deployment.html';
-    });
-
     document.querySelectorAll('.slide-button').forEach(slideButton => {
         slideButton.addEventListener('click', () => {
             const id = slideButton.getAttribute('data-id');
@@ -116,46 +97,12 @@ async function updateStrategy(id, strategy) {
             throw new Error(`HTTP Error: ${response.status}`);
         }
 
-        // Mostra un messaggio di conferma
         alert('Strategy updated successfuly');
 
-        // Aggiorna la tabella dopo aver aggiornato la strategia
         fetchDeployments();
     } catch (error) {
         console.error('Error in adding the strategy:', error);
     }
 }
 
-async function deleteDeployment(id) {
-    
-    const deployment = deploymentData.find(n => n.id.toString() === id.toString());
-      
-    if (!deployment) {
-        console.error('Deployment not found');
-        return;
-    }
-
-    if (!confirm(`Confirm ${deployment.name} removal?`)) {
-        return;
-    }
-    try {
-        const response = await fetch(`/deployment/${id}`, {
-            method: 'DELETE'
-        });
-        if (!response.ok) {
-            throw new Error(`Errore HTTP: ${response.status}`);
-        }
-        
-        fetchDeployments();
-    
-    } catch (error) {
-        console.error('Error in deleting the deployment:', error);
-    }
-}
-
-function editDeployment(id) {
-    window.location.href = `edit-deployment.html?id=${id}`;
-}
-
-// Inizializza la tabella dei deployment al caricamento della pagina
 document.addEventListener('DOMContentLoaded', fetchDeployments);
