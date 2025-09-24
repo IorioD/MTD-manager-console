@@ -58,7 +58,10 @@ SET default_table_access_method = heap;
 
 CREATE TABLE mtdmanager.deployment (
     name character varying NOT NULL,
+    node_name character varying NOT NULL,
     strategy integer NOT NULL,
+    status character varying NOT NULL,
+    podip character varying NOT NULL,
     namespace character varying,
     id integer NOT NULL,
     type character varying NOT NULL,
