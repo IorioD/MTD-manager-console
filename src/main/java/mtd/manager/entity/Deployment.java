@@ -25,6 +25,15 @@ public class Deployment implements Serializable {
     @Column(name = "type")
     private String type;
 
+    @Column(name = "node_name")
+    private String nodeName;
+
+    @Column(name = "status")
+    private String status;
+
+    @Column(name = "podip")
+    private String podIp;
+
     @Column(name = "strategy")
     private Integer strategy;  
 	
@@ -37,5 +46,13 @@ public class Deployment implements Serializable {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getNodeName() {
+        return nodeName;
+    }
+
+    public void setNodeName(String nodeName) {
+        this.nodeName = nodeName;
     }
 }
