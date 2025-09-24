@@ -141,17 +141,15 @@ public class NodeService {
                             role.equals("worker"))
                 ? CLOUD : EDGE;
 
-            // AVAILABLE
-            V1NodeCondition readyCond = Optional.ofNullable(nodeV1.getStatus())
+            // STATUS
+            String status = Optional.ofNullable(nodeV1.getStatus())
                 .map(V1NodeStatus::getConditions)
                 .orElse(Collections.emptyList())
                 .stream()
                 .filter(cond -> "Ready".equals(cond.getType()))
                 .findFirst()
-                .orElse(null);
-
-            String status = (readyCond != null && "True".equals(readyCond.getStatus())) ? "Ready" : "NotReady";
-            boolean available = "Ready".equals(status);
+                .map(V1NodeCondition::getStatus)  // "True" / "False" / "Unknown"
+                .orElse("Unknown");
 
             // DB ADD/UPDATE 
             Node node = nodeRepository.findByIpAddress(ip).orElse(new Node());
@@ -159,7 +157,7 @@ public class NodeService {
             node.setIpAddress(ip);
             node.setRole(role);
             node.setType(type);
-            node.setAvailable(available);
+            node.setAvailable(status);
 
             nodeRepository.save(node);
         }
