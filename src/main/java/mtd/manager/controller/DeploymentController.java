@@ -2,8 +2,6 @@ package mtd.manager.controller;
 
 import mtd.manager.dto.DeploymentDTO;
 import mtd.manager.service.DeploymentService;
-import mtd.manager.vo.DeploymentUpdateVO;
-import mtd.manager.vo.DeploymentVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,27 +18,6 @@ public class DeploymentController {
     @Autowired
     private DeploymentService deploymentService;
 
-    @PostMapping
-    public String save(@Valid @RequestBody DeploymentVO vO) {
-        return deploymentService.save(vO).toString();
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@Valid @NotNull @PathVariable("id") Long id) {
-        deploymentService.delete(id);
-    }
-
-    @PutMapping //("/{id}")
-    public void update(@Valid @RequestBody DeploymentUpdateVO vO) {
-        deploymentService.update(vO);
-    }
-
-    @PutMapping("/{id}")
-    public void update(@Valid @RequestBody DeploymentUpdateVO vO, @PathVariable Long id) {
-        vO.setId(id); // Set the ID to the VO
-        deploymentService.update(vO);
-    }
-
     @GetMapping("/{id}")
     public DeploymentDTO getById(@Valid @NotNull @PathVariable("id") Long id) {
         return deploymentService.getById(id);
@@ -51,7 +28,7 @@ public class DeploymentController {
         return deploymentService.findAll();
     }
 
-    @PutMapping("/{id}/strategy")
+    /* @PutMapping("/{id}/strategy")
     public void updateDeploymentStrategy(@PathVariable("id") Long id, @RequestParam Integer strategy) {
         deploymentService.updateDeploymentStrategy(id, strategy);
     }
@@ -64,5 +41,5 @@ public class DeploymentController {
     @PatchMapping("/{id}/toggle")
     public void toggleEnabled(@PathVariable("id") Long id) {
         deploymentService.toggleEnabled(id);
-    }
+    } */
 }
