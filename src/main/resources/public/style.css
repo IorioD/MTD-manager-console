@@ -1,9 +1,9 @@
-/* Stili per il bottone slide */
+/* Styles for the slide button */
 .slide-button {
     position: relative;
     width: 60px;
     height: 30px;
-    background-color: #4CAF50; /* Verde quando è true */
+    background-color: #4CAF50; /* Green when true */
     border-radius: 15px;
     cursor: pointer;
     overflow: hidden;
@@ -12,21 +12,21 @@
 .slider {
     position: absolute;
     top: 0;
-    left: 0; /* Modifica la posizione a sinistra */
+    left: 0; /* Change position to left */
     width: 50%;
     height: 100%;
-    background-color: #ccc; /* Cambia il colore quando è false */
+    background-color: #ccc; /* Change color when false */
     border-radius: 15px;
-    transition: left 0.3s ease, background-color 0.3s ease; /* Aggiunto transition per il cambio di colore e posizione */
+    transition: left 0.3s ease, background-color 0.3s ease; /* Added transition for color and position change */
 }
 
 .slide-button[data-enabled="true"] .slider {
-    left: 50%; /* Cambia la posizione a destra */
-    background-color: #333; /* Cambia il colore quando è true */
+    left: 50%; /* Change position to right */
+    background-color: #333; /* Change color when true */
 }
 
 
-/* Stili per il bottone generico */
+/* Styles for the generic button */
 .button {
     background-color: gray;
     color: white;
@@ -45,7 +45,7 @@
     background-color: darkgray;
 }
 
-/* Stili per il container principale */
+/* Styles for the main container */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -88,8 +88,8 @@ table td {
 }
 
 .button-container {
-    display: grid;  /* Utilizziamo CSS Grid */
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));  /* Colonnes automatiche */
-    gap: 10px;  /* Spazio tra i bottoni */
-    margin-top: 20px; /* Aggiungi uno spazio di 20px sopra al container */
+    display: grid;  /* CSS Grid */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));  /* Auto columns */
+    gap: 10px;  /* Space between buttons */
+    margin-top: 20px; /* Add 20px space above the container */
 }

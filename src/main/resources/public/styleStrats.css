@@ -31,20 +31,20 @@ h2 {
     color: #555;
     margin-bottom: 10px;
 }
-.strategy-table {
+.strategyTable {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
 }
-.strategy-table th, .strategy-table td {
+.strategyTable th, .strategyTable td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
 }
-.strategy-table th {
+.strategyTable th {
     background-color: #f2f2f2;
 }
-.strategy-table td {
+.strategyTable td {
     background-color: #fff;
 }
 .enable-button {
@@ -75,8 +75,8 @@ h2 {
     opacity: 0.8;
 }
 .button-container {
-    display: grid;  /* Utilizziamo CSS Grid */
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));  /* Colonnes automatiche */
-    gap: 10px;  /* Spazio tra i bottoni */
-    margin-top: 20px; /* Aggiungi uno spazio di 20px sopra al container */
+    display: grid;  /* CSS Grid */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));  /* Auto columns */
+    gap: 10px;  /* Space between buttons */
+    margin-top: 20px; /* Add 20px space above the container */
 }

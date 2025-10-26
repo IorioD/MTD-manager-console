@@ -5,21 +5,21 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta
-			http-equiv="Content-Security-Policy"
-			content="default-src 'self'; 
-					
-					img-src 'self'
-							https://*;  
-					
-					style-src 	'self'
-								'unsafe-hashes' 'sha256-llclVMhPk3Y3eprq3MGrpRb8CwMP8X5oYvgF5lY6SUE=' 
-								https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css;
-					
-					script-src 'self'
-			"
-		/>
-		
+		<meta http-equiv="Content-Security-Policy"
+			content="
+                    default-src 'self';
+                        
+                    img-src 'self'
+                            https://*;
+                    
+                    style-src   'self'
+                                'unsafe-hashes' 'sha256-llclVMhPk3Y3eprq3MGrpRb8CwMP8X5oYvgF5lY6SUE=' 
+                                https://cdn.jsdelivr.net;
+
+                    script-src  'self';
+
+                    connect-src 'self' https://cdn.jsdelivr.net;
+            "/>
 		<link rel="icon" type="image/png" href="mtd.png" sizes="64x64">
 		<title>MTD Manager - Home</title>
 				
@@ -34,7 +34,8 @@
 		<div id="mySidebar" class="sidebar">
 			<a href="#" class="closebtn">&times;</a>
 			<a href="nodes.html">Nodes List</a>
-			<a href="deployment.html">Pods List</a>
+			<a href="deployment.html">Deployments List</a>
+			<a href="pods.html">Pods List</a>
 			<a href="strategy.html">Strategies List</a>
 			<a href="parameter.html">Parameters List</a>
 		</div>
@@ -44,7 +45,7 @@
 			<br><br>
 			<h1>Welcome to Moving Target Defence management console</h1>
 			<div class="cluster-info">
-				<h2>Kubernates Cluster and node information</h2>
+				<h2>Kubernetes Cluster and node information</h2>
 				<div class="table-container">
 					<div id="cluster-data"></div>
 					<div id="node-info"></div>

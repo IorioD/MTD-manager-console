@@ -52,7 +52,7 @@ body {
 .container {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* per allineare i figli a sinistra */
+    align-items: flex-start; /* left align children */
     /*transition: margin-left .5s;*/
     padding: 20px;
     flex-grow: 1;
@@ -94,7 +94,7 @@ h2 {
 }
 .table-container {
     overflow-x: auto;
-    width: 100%; /* Larghezza massima del 100% per evitare il superamento */
+    width: 100%; /* Maximum width of 100% to prevent overflow */
     margin-bottom: 20px;
 }
 .table-title {

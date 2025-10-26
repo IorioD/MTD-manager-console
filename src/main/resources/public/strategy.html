@@ -1,28 +1,44 @@
 <!DOCTYPE html>
-<html lang="it" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-        xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+    xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="Content-Security-Policy"
-            content="default-src 'self';
+            content="
+                    default-src 'self';
                         
                     img-src 'self'
                             https://*;
                     
                     style-src   'self'
                                 'unsafe-hashes' 'sha256-llclVMhPk3Y3eprq3MGrpRb8CwMP8X5oYvgF5lY6SUE=' 
-                                https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css;
+                                https://cdn.jsdelivr.net
+                                https://cdn.datatables.net;
+                    
+                    style-src-elem 'self' 
+                                https://cdn.jsdelivr.net
+                                https://cdn.datatables.net;
 
-                    script-src  'self';
+                    script-src  'self'
+                                https://cdn.datatables.net
+                                https://code.jquery.com;
+
+
+                    connect-src 'self' 
+                                https://cdn.jsdelivr.net;
             "/>
         <link rel="icon" type="image/png" href="mtd.png" sizes="64x64">
         <title>MTD Manager - Strategies</title>
 
+        <!-- Bootstrap -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-                integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-                
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+        <!-- DataTables -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+     
         <link rel="stylesheet" href="styleStrats.css">
     </head>
 
@@ -33,31 +49,36 @@
             <div class="button-container">
                 <a href="index.html" class="button">Home</a>
                 <a href="nodes.html" class="button">Nodes</a>
-                <a href="deployment.html" class="button">Pods</a>
+                <a href="deployment.html" class="button">Deployments</a>
+                <a href="pods.html" class="button">Pods</a>
+                <a href="strategy.html" class="button">Strategies</a>
                 <a href="parameter.html" class="button">Parameters</a>
-                <a href="strategy.html" class="button">Refresh</a>
             </div>
 
             <br>
 
-            <table class="strategy-table">
+            <table id="strategyTable" class="display strategyTable">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Name</th>
                         <th>Description</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="strategy-list">
-                    <!-- I dati delle strategie saranno inseriti qui tramite JavaScript -->
+                <tbody id="strategyTableBody">
                 </tbody>
             </table>
+            
+            <br>
 
+            <br><br>
         </div>
+
+        <!-- jQuery e DataTables -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
         <script src="strats.js"></script>
     </body>
-
 </html>
