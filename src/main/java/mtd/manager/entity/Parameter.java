@@ -17,11 +17,8 @@ public class Parameter implements Serializable {
 
     @Id
     private Long id;
-
     @Column(name = "key", nullable = false)
     private String key;
-
     @Column(name = "value", nullable = false)
     private String value;
-
 }

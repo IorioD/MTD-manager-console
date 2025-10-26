@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class NodeLabel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     @Column(name = "key")
     private String key;
     @Column(name = "value")
