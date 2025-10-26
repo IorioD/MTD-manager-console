@@ -18,9 +18,9 @@ public class MTDStrategyService implements ApplicationRunner {
     NodeShufflingStrategyService NodeShufflingStrategyService;
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        new Thread(ServiceAccountStrategyService, "sa-shuffling").start();
+        new Thread(ServiceAccountStrategyService, "service-account-shuffling").start();
         new Thread(IPShufflingStrategyService, "ip-shuffling").start();
         new Thread(RedundancyService, "redundancy-service").start();
-        new Thread(NodeShufflingStrategyService, "LM-VM").start();
+        new Thread(NodeShufflingStrategyService, "pod-migration").start();
     }
 }

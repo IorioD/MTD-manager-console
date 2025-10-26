@@ -19,7 +19,7 @@ public class NodeLabelService {
     @Autowired
     private NodeLabelRepository nodeLabelRepository;
 
-    public Integer save(NodeLabelVO vO) {
+    public Long save(NodeLabelVO vO) {
         NodeLabel bean = new NodeLabel();
         BeanUtils.copyProperties(vO, bean);
         bean = nodeLabelRepository.save(bean);

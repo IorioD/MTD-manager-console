@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 public class ClusterService {
 
     private static final Logger logger = LoggerFactory.getLogger(ClusterService.class);
-    private static final String PROMETHEUS_URL = "http://192.168.1.37:30090/api/v1/query";
+    private static final String PROMETHEUS_URL = "http://192.168.56.117:30090/api/v1/query";
 
     @SuppressWarnings("null")
     public ClusterDTO retrieveClusterInfo() throws IOException, ApiException{

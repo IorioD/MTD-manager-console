@@ -22,6 +22,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/*=============================================================================================================
+                                            Service Account Shuffling
+
+   This strategy periodically changes the service account used by a deployment to distribute load
+   and avoid potential bottlenecks. 
+   It creates a new service account with a unique name and updates the deployment to use this new service account.
+
+   The service runs in an infinite loop, sleeping for a configurable period between iterations.
+=============================================================================================================*/
+
 @Slf4j
 @Component
 public class ServiceAccountStrategyService implements Runnable {
@@ -42,7 +52,7 @@ public class ServiceAccountStrategyService implements Runnable {
 
         log.info("ServiceAccountStrategyService running");
         KubernetesClient kubernetesClient = new KubernetesClientBuilder().build();
-        log.info("KubernetesClient built");
+        log.info("KubernetesClient built: Service Account Shuffling");
 
         while (true) {
 
@@ -53,14 +63,16 @@ public class ServiceAccountStrategyService implements Runnable {
             for (Deployment deployment : deployments) {
                 if(Boolean.TRUE.equals(saShuffling.getEnabled()) && Integer.valueOf(4).equals(deployment.getStrategy()) && deployment.isEnabled()){
                     io.fabric8.kubernetes.api.model.apps.Deployment runningDeployment = kubernetesClient.apps().deployments().inNamespace(deployment.getNamespace()).withName(deployment.getName()).get();
-                    log.info("deployment running: {}", runningDeployment.getMetadata().getName());
+                    log.info("Deployment running: {}", runningDeployment.getMetadata().getName());
+
                     changeServiceAccount(kubernetesClient, deployment, runningDeployment);
+                    
                     kubernetesClient.apps().deployments()
                             .inNamespace(deployment.getNamespace())
                             .resource(runningDeployment)
                             .update();
 
-                    log.info("Restart executed for deployment {}", runningDeployment.getMetadata().getName());
+                    log.info("Restart executed for pod {}", runningDeployment.getMetadata().getName());
                     String oldServiceAccountName = runningDeployment.getSpec().getTemplate().getSpec().getServiceAccountName();
                     if(!"default".equals(oldServiceAccountName)){
                         ServiceAccount old = new ServiceAccountBuilder().withNewMetadata().withName(oldServiceAccountName).endMetadata().build();
@@ -78,7 +90,9 @@ public class ServiceAccountStrategyService implements Runnable {
         String generatedString = RandomStringUtils.randomAlphanumeric(5).toLowerCase();
         String serviceAccountName = deployment.getName().replace("-", ".") + "." + generatedString;
         Map<String, String> annotations = new HashMap<>();
-        annotations.put("iam.kubesphere.io/role", "admin");
+
+        annotations.put("iam.kubesphere.io/role", "admin"); //<-- DA MODIFICARE KUBESPHERE!!!!!!!!!!
+        
         ServiceAccount sa = new ServiceAccountBuilder()
                 .withNewMetadata()
                 .withName(serviceAccountName)

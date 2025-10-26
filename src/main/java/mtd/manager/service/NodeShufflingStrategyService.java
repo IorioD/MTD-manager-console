@@ -17,11 +17,23 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/*=============================================================================================================
+                                            Node Shuffling Strategy
+
+    This service periodically checks for deployments that have the Node Shuffling strategy enabled.
+    If a deployment is found with this strategy enabled, it selects a new node (either edge or cloud based on
+    the deployment type) and updates the deployment's pod template to use the new node. This triggers Kubernetes
+    to reschedule the pods onto the new node (cloud or edge depending on the deployment type).
+
+    The service runs in an infinite loop, sleeping for a configurable period between iterations.
+=============================================================================================================*/
+
+
 @Slf4j
 @Component
 public class NodeShufflingStrategyService implements Runnable {
 
-    public static final String NODE_SHUFFLING_CONTAINER = "node-migration";
+    public static final String NODE_SHUFFLING_CONTAINER = "pod-migration";
     public static final String EDGE = "edge";
     public static final String CLOUD = "cloud";
 
@@ -42,7 +54,7 @@ public class NodeShufflingStrategyService implements Runnable {
     public void run() {
         log.info("NodeShufflingStrategyService running");
         KubernetesClient kubernetesClient = new KubernetesClientBuilder().build();
-        log.info("KubernetesClient built");
+        log.info("KubernetesClient built: Node Shuffling");
 
         while (true) {
             Strategy nodeShuffling = strategyRepository.findByName(NODE_SHUFFLING_CONTAINER).orElseThrow(EntityNotFoundException::new);
@@ -56,7 +68,7 @@ public class NodeShufflingStrategyService implements Runnable {
                             .inNamespace(deployment.getNamespace())
                             .withName(deployment.getName())
                             .get();
-                    log.info("Deployment running: {}", runningDeployment.getMetadata().getName());
+                    log.info("Deployments running: {}", runningDeployment.getMetadata().getName());
 
                     if (runningDeployment != null) {
                         changeDeploymentNode(kubernetesClient, runningDeployment, deployment.getType());
@@ -68,9 +80,9 @@ public class NodeShufflingStrategyService implements Runnable {
                                 .rolling()
                                 .restart();
 
-                        log.info("Node shuffle and restart executed for deployment {}", runningDeployment.getMetadata().getName());
+                        log.info("Node shuffle and restart executed for pod {}", runningDeployment.getMetadata().getName());
                     } else {
-                        log.warn("No running deployment found for {}", deployment.getName());
+                        log.warn("No running pod found for {}", deployment.getName());
                     }
                 }
             }
@@ -106,7 +118,7 @@ public class NodeShufflingStrategyService implements Runnable {
                 log.info("Verified node for deployment {} is set to {}", runningDeployment.getMetadata().getName(), updatedPodSpec.getNodeName());
 
                 if (newNode.getHostname().equals(updatedPodSpec.getNodeName())) {
-                    log.info("Pod successfully reassigned to new node {}", newNode.getHostname());
+                    log.info("Deployments successfully reassigned to new node {}", newNode.getHostname());
                 } else {
                     log.warn("Failed to reassign pod to new node. Current node: {}", updatedPodSpec.getNodeName());
                 }

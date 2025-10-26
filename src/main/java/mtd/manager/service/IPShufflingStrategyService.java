@@ -16,6 +16,18 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 
+
+/* =============================================================================================================
+                                        IP Shuffling Strategy
+
+    This service periodically checks for deployments that have the IP Shuffling strategy enabled.
+    If a deployment is found with this strategy enabled, it forces a rolling restart of the pods associated
+    with that deployment by updating an annotation on the pod template. This triggers Kubernetes to restart
+    the pods, effectively shuffling their IP addresses.
+
+    The service runs in an infinite loop, sleeping for a configurable period between iterations.
+=============================================================================================================*/
+
 @Slf4j
 @Component
 public class IPShufflingStrategyService implements Runnable {
@@ -43,7 +55,7 @@ public class IPShufflingStrategyService implements Runnable {
 
         log.info("IPShufflingStrategyService running");
         KubernetesClient kubernetesClient = new KubernetesClientBuilder().build();
-        log.info("KubernetesClient built");
+        log.info("KubernetesClient built: IP Shuffling");
 
         while (true) {
 
@@ -57,9 +69,15 @@ public class IPShufflingStrategyService implements Runnable {
 
                     io.fabric8.kubernetes.api.model.apps.Deployment runningDeployment = kubernetesClient.apps()
                             .deployments().inNamespace(deployment.getNamespace()).withName(deployment.getName()).get();
-                    log.info("Deployment running: {}", runningDeployment.getMetadata().getName());
+                    
+                    if (runningDeployment == null) {
+                        log.warn("Deployments {} not found in namespace {}", deployment.getName(), deployment.getNamespace());
+                        continue; // Skip to next one
+                    }
+                    
+                    log.info("Deplyments running: {}", runningDeployment.getMetadata().getName());
 
-                    // Force a rolling restart by updating an annotation
+                    // Force a rolling restart by updating a deployment annotation
                     Map<String, String> annotations = runningDeployment.getSpec().getTemplate().getMetadata().getAnnotations();
                     if (annotations == null) {
                         annotations = new java.util.HashMap<>();
@@ -72,7 +90,7 @@ public class IPShufflingStrategyService implements Runnable {
                             .resource(runningDeployment)
                             .update();
 
-                    log.info("Restart executed for deployment {}", runningDeployment.getMetadata().getName());
+                    log.info("Restart executed for pod {}", runningDeployment.getMetadata().getName());
                 }
             }
 
