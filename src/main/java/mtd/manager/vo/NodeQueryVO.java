@@ -9,12 +9,9 @@ import java.io.Serializable;
 public class NodeQueryVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String hostname;
-
-    private String ipAddress;
-
     private Long id;
-
+    private String hostname;
+    private String ipAddress;
     private String role;
     private Boolean available;
 

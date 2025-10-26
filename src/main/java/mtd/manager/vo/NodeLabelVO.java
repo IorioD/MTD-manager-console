@@ -12,11 +12,8 @@ public class NodeLabelVO implements Serializable {
 
     @NotNull(message = "id can not null")
     private Integer id;
-
     private String key;
-
     private String value;
-
     @NotNull(message = "idNode can not null")
     private Long idNode;
 
