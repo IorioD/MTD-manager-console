@@ -1,6 +1,7 @@
 # This file will provide some useful KubeKey commands for cluster management.
 
 [Official GitHub guide](https://github.com/kubesphere/kubekey)
+[Support page](https://pkg.go.dev/github.com/kubesphere/kubekey#section-readme)
 
 ## ADD and DELETE node
 
@@ -23,7 +24,7 @@ and then execute
 
 If you want to delete the whole cluster, just execute
 ```sh
-./kk delete cluster [-f <config-name>.yaml.yaml]
+./kk delete cluster [-f <config-name>.yaml]
 ```
 
 ## Upgrade the cluster
