@@ -15,21 +15,25 @@ The implemented techniques are:
 The application is intuitive and easy to use.
 - The `landing page` is the following:
 
-![Alt text](img/HomePage.png "Home page")
+![Alt text](img/Home.png "Home page")
 
 in which information about the cluster and the single node is automatically retrieved.
 
 - In the `Nodes List` page, the user can access the information of the active nodes in the cluster.
 
-![Alt text](img/NodeList.png "Nodes")
+![Alt text](img/Nodes.png "Nodes")
+<!---
+- In the `Deployment List` page, the user can access the information for each deployment installed in the cluster and can decide on which of them MTD will be enabled.
 
+![Alt text](img/Pods.png "Deployments") 
+-->
 - In the `Pods List` page, the user can access the information for each pod installed in the cluster and can decide on which of them MTD will be enabled.
 
-![Alt text](img/PodList.png "Deployments")  
+![Alt text](img/Pods.png "Deployments")
 
 - In the `Strategies List` page
 
-![Alt text](img/List-strat.png "Strategies")
+![Alt text](img/Strats.png "Strategies")
 
 the user can enable one (or more) strategy that will affect the enabled deployment.
 In this case, the user cannot edit the strategy directly in the UI but needs to modify the source code to change/add implementation logic.
