@@ -44,7 +44,7 @@ Whenever a new strategy is created, the following steps are needed:
    INSERT INTO mtdmanager.strategy VALUES ('techniqueName', false, 'fixed', <n>);
    ```
    where "n" is the progressive technique number 
-3. modify `src/main/resources/public/deplo.js` script to adapt the dropdown menu to the new scenario, adding
+3. modify `src/main/resources/public/deployments.js` script to adapt the dropdown menu to the new scenario, adding
    ```js
    <option value="n" ${deployment.strategy === n ? 'selected' : ''}>techniqueName</option>
    ```
