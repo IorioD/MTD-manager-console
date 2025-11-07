@@ -53,8 +53,7 @@ Whenever a new strategy is created, the following steps are needed:
    ```js
    ID: 'Strategy description',
    ```
-5. in `src/main/resources/public/add-deployment.js` update the function `isValidStrategy` (row 14), adding the numbers of the new technique.
-6. in `src/main/java/mtd/manager/service/MTDStrategyService.java` add a new related thread to activate the service itself upon startup with
+5. in `src/main/java/mtd/manager/service/MTDStrategyService.java` add a new related thread to activate the service itself upon startup with
    ```java
    new Thread(classNameService, "name_alias").start();
    ```
