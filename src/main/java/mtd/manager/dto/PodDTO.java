@@ -15,7 +15,6 @@ public class PodDTO implements Serializable {
     private String nodeName;
     private String status;
     private String podIp;
-    private Integer strategy;  
 	private Boolean enabled;
     private Integer idDeplo;
 
@@ -65,14 +64,6 @@ public class PodDTO implements Serializable {
 
     public void setPodIp(String podIp) {
         this.podIp = podIp;
-    }
-
-    public Integer getStrategy() {
-        return strategy;
-    }
-
-    public void setStrategy(Integer strategy) {
-        this.strategy = strategy;
     }
 
     public Boolean isEnabled() {
