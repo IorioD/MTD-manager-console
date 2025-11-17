@@ -28,11 +28,6 @@ public class PodController {
         return podService.findAll();
     }
 
-    @PutMapping("/{id}/strategy")
-    public void updatePodStrategy(@PathVariable("id") Long id, @RequestParam Integer strategy) {
-        podService.updatePodStrategy(id, strategy);
-    }
-
     @PutMapping("/{id}/enabled")
     public void updateEnabled(@PathVariable("id") Long id, @RequestParam boolean enabled) {
         podService.updateEnabled(id, enabled);
