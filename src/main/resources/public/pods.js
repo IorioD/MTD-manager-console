@@ -35,18 +35,6 @@ function renderTable() {
                 </div>
             </td>
         `;
-
-        /*const select = document.createElement('select');
-        select.addEventListener('change', function() {
-            updateStrategy(pod.id, this.value);
-        });
-        select.innerHTML = `
-            <option value="1" ${pod.strategy === 1 ? 'selected' : ''}>IP Shuffling</option>
-            <option value="2" ${pod.strategy === 2 ? 'selected' : ''}>Dynamic pod replication</option>
-            <option value="3" ${pod.strategy === 3 ? 'selected' : ''}>Pod Migration</option>
-            <option value="4" ${pod.strategy === 4 ? 'selected' : ''}>Service Account shuffling</option>
-        `;
-        row.children[6].appendChild(select);*/
         tableBody.appendChild(row);
     });
 
@@ -112,22 +100,5 @@ function addEventListeners() {
         });
     });
 }
-
-/*async function updateStrategy(id, strategy) {
-    try {
-        const response = await fetch(`/pods/${id}/strategy?strategy=${strategy}`, {
-            method: 'PUT',
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
-        }
-
-        alert('Strategy updated successfuly');
-
-        fetchPods();
-    } catch (error) {
-        console.error('Error in adding the strategy:', error);
-    }
-}*/
 
 document.addEventListener('DOMContentLoaded', fetchPods);
