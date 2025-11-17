@@ -41,7 +41,9 @@ CREATE TABLE mtdmanager.deployment (
     name character varying NOT NULL,
     namespace character varying,
     status character varying NOT NULL,
-    type character varying NOT NULL
+    type character varying NOT NULL,
+    enabled boolean NOT NULL,
+    strategy integer
 );
 ALTER TABLE mtdmanager.deployment OWNER TO mtdmanager;
 --    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
