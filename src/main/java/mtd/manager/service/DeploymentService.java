@@ -96,21 +96,24 @@ public class DeploymentService {
 
     @PostConstruct
     public void init() {
-        new Thread(() -> {
-            //while(true){
-                try {
-                    ApiClient client = Config.defaultClient();
-                    Configuration.setDefaultApiClient(client);
-
-                    initialFetch(client);
-                    watchDeployments(client);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            //}
-        }).start();
+        try{
+            ApiClient client = Config.defaultClient();
+            Configuration.setDefaultApiClient(client);
+            initialFetch(client);
+                new Thread(() -> {
+                        try {
+                            watchDeployments(client);
+                        } catch (Exception e) {
+                            System.err.println("Error watching Kubernetes deployments: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    // Initial fetch of existing deployments to populate the database
     private void initialFetch(ApiClient client) throws Exception {
         AppsV1Api api = new AppsV1Api(client);
 
@@ -127,6 +130,7 @@ public class DeploymentService {
         System.out.println("Initial fetch completed, DB populated.");
     }
 
+    // Watch for deployment changes in Kubernetes
     public void watchDeployments(ApiClient client) throws Exception {
         AppsV1Api api = new AppsV1Api(client);
 
@@ -149,6 +153,7 @@ public class DeploymentService {
         }
     }
 
+    // Handle deployment events from Kubernetes watch
     private void handleDeploymentEvent(String eventType, V1Deployment deployment) {
         if (deployment == null || deployment.getMetadata() == null) return;
 
@@ -190,6 +195,7 @@ public class DeploymentService {
         }
     }
 
+    // Get the current state of a deployment based on its conditions
     public static String getDeploymentState(V1Deployment deployment) {
         List<V1DeploymentCondition> conditions = Optional.ofNullable(deployment.getStatus())
                 .map(V1DeploymentStatus::getConditions)
