@@ -29,7 +29,6 @@ function renderTable() {
             <td>${pod.type}</td>
             <td>${pod.status}</td>
             <td>${pod.nodeName}</td>
-            <td></td>
             <td>
                 <div class="slide-button" data-id="${pod.id}" data-enabled="${pod.enabled}">
                     <div class="slider" id="slider_${pod.id}"></div>
@@ -37,7 +36,7 @@ function renderTable() {
             </td>
         `;
 
-        const select = document.createElement('select');
+        /*const select = document.createElement('select');
         select.addEventListener('change', function() {
             updateStrategy(pod.id, this.value);
         });
@@ -47,7 +46,7 @@ function renderTable() {
             <option value="3" ${pod.strategy === 3 ? 'selected' : ''}>Pod Migration</option>
             <option value="4" ${pod.strategy === 4 ? 'selected' : ''}>Service Account shuffling</option>
         `;
-        row.children[6].appendChild(select);
+        row.children[6].appendChild(select);*/
         tableBody.appendChild(row);
     });
 
@@ -114,7 +113,7 @@ function addEventListeners() {
     });
 }
 
-async function updateStrategy(id, strategy) {
+/*async function updateStrategy(id, strategy) {
     try {
         const response = await fetch(`/pods/${id}/strategy?strategy=${strategy}`, {
             method: 'PUT',
@@ -129,6 +128,6 @@ async function updateStrategy(id, strategy) {
     } catch (error) {
         console.error('Error in adding the strategy:', error);
     }
-}
+}*/
 
 document.addEventListener('DOMContentLoaded', fetchPods);
