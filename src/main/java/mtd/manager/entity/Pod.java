@@ -40,9 +40,7 @@ public class Pod implements Serializable {
     @Column(name = "status")
     private String status;
     @Column(name = "pod_ip")
-    private String podIp;
-    @Column(name = "strategy")
-    private Integer strategy;  
+    private String podIp; 
 	@Column(name = "enabled")
     private Boolean enabled;
     @Column(name = "id_deplo")
