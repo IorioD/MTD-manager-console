@@ -16,4 +16,7 @@ public class DeploymentVO implements Serializable {
     private String namespace;
     private String status;
     private String type;
+    @NotNull(message = "strategy cannot be null")
+    private Integer strategy;
+    private Boolean enabled;
 }
