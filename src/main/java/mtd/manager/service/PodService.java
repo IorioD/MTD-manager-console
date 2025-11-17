@@ -56,7 +56,6 @@ public class PodService {
     private PodDTO toDTO(Pod original) {
         PodDTO bean = new PodDTO();
         BeanUtils.copyProperties(original, bean);
-        bean.setStrategy(original.getStrategy()); // Set the strategy
         bean.setEnabled(original.getEnabled());   // Set the enabled flag
         return bean;
     }
@@ -70,12 +69,6 @@ public class PodService {
         List<PodDTO> list = new ArrayList<>();
         podRepository.findAll().forEach(depl -> list.add(toDTO(depl)));
         return list;
-    }
-
-    public void updatePodStrategy(Long id, Integer strategy) {
-        Pod pod = requireOne(id);
-        pod.setStrategy(strategy);
-        podRepository.save(pod);
     }
 
     public void updateEnabled(Long id, boolean enabled) {
@@ -153,7 +146,6 @@ public class PodService {
             if (podDB == null) {
                 podDB = new Pod();
                 podDB.setEnabled(false); // Default to enabled for new pods
-                podDB.setStrategy(1);   // Default strategy for new pods
             }
             podDB.setName(podName);
             podDB.setNamespace(namespace);
