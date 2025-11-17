@@ -90,7 +90,7 @@ public class IPShufflingStrategyService implements Runnable {
                             .resource(runningDeployment)
                             .update();
 
-                    log.info("Restart executed for pod {}", runningDeployment.getMetadata().getName());
+                    log.info("Restart executed for deployment {}", runningDeployment.getMetadata().getName());
                 }
             }
 
