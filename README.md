@@ -22,11 +22,11 @@ in which information about the cluster and the single node is automatically retr
 - In the `Nodes List` page, the user can access the information of the active nodes in the cluster.
 
 ![Alt text](img/Nodes.png "Nodes")
-<!---
-- In the `Deployment List` page, the user can access the information for each deployment installed in the cluster and can decide on which of them MTD will be enabled.
 
-![Alt text](img/Pods.png "Deployments") 
--->
+- In the `Deployment List` page, the user can access the information for each deployment installed in the cluster and can decide on which of them to enable the selected MTD technique.
+
+![Alt text](img/Deployment.png "Deployments") 
+
 - In the `Pods List` page, the user can access the information for each pod installed in the cluster and can decide on which of them MTD will be enabled.
 
 ![Alt text](img/Pods.png "Deployments")
