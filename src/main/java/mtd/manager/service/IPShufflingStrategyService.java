@@ -25,6 +25,10 @@ import java.util.Map;
     with that deployment by updating an annotation on the pod template. This triggers Kubernetes to restart
     the pods, effectively shuffling their IP addresses.
 
+    The IP is chosen from a range of reserved IP addresses via the so-called Container Network Interface (CNI) 
+    plugins, assigning a unique address to the pod from this range and setting up the necessary network interfaces 
+    and routing rules on the node to ensure the direct communication among pods without any NAT.
+
     The service runs in an infinite loop, sleeping for a configurable period between iterations.
 =============================================================================================================*/
 
