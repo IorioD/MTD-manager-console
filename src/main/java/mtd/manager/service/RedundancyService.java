@@ -22,6 +22,9 @@ import java.util.List;
     If a deployment is found with this strategy enabled, it calculates the desired number of replicas
     based on predefined criteria and updates the deployment's replica count accordingly.
 
+    Replicas are implemented in Kubernetes via an object called ReplicaSet to maintain a specific number of 
+    replicas always updated and ready.
+
     The service runs in an infinite loop, sleeping for a configurable period between iterations.
 =============================================================================================================*/
 
