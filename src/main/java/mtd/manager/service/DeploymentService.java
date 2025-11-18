@@ -127,7 +127,7 @@ public class DeploymentService {
             handleDeploymentEvent("ADDED", deployment); // save DB
         }
 
-        System.out.println("Initial fetch completed, DB populated.");
+        System.out.println("Initial deployments fetch completed, DB populated.");
     }
 
     // Watch for deployment changes in Kubernetes
