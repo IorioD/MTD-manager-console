@@ -5,7 +5,7 @@ mvn clean install
 
 # Check result
 if [ $? -ne 0 ]; then
-    echo "Errore durante l'esecuzione di 'mvn clean install'. Interrompendo lo script."
+    echo "Error during 'mvn clean install'. Aborting execution..."
     exit 1
 fi
 
