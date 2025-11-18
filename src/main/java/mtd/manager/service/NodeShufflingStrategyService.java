@@ -25,6 +25,9 @@ import java.util.List;
     the deployment type) and updates the deployment's pod template to use the new node. This triggers Kubernetes
     to reschedule the pods onto the new node (cloud or edge depending on the deployment type).
 
+    The Scheduler component in the CNI plugins schedules pods and dynamically modifies the pod.spec.nodeName field
+    in the YAML configuration file.
+
     The service runs in an infinite loop, sleeping for a configurable period between iterations.
 =============================================================================================================*/
 
