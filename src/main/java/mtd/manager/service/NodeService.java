@@ -134,7 +134,7 @@ public class NodeService {
             upsertNode(node);
         }
 
-        System.out.println("Initial Kubernetes nodes sync completed.");
+        System.out.println("Initial nodes fetch completed, DB populated.");
     }
     
     // Watch for node changes in Kubernetes
