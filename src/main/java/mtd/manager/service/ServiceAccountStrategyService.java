@@ -29,6 +29,9 @@ import java.util.Map;
    and avoid potential bottlenecks. 
    It creates a new service account with a unique name and updates the deployment to use this new service account.
 
+   This strategy is implemented with a function editing the spec.ServiceAccountName parameter in the configuration 
+   file then applied in the configuration file of the pod.
+
    The service runs in an infinite loop, sleeping for a configurable period between iterations.
 =============================================================================================================*/
 
