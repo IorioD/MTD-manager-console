@@ -9,55 +9,15 @@ const strategyDescriptions = {
 
 let dataTableInstance = null;
 
-async function fetchStrategies() {
-    try {
-        const response = await fetch('/strategy/all');
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
-        }
-        const strategyData = await response.json();
-        renderTable(strategyData);
+// Load strategies on page load
+document.addEventListener('DOMContentLoaded', async () => {
+    initDataTable();
+    await fetchStrategies();
+});
 
-    } catch (error) {
-        console.error('Error in fetching the strategies:', error);
-    }
-}
 
-function renderTable(strategyData) {
-    const strategyList = document.getElementById('strategyTableBody');
-
-        strategyList.innerHTML = '';
-    
-        strategyData.forEach(strategy => {
-
-            const description = strategyDescriptions[strategy.id] || 'Description unavailable';
-
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${strategy.name}</td>
-                <td>${description}</td>
-                <td>${strategy.enabled ? 'Enabled' : 'Disabled'}</td>
-                <td>
-                <button class="${strategy.enabled ? 'disable-button' : 'enable-button'}"
-                        data-id="${strategy.id}" data-enabled="${!strategy.enabled}">
-                        ${strategy.enabled ? 'Disable' : 'Enable'}
-                </button>
-                </td>
-            `;
-            strategyList.appendChild(row);
-        });
-
-        document.querySelectorAll('.enable-button, .disable-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
-                const enabled = this.getAttribute('data-enabled') === 'true';
-                toggleStrategy(id, enabled);
-            });
-        });
-
-        if (dataTableInstance) {
-        dataTableInstance.destroy(); // avoid duplications
-    }
+// initialize DataTable
+function initDataTable() {
     dataTableInstance = $('#strategyTable').DataTable({
         pageLength: 10,
         lengthChange: false,
@@ -75,6 +35,58 @@ function renderTable(strategyData) {
     });
 }
 
+// fetch strategies from the db
+async function fetchStrategies() {
+    try {
+        const response = await fetch('/strategy/all');
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
+        }
+        const strategyData = await response.json();
+        updateTable(strategyData);
+
+    } catch (error) {
+        console.error('Error in fetching the strategies:', error);
+        alert(`Error in fetching the strategies: ${error.message}`);
+    }
+}
+
+// update DataTable with fetched strategies
+function updateTable(strategyData) {
+    dataTableInstance.clear(); // Clear existing data
+
+    strategyData.forEach(strategy => {
+
+        const description = strategyDescriptions[strategy.id] || 'Description unavailable';
+
+        dataTableInstance.row.add([
+            strategy.name,
+            description,
+            strategy.enabled ? 'Enabled' : 'Disabled',
+            `
+                <button class="${strategy.enabled ? 'disable-button' : 'enable-button'}"
+                        data-id="${strategy.id}" data-enabled="${!strategy.enabled}">
+                    ${strategy.enabled ? 'Disable' : 'Enable'}
+                </button>
+            `
+        ]);
+    });
+
+    dataTableInstance.draw(); // redraw table
+
+    attachButtonListeners(); // reattach toggle handlers
+}
+
+function attachButtonListeners() {
+    document.querySelectorAll('.enable-button, .disable-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const enabled = this.getAttribute('data-enabled') === 'true';
+            toggleStrategy(id, enabled);
+        });
+    });
+}
+
 async function toggleStrategy(id, enabled) {
     try {
         const response = await fetch(`/strategy/enable/${id}?enabled=${enabled}`, {
@@ -84,15 +96,10 @@ async function toggleStrategy(id, enabled) {
             throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
         }
         // Reload the strategies list after changing the state
-        fetchStrategies();
+        await fetchStrategies();
         
     } catch (error) {
         console.error(`Error in editing the strategy ${id}:`, error);
         alert(`Error in editing strategy state ${id}: ${error.message}`);
     }
 }
-
-// Load strategies on page load
-fetchStrategies();
-
-document.addEventListener('DOMContentLoaded', fetchStrategies);
