@@ -6,7 +6,15 @@ To install this application on the cluster, you need the yaml files in `miscConf
 The following image describes at a high level how the application is intended to be deployed on the nodes.
 ![Alt text](../img/App.png "MACM")
 
-## 1. Initial Configuration in Kubesphere
+The test banking application was designed with a simplified microservices architecture, consisting of three main components:
+
+* **Frontend:** The web user interface accessed by users. It is developed using standard web technologies (HTML, CSS, JavaScript).
+* **Backend:** The application service that handles business logic, user operations (login, registration, transfers, etc.), and interaction with the database. It is implemented using the Python Flask framework.
+* **Database:** A MySQL instance used to store user data (credentials, balance) and transactions.
+
+The typical interaction sequence for a user operation (such as viewing the dashboard or making a transfer) follows the logical flow: User (via Frontend) -> Backend -> Database -> Backend -> Frontend (page refresh). For requirements and security controls implemented, refer to [this file](Bank_req_sec.md).
+
+## 1. Initial Configuration in Kubesphere -- KUBESPHERE NOT AVAILABLE ANYMORE UPDATES WILL FOLLOW
 Configuration of the necessary workspaces and projects within Kubesphere.
 
 1.  Access the **Kubesphere Control Panel**.
