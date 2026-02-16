@@ -1,4 +1,4 @@
-# This file provides a guide to test the architecture with Postman and Jmeter
+# This file provides a guide to test the framework architecture with Postman and Jmeter
 
 ## 1. Postman Test
 1. Install desktop agent and make it run on startup
