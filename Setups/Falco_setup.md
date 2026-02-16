@@ -1,6 +1,6 @@
 # In this file is explained how to install Falco component on the cluster
 
-This component consumes event flows and evaluates security rules to detect anomalies. As a default setup, it consumes Linux kernel events and is installed on each node of the cluster using a DaemonSet. [install Falco in Kubernetes](https://falco.org/docs/getting-started/falco-kubernetes-quickstart/).
+This component consumes event flows and evaluates security rules to detect anomalies. As a default setup, it consumes Linux kernel events and is installed on each node of the cluster using a DaemonSet. [Official guide to install Falco in Kubernetes](https://falco.org/docs/getting-started/falco-kubernetes-quickstart/).
 
 ## 1. Install Falco
    1. add the Helm repository using:
