@@ -14,8 +14,8 @@
 | Edge_2   | 2   | 2        | 30        | Linux Lite|
 
 - For each VM, set a bridged network card.
-- Only if needed set the IP of each VM as static.
-- If you're installing the cluster on a local machine and you are using VirtulBox it is suggested to set 2 network interfaces: one NAT and the other HOST ONLY.
+- Only if needed, set the IP of each VM as static.
+- If you're installing the cluster on a local machine and you are using VirtulBox it is suggested to set 2 network interfaces: one NAT and the other HOST ONLY. 
 
 If you want better performance, you can use virtual machines with Ubuntu server installed following [Ubuntu server guide](Ubuntu_Server.md).
 
@@ -41,10 +41,6 @@ On each VM install
     ```
 ---    
 ## 2. Cluster Installation
-### N.B. The following guide relies on the use of Kubesphere, which is not open source anymore. Updates will follow.
-- Follow the guide: [KubeSphere Multi-node Installation](https://kubesphere.io/docs/v3.4/installing-on-linux/introduction/multioverview/)
-- Video guide: [YouTube Video Guide](https://www.youtube.com/watch?v=nYOYk3VTSgo)
-
 ### Steps:
 1. Download KubeKey and make it executable:
 
@@ -84,16 +80,17 @@ The command using Kubesphere `./kk create config --with-kubernetes v1.23.10 --wi
     ```sh
     ./kk create cluster -f <config-name>.yaml
     ```
-Refer to [this file](KubeKey_CMD.md) if you need more KubeKey cluster management commands.
+Refer to [this file](KubeKey_CMD.md) if you need more KubeKey cluster management commands
 
 ---
 
-If you want to install a custom application on the cluster that does not require edge nodes, you can skip the following steps and start the [setup of the framework](Framework_setup.md) itself. As an example of a cloud application, you can refer to the [bank application](Bank_setup.md) that provides a simple high level money transfer mechanism like PayPal.
+If you want to install a custom application on the cluster that does not require edge nodes, you can skip the following steps and start the [setup of the framework](Framework_setup.md) itself. As an example of a cloud application, you can refer to the [bank application](Bank_setup.md) that provides a simple high-level money transfer mechanism like PayPal.
 
 In any case, you can follow the [Application environment setup guide](Applications_environment.md) to create the proper workspace for your application in the cluster since it is intended to be multi-tenant.
 
 ---
 ## 4. Adding an Edge Node in the Cluster
+### N.B. The following guide relies on the use of Kubesphere, which is not open source anymore. Updates will follow.
 [Add Edge Nodes Guide](https://www.kubesphere.io/docs/v3.4/installing-on-linux/cluster-operation/add-edge-nodes/)
 
 ### 1. Install KubeEdge on Master Node
@@ -164,4 +161,4 @@ e.g.
     to restart the service and start collecting metrics about the edge node.
 From now on, you’ll have a cluster with 3 cloud-nodes and 1 edge-node with the kubesphere console installed on the master node (if you need more than one edge, repeat steps 2 and 3).
 
-As an example of an application using edge nodes, you can refer to the [temperature application](Temp_setup.md) that provides a simple application to collect simulated temperature values from the edges. More application examples are available at [official KubeEdge repository](https://github.com/kubeedge/examples). 
+As an example of an application using edge nodes, you can refer to the [temperature application](Temp_setup.md) that provides a simple application to collect simulated temperature values from the edges. More application examples are available at [official KubeEdge repository](https://github.com/kubeedge/examples).
