@@ -1,0 +1,51 @@
+- action: Terminate Pod
+  actionner: kubernetes:terminate
+
+- action: Terminate Pod with Grace
+  actionner: kubernetes:terminate
+  parameters:
+    grace_period_seconds: 10
+    ignore_daemonsets: true
+    ignore_statefulsets: true
+
+- action: Disable Outbound Connections
+  actionner: kubernetes:networkpolicy
+  parameters:
+    allow:
+      - "10.0.0.0/8"
+      - "172.16.0.0/12"
+      - "192.168.0.0/16"
+
+- action: Get logs of the pod
+  actionner: kubernetes:log
+  parameters:
+    tail_lines: 200
+  output:
+    target: local:file
+    parameters:
+      destination: /var/falco-talon-logs/
+
+- rule: Terminal shell in container
+  description: >
+    Salva i log del pod e termina il pod che ha generato l'allarme se una shell viene avviata.
+  match:
+    rules:
+      - Terminal shell in container
+    output_fields:
+      - k8s.ns.name!=kube-system, k8s.ns.name!=falco
+  actions:
+    - action: Get logs of the pod
+    - action: Terminate Pod
+
+- rule: Suspicious Outbound Connection Alert
+  description: >
+    Allerta su connessioni in uscita inaspettate, blocca il traffico esterno, recupera i log e termina il pod.
+  match:
+    rules:
+      - Unexpected outbound connection destination
+    output_fields:
+      - k8s.ns.name!=kube-system
+  actions:
+    - action: Get logs of the pod
+    - action: Disable Outbound Connections
+    - action: Terminate Pod with Grace
