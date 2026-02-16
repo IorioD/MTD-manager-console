@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: falco-talon-logs-pvc # Name of your PVC.
+  namespace: falco          # Same namespace as your Falco Talon Deployment.
+spec:
+  accessModes:
+    - ReadWriteOnce         # Allows a single node to mount read/write.
+  resources:
+    requests:
+      storage: 1Gi          # Requests 1 Gigabyte of storage. Adjust as needed.
+  storageClassName: local   # **IMPORTANT:** Must match an available StorageClass in your cluster (e.g., "local" for OpenEBS).
