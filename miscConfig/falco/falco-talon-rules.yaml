@@ -1,6 +1,23 @@
+
+#==================================================== TALON ACTIONS ==========================================================
+
+# ====================================================== ACTION 1 ============================================================
+# This action is designed to terminate a Kubernetes pod immediately. It uses the Kubernetes API to identify and terminate the
+# specified pod, effectively stopping any processes running within it. This action is typically used in response to security
+# incidents or when a pod is deemed to be compromised or behaving maliciously, in order to prevent further harm to the cluster
+# or other resources.
+# ============================================================================================================================
 - action: Terminate Pod
   actionner: kubernetes:terminate
 
+# ====================================================== ACTION 2 ============================================================
+# This action is designed to gracefully terminate a Kubernetes pod. It allows for a specified grace period during which the pod
+# can complete any ongoing processes or tasks before being forcefully terminated. Additionally, it includes options to ignore 
+# certain types of pods, such as those managed by DaemonSets or StatefulSets, to avoid disrupting critical system components. 
+# This action is typically used in response to security incidents or when a pod is deemed to be compromised or behaving 
+# aliciously, in order to prevent further harm to the cluster or other resources while allowing for a more controlled shutdown 
+# process.
+# ============================================================================================================================
 - action: Terminate Pod with Grace
   actionner: kubernetes:terminate
   parameters:
@@ -8,6 +25,10 @@
     ignore_daemonsets: true
     ignore_statefulsets: true
 
+# ====================================================== ACTION 3 ============================================================
+# This action is designed to disable outbound connections from a Kubernetes pod by creating a network policy that restricts 
+# egress traffic.
+# ============================================================================================================================
 - action: Disable Outbound Connections
   actionner: kubernetes:networkpolicy
   parameters:
@@ -16,6 +37,11 @@
       - "172.16.0.0/12"
       - "192.168.0.0/16"
 
+# ====================================================== ACTION 4 ============================================================
+# This action is designed to retrieve the logs of a Kubernetes pod and save them to a local file for further analysis. 
+# It uses the Kubernetes API to access the logs of the specified pod and saves them to a designated directory on the local 
+# filesystem.
+# ============================================================================================================================
 - action: Get logs of the pod
   actionner: kubernetes:log
   parameters:
@@ -25,6 +51,61 @@
     parameters:
       destination: /var/falco-talon-logs/
 
+# ====================================================== ACTION 5 ============================================================
+# This action is designed to label a Kubernetes pod as suspicious by adding a specific label to the pod's metadata. 
+# This can be used to flag pods that are suspected of being compromised or behaving maliciously, allowing for easier 
+# identification and tracking within the cluster. The label can then be used in conjunction with other tools or processes to
+# take further actions, such as monitoring, alerting, or applying additional security measures to the labeled pods.
+# ============================================================================================================================
+- action: Label Pod as Suspicious
+  actionner: kubernetes:label
+  parameters:
+    labels:
+      security-status: suspicious
+
+# ====================================================== ACTION 6 ============================================================
+# This action is designed to cordon a Kubernetes node, which means marking the node as unschedulable to prevent new pods from 
+# being scheduled on it. This is typically done in response to security incidents or when a node is deemed to be compromised 
+# or behaving maliciously, in order to prevent further harm to the cluster or other resources while allowing for a more 
+# controlled response.
+# ============================================================================================================================
+- action: Cordon node
+  actionner: kubernetes:cordon
+
+# ====================================================== ACTION 7 ============================================================
+# This action is designed to drain a Kubernetes node, which involves safely evicting all existing pods from the node. This is
+# typically done in response to security incidents or when a node is deemed to be compromised or behaving maliciously, in order
+# to prevent further harm to the cluster or other resources while allowing for a more controlled response. The parameters 
+# for this action include options to force the eviction of pods, ignore DaemonSets, and ignore StatefulSets to avoid
+# disrupting critical system components during the draining process.
+# ============================================================================================================================
+- action: Drain node
+  actionner: kubernetes:drain
+  parameters:
+    force: true
+    ignore_daemonsets: true
+    ignore_statefulsets: true
+
+# ====================================================== ACTION 8 ============================================================
+# This action is designed to block the egress traffic of a Kubernetes pod by creating a network policy that restricts outbound
+# connections. This is typically done in response to security incidents or when a pod is deemed to be compromised or behaving 
+# maliciously, in order to prevent potential malicious network activity while allowing for a more controlled response. The
+# action uses the Kubernetes API to create a network policy that effectively blocks all outbound traffic from the specified
+# pod, helping to mitigate potential threats and protect the cluster and other resources.
+# ============================================================================================================================
+- action: Block pod egress
+  actionner: kubernetes:networkpolicy
+  parameters:
+    allow:
+      - ""
+
+#==================================================== TALON RULES ============================================================
+
+# ==================================================== RULE 1 ================================================================
+# This rule is designed to detect when a terminal shell is initiated within a container. When such an event is detected in 
+# pods that are not part of the kube-system or falco namespaces, the rule will trigger actions to retrieve the logs of the pod
+# for further analysis and then terminate the pod to prevent potential unauthorized access or malicious activity.
+# ============================================================================================================================
 - rule: Terminal shell in container
   description: >
     Salva i log del pod e termina il pod che ha generato l'allarme se una shell viene avviata.
@@ -37,6 +118,12 @@
     - action: Get logs of the pod
     - action: Terminate Pod
 
+# ==================================================== RULE 2 ================================================================
+# This rule is designed to detect unexpected outbound connections from pods. When such an event is detected, the rule will 
+# trigger actions to disable outbound connections from the affected pod, retrieve its logs for further analysis, and then
+# terminate the pod to prevent potential data exfiltration or communication with malicious external entities. This rule 
+# specifically targets pods that are not part of the kube-system namespace to avoid disrupting critical system components.
+# ============================================================================================================================
 - rule: Suspicious Outbound Connection Alert
   description: >
     Allerta su connessioni in uscita inaspettate, blocca il traffico esterno, recupera i log e termina il pod.
@@ -49,3 +136,101 @@
     - action: Get logs of the pod
     - action: Disable Outbound Connections
     - action: Terminate Pod with Grace
+
+# ==================================================== RULE 3 ================================================================
+# This rule is designed to detect and respond to a variety of suspicious activities within Kubernetes pods, such as reading 
+# sensitive files, writing to critical directories, scheduling cron jobs, accessing environment variables from /proc files,
+# executing new binaries, launching package management processes, and using remote file copy tools. When any of these activities
+# are detected in pods that are not part of the kube-system or falco namespaces, the rule will label the pod as suspicious,
+# retrieve its logs for further analysis, and then terminate the pod to prevent potential harm to the cluster.
+# ============================================================================================================================
+- rule: Label IP Shuffling Logs 
+  match:
+    rules:
+      - Read sensitive file untrusted
+      - Write below etc
+      - Schedule Cron Jobs
+      - Read environment variable from /proc files
+      - Drop and execute new binary in container
+      - Launch Package Management Process in Container
+      - Launch Ingress Remote File Copy Tools in Container
+    output_fields:
+      - "k8s.ns.name!=kube-system, k8s.ns.name!=falco"
+  actions:
+    - Label Pod as Suspicious
+    - Get logs of the pod
+    - Terminate Pod
+
+# ==================================================== RULE 4 ================================================================
+# This rule is designed to performe an IP addresses shuffle. It looks for a sequence of events including removing bulk data
+# from disk, decoding payloads in containers, deleting or renaming shell history, and clearing log activities. When such a
+# combination of activities is detected in pods that are not part of the kube-system or falco namespaces, the rule will 
+# trigger actions to retrieve the logs of the pod for further analysis and then terminate the pod to prevent potential
+# malicious activity.
+# ============================================================================================================================
+- rule: Ip Shuffling Logs MTD
+  match:
+    rules:
+      - Remove Bulk Data from Disk
+      - Decoding Payload in Container
+      - Delete or rename shell history
+      - Clear Log Activities
+    output_fields:
+      - "k8s.ns.name!=kube-system, k8s.ns.name!=falco"
+  actions:
+    - Get logs of the pod
+    - Terminate Pod
+
+# ==================================================== RULE 5 ================================================================
+# This rule is designed to detect and respond to potential node compromise scenarios. It looks for a combination of activities
+# such as writing below root and launching a mount in a privileged container. When such activities are detected in nodes that
+# are not part of the kube-system or falco namespaces, the rule will trigger actions to cordon the node, preventing new pods
+# from being scheduled on it, and then drain the node, safely evicting all existing pods to mitigate potential threats and 
+# maintain cluster security.
+# ============================================================================================================================
+- rule: Cordon Drain MTD
+  match:
+    rules:
+      - Write below root
+      - Mount Launched in Privileged Container
+    output_fields:
+      - "k8s.ns.name!=kube-system, k8s.ns.name!=falco"
+  actions:
+    - Cordon node
+    - Drain node
+
+# ====================================================== RULE 7 ==============================================================
+# This rule is designed to detect the launch of suspicious network tools within containers. When such an event is detected, 
+# the rule will block the egress traffic of the pod to prevent potential malicious network activity. This rule specifically 
+# targets pods that are not part of the kube-system or falco namespaces to avoid disrupting critical system components.
+# ============================================================================================================================
+- rule: Launch Suspicious Network Tool in Container
+  match:
+    rules:
+      - Launch Suspicious Network Tool in Container
+  actions:
+    - action: Block pod egress
+
+# ====================================================== RULE 8 ==============================================================
+# This rule is designed to detect the creation of packet sockets within containers. When such an event is detected, the rule 
+# will block the egress traffic of the pod to prevent potential malicious network activity. This rule specifically targets 
+# pods that are not part of the kube-system or falco namespaces to avoid disrupting critical system components.
+# ============================================================================================================================
+- rule: Packet socket created in container
+  match:
+    rules:
+      - Packet socket created in container
+  actions:
+    - action: Block pod egress
+
+# ====================================================== RULE 9 ==============================================================
+# This rule is designed to detect unexpected UDP traffic originating from containers. When such an event is detected, the rule
+# will block the egress traffic of the pod to prevent potential malicious network activity. This rule specifically targets pods
+# that are not part of the kube-system or falco namespaces to avoid disrupting critical system components.
+# ============================================================================================================================
+- rule: Unexpected UDP Traffic
+  match:
+    rules:
+      - Unexpected UDP Traffic
+  actions:
+    - action: Block pod egress
