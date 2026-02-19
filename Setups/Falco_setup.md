@@ -77,6 +77,8 @@ You can now try introducing a malicious pod on the cluster following the [attack
    ```
    once it is done, Falco Talon is active and running and is ready to operate.
 
+   For the implemented rules refer to [this file](../miscConfig/falco/falco-talon-rules.yaml)
+
 ## 5. Set Persistent Log Storage for Falco Talon
    1. First, you need to define the persistent storage request for Falco Talon (This PVC acts as a claim for storage space in your cluster) as done in  `miscConfig/falco/falco-talon-logs-pvc.yaml`
    ```sh
@@ -208,8 +210,8 @@ You can now try introducing a malicious pod on the cluster following the [attack
    kubectl apply -f your-falco-talon-deployment.yaml
    ```
    
-   3.Access the logs
-   Now that Falco Talon is configured to save logs to the PVC, and the PVC is powered by OpenEBS Local PV, here's how you can access those logs directly. The direct node access is the fastest and most efficient because your Local PV data is physically on the filesystem of the node where the PV is located.
+   3. Access the logs
+   Now that Falco Talon is configured to save logs to the PVC, and the PVC is powered by OpenEBS Local PV, here's how you can access those logs directly. Direct node access is the fastest and most efficient because your Local PV data is physically on the filesystem of the node where the PV is located.
    
    3.1  **Identify the PersistentVolume (PV) and its associated node/path:**
        First, find which node your `falco-talon-logs-pvc` is bound to and the specific path of the PV on that node.
