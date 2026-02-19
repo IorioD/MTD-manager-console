@@ -1,0 +1,182 @@
+# ==================================================== RULE MAPPING =====================================
+# RULE # |            Description                           |      Asset       |     STRIDE Category    |
+#________|__________________________________________________|__________________|________________________|
+#   1    |     Write below root                             |     Backend      |       Tampering        |
+#   2    |     Clear Log Activities                         |  Kubernetes API  |       Tampering        |
+#   3    |     Delete or rename shell history               |  Kubernetes API  |       Tampering        |
+#   4    |     Modify Shell Configuration File              |  Kubernetes API  |       Tampering        |
+#   5    |     Remove Bulk Data from Disk                   |  Kubernetes API  |       Tampering        |     
+#   6    |     Launch Suspicious Network Tool in Container  |  MySQL Database  |     Info Disclosure    |
+#   7    |     Packet socket created in container           |  MySQL Database  |     Info Disclosure    |
+#   8    |     Unexpected UDP Traffic                       |  MySQL Service   |    Denial of Service   |
+#   9    |     Mount Launched in Privileged Container       | Docker Container | Elevation of Privilege |  
+# =======================================================================================================
+
+
+# ==================================================== RULE 1 ================================================================
+# This rule detects when a file is opened for writing below the root directory ("/") or the root user's home directory 
+# ("/root"). It checks for various conditions to filter out known legitimate activities and focuses on potentially 
+# malicious actions that could indicate an attempt to modify critical system files or configurations.
+# ============================================================================================================================
+- rule: Write below root
+  condition: >
+    open_write and evt.dir=<
+    and root_dir
+    and proc_name_exists
+    and not fd.name in (known_root_files)
+    and not fd.directory pmatch (known_root_directories)
+    and not exe_running_docker_save
+    and not gugent_writing_guestagent_log
+    and not dse_writing_tmp
+    and not zap_writing_state
+    and not airflow_writing_state
+    and not rpm_writing_root_rpmdb
+    and not maven_writing_groovy
+    and not chef_writing_conf
+    and not kubectl_writing_state
+    and not cassandra_writing_state
+    and not galley_writing_state
+    and not calico_writing_state
+    and not rancher_writing_root
+    and not runc_writing_exec_fifo
+    and not mysqlsh_writing_state
+    and not known_root_conditions
+    and not user_known_write_root_conditions
+    and not user_known_write_below_root_activities
+  output: File below / or /root opened for writing | file=%fd.name evt_type=%evt.type user=%user.name user_uid=%user.uid user_loginuid=%user.loginuid process=%proc.name proc_exepath=%proc.exepath parent=%proc.pname command=%proc.cmdline terminal=%proc.tty
+  priority: ERROR
+  tags: [host, container, filesystem, mitre_persistence, TA0003]
+
+# ==================================================== RULE 2 ================================================================
+# This rule detects when a file is opened for writing with the O_TRUNC flag, which indicates that the file is being truncated.
+# It focuses on log files and checks for various conditions to filter out known legitimate activities, aiming to identify
+# potential tampering of log files that could be used to cover up malicious actions.
+# ============================================================================================================================
+- rule: Clear Log Activities
+  condition: >
+    open_write 
+    and access_log_files 
+    and evt.arg.flags contains "O_TRUNC" 
+    and not containerd_activities
+    and not trusted_logging_images 
+    and not allowed_clear_log_files
+  output: Log files were tampered | file=%fd.name evt_type=%evt.type user=%user.name user_uid=%user.uid user_loginuid=%user.loginuid process=%proc.name proc_exepath=%proc.exepath parent=%proc.pname command=%proc.cmdline terminal=%proc.tty
+  priority:
+    WARNING
+  tags: [host, container, filesystem, mitre_defense_evasion, T1070, NIST_800-53_AU-10]
+
+# ==================================================== RULE 3 ================================================================
+# This rule detects the deletion or renaming of the shell history. It looks for activities that modify or truncate the
+# shell history files while ensuring that these actions are not performed by known legitimate processes (like Docker 
+# binaries) or within specific file paths associated with Docker. 
+# Helps identify potential attempts to cover up command history, which is a common tactic used by attackers to evade detection.
+# ============================================================================================================================
+- rule: Delete or rename shell history
+  condition: >
+    (modify_shell_history or truncate_shell_history) 
+    and not var_lib_docker_filepath 
+    and not proc.name in (docker_binaries)
+  output: Shell history deleted or renamed | file=%fd.name name=%evt.arg.name path=%evt.arg.path oldpath=%evt.arg.oldpath evt_type=%evt.type user=%user.name user_uid=%user.uid user_loginuid=%user.loginuid process=%proc.name proc_exepath=%proc.exepath parent=%proc.pname command=%proc.cmdline terminal=%proc.tty
+  priority:
+    WARNING
+  tags: [host, container, process, filesystem, mitre_defense_evasion, T1070]
+
+# ==================================================== RULE 4 ================================================================
+# This rule detects modifications to shell configuration files. It monitors for write operations on files that are commonly
+# used for shell configuration (like .bashrc, .zshrc, etc.) and checks for various conditions to filter out known legitimate
+# activities. The rule aims to identify potential unauthorized changes to shell configurations, which could be used by
+# attackers to establish persistence or execute malicious commands when a user opens a new shell session.
+# ============================================================================================================================
+- rule: Modify Shell Configuration File
+  condition: >
+    open_write 
+    and (fd.filename in (shell_config_filenames) or
+         fd.name in (shell_config_files) or
+         fd.directory in (shell_config_directories))
+    and not proc.name in (shell_binaries)
+    and not exe_running_docker_save
+    and not user_known_shell_config_modifiers
+  output: A shell configuration file has been modified | file=%fd.name pcmdline=%proc.pcmdline evt_type=%evt.type user=%user.name user_uid=%user.uid user_loginuid=%user.loginuid process=%proc.name proc_exepath=%proc.exepath parent=%proc.pname command=%proc.cmdline terminal=%proc.tty
+  priority:
+    WARNING
+  tags: [host, container, filesystem, mitre_persistence, T1546.004]
+
+# ==================================================== RULE 5 ================================================================
+# This rule detects when bulk data is removed from disk. It looks for processes that are known to clear data and checks
+# for various conditions
+# ============================================================================================================================
+- rule: Remove Bulk Data from Disk
+  condition: > 
+    spawned_process 
+    and clear_data_procs 
+    and not user_known_remove_data_activities
+  output: Bulk data has been removed from disk | file=%fd.name evt_type=%evt.type user=%user.name user_uid=%user.uid user_loginuid=%user.loginuid process=%proc.name proc_exepath=%proc.exepath parent=%proc.pname command=%proc.cmdline terminal=%proc.tty exe_flags=%evt.arg.flags
+  priority:
+    WARNING
+  tags: [host, container, process, filesystem, mitre_impact, T1485]
+
+# ==================================================== RULE 6 ================================================================
+# This rule detects the launch of suspicious network tools within a container. It monitors for processes that are known to be
+# network tools and checks for various conditions to filter out known legitimate activities. The rule aims to identify potential
+# unauthorized use of network tools within containers, which could indicate reconnaissance or lateral movement activities by attackers
+# ============================================================================================================================
+- rule: Launch Suspicious Network Tool in Container
+  condition: >
+    spawned_process 
+    and container 
+    and network_tool_procs 
+    and not user_known_network_tool_activities
+  output: Network tool launched in container | evt_type=%evt.type user=%user.name user_uid=%user.uid user_loginuid=%user.loginuid process=%proc.name proc_exepath=%proc.exepath parent=%proc.pname command=%proc.cmdline terminal=%proc.tty exe_flags=%evt.arg.flags
+  priority: NOTICE
+  tags: [container, network, process, mitre_execution, T1059]
+
+# ==================================================== RULE 7 ================================================================
+# This rule detects the creation of packet sockets within a container. It monitors for socket events that involve the
+# AF_PACKET domain and checks for various conditions to filter out known legitimate activities. The rule aims to identify
+# potential unauthorized creation of packet sockets, which could be used by attackers for network sniffing or other
+# malicious activities within containers.
+# ============================================================================================================================
+- rule: Packet socket created in container
+  condition: > 
+    evt.type=socket and evt.dir=>
+    and container 
+    and evt.arg.domain contains AF_PACKET 
+    and not proc.name in (user_known_packet_socket_binaries)
+  output: Packet socket was created in a container | socket_info=%evt.args connection=%fd.name lport=%fd.lport rport=%fd.rport fd_type=%fd.type fd_proto=%fd.l4proto evt_type=%evt.type user=%user.name user_uid=%user.uid user_loginuid=%user.loginuid process=%proc.name proc_exepath=%proc.exepath parent=%proc.pname command=%proc.cmdline terminal=%proc.tty
+  priority: NOTICE
+  tags: [container, network, mitre_credential_access, T1557.002]
+
+# ==================================================== RULE 8 ================================================================
+# This rule detects unexpected UDP traffic. It monitors for network events that involve the UDP protocol and checks for various
+# conditions to filter out known legitimate activities. The rule aims to identify potential unauthorized UDP traffic, 
+# which could indicate data exfiltration or other malicious activities within the network.
+# ============================================================================================================================
+- rule: Unexpected UDP Traffic
+  condition: > 
+    inbound_outbound 
+    and fd.l4proto=udp 
+    and not expected_udp_traffic
+  output: Unexpected UDP Traffic Seen | connection=%fd.name lport=%fd.lport rport=%fd.rport fd_type=%fd.type fd_proto=%fd.l4proto evt_type=%evt.type user=%user.name user_uid=%user.uid user_loginuid=%user.loginuid process=%proc.name proc_exepath=%proc.exepath parent=%proc.pname command=%proc.cmdline terminal=%proc.tty
+  priority: NOTICE
+  tags: [host, container, network, mitre_exfiltration, TA0011]
+
+# ==================================================== RULE 9 ================================================================
+# This rule detects the launch of the mount command within a privileged container. It monitors for processes that execute 
+# the mount command while running in a privileged container and checks for various conditions to filter out known legitimate
+# activities, including specific known activities in GKE and AKS. The rule aims to identify potential unauthorized use of the
+# mount command in privileged containers, which could indicate an attempt to escalate privileges or access sensitive data
+# within the container environment.
+# ============================================================================================================================
+- rule: Mount Launched in Privileged Container
+  condition: >
+    spawned_process 
+    and container
+    and container.privileged=true
+    and proc.name=mount
+    and not mount_info
+    and not known_gke_mount_in_privileged_containers
+    and not known_aks_mount_in_privileged_containers
+    and not user_known_mount_in_privileged_containers
+  output: Mount was executed inside a privileged container | evt_type=%evt.type user=%user.name user_uid=%user.uid user_loginuid=%user.loginuid process=%proc.name proc_exepath=%proc.exepath parent=%proc.pname command=%proc.cmdline terminal=%proc.tty exe_flags=%evt.arg.flags
+  priority: WARNING
+  tags: [container, filesystem, mitre_privilege_escalation, T1611]
