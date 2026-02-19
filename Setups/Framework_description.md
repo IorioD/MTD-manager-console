@@ -1,7 +1,5 @@
 # MTD-manager-console
-This is a JAVA application for managing the Moving Target Defense in a cloud environment developed in collaboration with `University of Naples Federico II` in the context of [DEFEDGE - PRIN PNRR 2022 Project](https://github.com/DEFEDGE) (reference author daniele.iorio2@unina.it).
- 
-To use this application, you need to install a kubernetes cluster following this file [How to Kubernetes](How_to_kubernetes.md) and set up the environment following [Framework setup](Framework_setup.md).
+This is a JAVA application for managing the Moving Target Defense in a cloud environment. To use this application, you need to install a kubernetes cluster following this file [How to Kubernetes](How_to_kubernetes.md) and set up the environment following [Framework setup](Framework_setup.md).
 
 The connection between the cluster and the framework can be described as follows.
 ![Alt text](../img/MTDmanager.png "MTD")
