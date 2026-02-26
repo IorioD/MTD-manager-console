@@ -85,6 +85,7 @@
     force: true
     ignore_daemonsets: true
     ignore_statefulsets: true
+    max_wait_period: 0
 
 # ====================================================== ACTION 8 ============================================================
 # This action is designed to block the egress traffic of a Kubernetes pod by creating a network policy that restricts outbound
@@ -96,8 +97,21 @@
 - action: Block pod egress
   actionner: kubernetes:networkpolicy
   parameters:
-    allow:
-      - ""
+    allow_namespaces:
+      - "kubesphere-monitoring-system"
+      - "extension-whizard-telemetry"
+      - "extension-gateway"
+      - "kubesphere-controls-system"
+      - "kubesphere-system"
+      - "kube-system"
+      - "kube-public"
+      - "kube-node-lease"
+      - "default"
+      - "falco"
+      - "ingress-nginx"
+      - "bank-project"
+      - "kubekey-system"
+      - " "
 
 # ====================================================== ACTION 9 ============================================================
 # This action is designed to capture system calls made by the pod using sysdig, a low-level tracing tool. This actionner 
@@ -105,40 +119,54 @@
 # The actionner can be configured to capture system calls for a specific number of calls or for a specific duration. The 
 # actionner can also be configured to capture system calls for a specific process ID or for all processes.
 # ============================================================================================================================
-- action: Capture the syscall
-  actionner: sysdig:capture
+- action: Capture the syscalls
+  actionner: "kubernetes:sysdig"
   parameters:
-    buffer_size: 10MB
-    duration: 60s
+    buffer_size: 2048
+    duration: 20
+    scope: pod
+  output:
+    target: "local:file"
+    parameters:
+      destination: /tmp/
 
 # ====================================================== ACTION 10 ===========================================================
 # This action is designed to download a specific file from the pod's internal filesystem to a local path on the control node,
 # facilitating the retrieval of artefacts relevant to diagnosis
 # ============================================================================================================================
-- action: Download file from pod
-  actionner: kubernetes:file
+- action: Download file
+  actionner: "kubernetes:download"
   parameters:
-    source_path: /tmp/suspicious_file
-    destination_path: /var/falco-talon-logs/suspicious_file
+    file: /root/file.txt
+  output:
+    target: "local:file"
+    parameters:
+      destination: /var/falco-talon-logs/
 
 # ====================================================== ACTION 11 ===========================================================
 # This action is designed to capture a dump of the pod's network traffic for a limited duration and with configurable
 # snaplen, allowing you to collect evidence of malicious or anomalous communications
 # ============================================================================================================================
-- action: Capture TCP dump logs
-  actionner: kubernetes:tcpdump
+- action: Get tcpdump logs
+  actionner: "kubernetes:tcpdump"
   parameters:
-    duration: 60s
-    snaplen: 128
+    snaplen: 512
+    duration: 5
+  output:
+    target: "local:file"
+    parameters:
+      destination: /var/falco-talon-logs/
 
 # ====================================================== ACTION 12 ===========================================================
 # This action is designed to executes arbitrary shell commands in the container, enabling custom interventions or quick tests 
 # without having to manually access the pod. For example, writing files or collecting runtime information.
 # ============================================================================================================================
 - action: Test exec
-  actionner: kubernetes:exec
+  actionner: "kubernetes:exec"
+  additional_contexts:
+    - k8snode
   parameters:
-    command: "ls -la /tmp"
+    command: 'echo "${FD_NAME}" > file.txt'
 
 #==================================================== TALON RULES ============================================================
 
