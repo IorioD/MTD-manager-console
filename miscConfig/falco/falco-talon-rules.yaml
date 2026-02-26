@@ -20,7 +20,7 @@
 # ============================================================================================================================
 - action: Terminate Pod with Grace
   actionner: kubernetes:terminate
-  parameters:
+  parameters: # prevent disruption of critical system components by ignoring DaemonSets and StatefulSets
     grace_period_seconds: 10
     ignore_daemonsets: true
     ignore_statefulsets: true
@@ -99,6 +99,47 @@
     allow:
       - ""
 
+# ====================================================== ACTION 9 ============================================================
+# This action is designed to capture system calls made by the pod using sysdig, a low-level tracing tool. This actionner 
+# acquires a configurable buffer size for a defined time duration, allowing detailed analysis of the suspicious activity in progress.
+# The actionner can be configured to capture system calls for a specific number of calls or for a specific duration. The 
+# actionner can also be configured to capture system calls for a specific process ID or for all processes.
+# ============================================================================================================================
+- action: Capture the syscall
+  actionner: sysdig:capture
+  parameters:
+    buffer_size: 10MB
+    duration: 60s
+
+# ====================================================== ACTION 10 ===========================================================
+# This action is designed to download a specific file from the pod's internal filesystem to a local path on the control node,
+# facilitating the retrieval of artefacts relevant to diagnosis
+# ============================================================================================================================
+- action: Download file from pod
+  actionner: kubernetes:file
+  parameters:
+    source_path: /tmp/suspicious_file
+    destination_path: /var/falco-talon-logs/suspicious_file
+
+# ====================================================== ACTION 11 ===========================================================
+# This action is designed to capture a dump of the pod's network traffic for a limited duration and with configurable
+# snaplen, allowing you to collect evidence of malicious or anomalous communications
+# ============================================================================================================================
+- action: Capture TCP dump logs
+  actionner: kubernetes:tcpdump
+  parameters:
+    duration: 60s
+    snaplen: 128
+
+# ====================================================== ACTION 12 ===========================================================
+# This action is designed to executes arbitrary shell commands in the container, enabling custom interventions or quick tests 
+# without having to manually access the pod. For example, writing files or collecting runtime information.
+# ============================================================================================================================
+- action: Test exec
+  actionner: kubernetes:exec
+  parameters:
+    command: "ls -la /tmp"
+
 #==================================================== TALON RULES ============================================================
 
 # ==================================================== RULE 1 ================================================================
@@ -108,15 +149,15 @@
 # ============================================================================================================================
 - rule: Terminal shell in container
   description: >
-    Salva i log del pod e termina il pod che ha generato l'allarme se una shell viene avviata.
+    Seves the attacked pod logs and terminates it when a shell is detected in a container that is not part of the kube-system or falco namespaces.
   match:
     rules:
       - Terminal shell in container
     output_fields:
       - k8s.ns.name!=kube-system, k8s.ns.name!=falco
   actions:
-    - action: Get logs of the pod
-    - action: Terminate Pod
+    - Get logs of the pod # retrieves the last 200 lines of logs from the pod for further analysis
+    - Terminate Pod       # terminates the pod immediately to prevent potential unauthorized access or malicious activity
 
 # ==================================================== RULE 2 ================================================================
 # This rule is designed to detect unexpected outbound connections from pods. When such an event is detected, the rule will 
@@ -126,16 +167,16 @@
 # ============================================================================================================================
 - rule: Suspicious Outbound Connection Alert
   description: >
-    Allerta su connessioni in uscita inaspettate, blocca il traffico esterno, recupera i log e termina il pod.
+    Alert on unexpected outbound connections, block egress traffic, retrieve logs and terminate the pod.
   match:
     rules:
       - Unexpected outbound connection destination
     output_fields:
       - k8s.ns.name!=kube-system
   actions:
-    - action: Get logs of the pod
-    - action: Disable Outbound Connections
-    - action: Terminate Pod with Grace
+    - Get logs of the pod          # retrieves the last 200 lines of logs from the pod for further analysis
+    - Disable Outbound Connections # blocks outbound traffic from the pod to prevent data exfiltration
+    - Terminate Pod with Grace     # gracefully terminates the pod to avoid disrupting other processes
 
 # ==================================================== RULE 3 ================================================================
 # This rule is designed to detect and respond to a variety of suspicious activities within Kubernetes pods, such as reading 
@@ -157,9 +198,9 @@
     output_fields:
       - "k8s.ns.name!=kube-system, k8s.ns.name!=falco"
   actions:
-    - Label Pod as Suspicious
-    - Get logs of the pod
-    - Terminate Pod
+    - Label Pod as Suspicious # lables the pod as suspicious to facilitate identification and tracking within the cluster
+    - Get logs of the pod     # retrieves the last 200 lines of logs from the pod for further analysis
+    - Terminate Pod           # terminates the pod immediately to prevent potential harm to the cluster or other resources
 
 # ==================================================== RULE 4 ================================================================
 # This rule is designed to performe an IP addresses shuffle. It looks for a sequence of events including removing bulk data
@@ -178,8 +219,8 @@
     output_fields:
       - "k8s.ns.name!=kube-system, k8s.ns.name!=falco"
   actions:
-    - Get logs of the pod
-    - Terminate Pod
+    - Get logs of the pod # retrieves the last 200 lines of logs from the pod for further analysis
+    - Terminate Pod       # terminates the pod immediately to prevent potential harm to the cluster or other resources
 
 # ==================================================== RULE 5 ================================================================
 # This rule is designed to detect and respond to potential node compromise scenarios. It looks for a combination of activities
@@ -196,8 +237,8 @@
     output_fields:
       - "k8s.ns.name!=kube-system, k8s.ns.name!=falco"
   actions:
-    - Cordon node
-    - Drain node
+    - Cordon node # marks the node as unschedulable to prevent new pods from being scheduled on it
+    - Drain node  # safely evicts all existing pods from the node to mitigate potential threats and maintain cluster security
 
 # ====================================================== RULE 7 ==============================================================
 # This rule is designed to detect the launch of suspicious network tools within containers. When such an event is detected, 
@@ -209,7 +250,7 @@
     rules:
       - Launch Suspicious Network Tool in Container
   actions:
-    - action: Block pod egress
+    - Block pod egress # blocks the egress traffic of the pod by creating a network policy that restricts outbound connections
 
 # ====================================================== RULE 8 ==============================================================
 # This rule is designed to detect the creation of packet sockets within containers. When such an event is detected, the rule 
@@ -221,7 +262,7 @@
     rules:
       - Packet socket created in container
   actions:
-    - action: Block pod egress
+    - Block pod egress # blocks the egress traffic of the pod by creating a network policy that restricts outbound connections
 
 # ====================================================== RULE 9 ==============================================================
 # This rule is designed to detect unexpected UDP traffic originating from containers. When such an event is detected, the rule
@@ -233,4 +274,4 @@
     rules:
       - Unexpected UDP Traffic
   actions:
-    - action: Block pod egress
+    - Block pod egress # blocks the egress traffic of the pod by creating a network policy that restricts outbound connections
