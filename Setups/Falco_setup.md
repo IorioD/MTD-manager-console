@@ -36,12 +36,23 @@ This component consumes event flows and evaluates security rules to detect anoma
    ``` 
   showing that a shell was created with sensitive files opened 
   
-## 3. Install Falco Sidekick and access UI (Falco alerts borker)
+## 3. Install Falco Sidekick and access UI (Falco alerts broker)
    1. install the `falcosidekick` component to get the UI
    ```sh
     helm upgrade --namespace falco falco falcosecurity/falco --set falcosidekick.enabled=true --set falcosidekick.webui.enabled=true --set falcosidekick.webui.service.type=NodePort --set falcosidekick.config.talon.address=http://falco-talon:2803
    ```
    N.B. The last 2 options are used to forward the Falco alerts to the FALCO TALON response engine.
+   Since Sidekick UI uses a Reids pod that need a persistent volume claim, you need to check whether a storage class already exists in your cluster or not using 
+   ```sh
+   kubectl get storageclass
+   ```
+   If you get `No resources found`, you need to install a dynamic "Local Path Provisioner" () using the following commands to download the storage, check its installation, and make it default:
+   ```sh
+   kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml
+   kubectl get storageclass
+   kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+   ```
+   N.B. The data is stored on the node’s local disk; if the Redis pod moves to another node, the volume does not follow (fine for a lab environment, but not for production)
 
    2. run the following command to identify the name of the ui service
    ```sh
