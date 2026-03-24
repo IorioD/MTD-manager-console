@@ -41,20 +41,21 @@ This component consumes event flows and evaluates security rules to detect anoma
    ```sh
     helm upgrade --namespace falco falco falcosecurity/falco --set falcosidekick.enabled=true --set falcosidekick.webui.enabled=true --set falcosidekick.webui.service.type=NodePort --set falcosidekick.config.talon.address=http://falco-talon:2803
    ```
-   The last 2 options are used to send the alerts to the falco talon engine.
+   N.B. The last 2 options are used to forward the Falco alerts to the FALCO TALON response engine.
 
    2. run the following command to identify the name of the ui service
    ```sh
    kubectl -n falco get svc
    ```
+   Look for something like `falco-falcosidekick-ui` 
    
-   3. run the following command and change the `spec.type` from `ClusterIP` to `NodePort`.
+   3. run the following command and change the `spec.type` from `ClusterIP` to `NodePort` (around line 44).
    ```sh
    kubectl edit svc <SERVICE_NAME> -n falco
    ```
    once it is done, a node port will be assigned to the service.
    
-   4. you can now connect to `http://<MASTER_IP>:<NODE_PORT>` to access the UI with `admin` as username and password.
+   4. you can now connect to `http://<MASTER_IP>:<NODE_PORT>` (the `<node_port>` is listed in the `spec.ports`); use `admin` as username and password for the first UI access.
 
 Alternatively, you can edit the setting by locating the service in the Kubesphere UI and change the yaml. 
 
