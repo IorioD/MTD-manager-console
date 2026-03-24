@@ -53,6 +53,11 @@ This component consumes event flows and evaluates security rules to detect anoma
    kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
    ```
    N.B. The data is stored on the node’s local disk; if the Redis pod moves to another node, the volume does not follow (fine for a lab environment, but not for production)
+   Now you need to force the pod to restart using one of the following commands:
+   ```sh
+   helm upgrade --namespace falco falco falcosecurity/falco --reuse-values
+   kubectl delete pvc -n falco falco-falcosidekick-ui-redis-data-falco-falcosidekick-ui-redis-0
+   ```
 
    2. run the following command to identify the name of the ui service
    ```sh
