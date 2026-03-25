@@ -29,7 +29,7 @@ This component consumes event flows and evaluates security rules to detect anoma
    For the implemented custom rules refer to [this file](../miscConfig/falco/falco-rules.yaml)
 
 ## 2. Test Falco
-   1. install a test pod and use it to generate potential malicious events (open a shell and expose sensitive data)
+   1. Using the following commands one by one, you can install a test pod and use it to generate potential malicious events (open a shell and expose sensitive data)
    ```sh
    kubectl run test-pod --image=alpine --command -- sleep 3600
    kubectl exec -it test-pod -- sh
