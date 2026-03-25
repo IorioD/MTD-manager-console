@@ -17,8 +17,14 @@ This component consumes event flows and evaluates security rules to detect anoma
    watch kubectl get pods -n falco
    ```
    now Falco is successfully installed.
+
+   Falco implements some standard rules for each probe on a node; to view them, you can select a pod from the ones listed by the previous command and execute the following command to acces a specific pod.
+   ```sh
+   kubectl exec -n falco -it falco-<xxx> -- /bin/sh 
+   ```
+   Under the directory `/etc/falco/` you'll find `config.d` folder containing the configuration engine file, `falco.yaml` containing the full falco configuration file, and `falco_rule.yaml` containing the default falco rules.
    
-   For the implemented rules refer to [this file](../miscConfig/falco/falco-rules.yaml)
+   For the implemented custom rules refer to [this file](../miscConfig/falco/falco-rules.yaml)
 
 ## 2. Test Falco
    1. install a test pod and use it to generate potential malicious events (open a shell and expose sensitive data)
