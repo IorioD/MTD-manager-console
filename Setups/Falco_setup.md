@@ -22,7 +22,9 @@ This component consumes event flows and evaluates security rules to detect anoma
    ```sh
    kubectl exec -n falco -it falco-<xxx> -- /bin/sh 
    ```
-   Under the directory `/etc/falco/` you'll find `config.d` folder containing the configuration engine file, `falco.yaml` containing the full falco configuration file, and `falco_rule.yaml` containing the default falco rules.
+   Under the directory `/etc/falco/` you'll find `config.d` folder containing the configuration engine file, `falco.yaml` containing the full falco configuration file, and `falco_rule.yaml` containing the default falco rules. 
+   
+   Falco load rules from the `/etc/falco/falco_rules.yaml` file, followed by any custom rules located in the `/etc/falco/falco_rules.local.yaml` file, followed by any custom rules located in the `/etc/falco/rules.d` directory.
    
    For the implemented custom rules refer to [this file](../miscConfig/falco/falco-rules.yaml)
 
