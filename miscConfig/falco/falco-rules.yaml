@@ -12,6 +12,143 @@
 #   9    |     Mount Launched in Privileged Container       | Docker Container | Elevation of Privilege |  
 # =======================================================================================================
 
+# ==================================================== MACROS ================================================================
+- macro: root_dir
+  condition: fd.directory=/ or fd.name startswith /root/
+# The root_dir macro checks if a file descriptor is associated with the root directory ("/") or the root user's home directory ("/root").
+
+- macro: exe_running_docker_save
+  condition: proc.name=dockerd and proc.cmdline contains "docker save"
+# The exe_running_docker_save macro checks if the process is the Docker daemon (dockerd) and if its command line contains the 
+# "docker save" command, which is used to save Docker images to a tar archive. 
+
+- macro: kubectl_writing_state
+  condition: proc.name=kubectl and fd.name contains "kubelet.state"
+# The kubectl_writing_state macro checks if the process is kubectl and if it is writing to a file that contains "kubelet.state" 
+# in its name, which is associated with Kubernetes state information.
+
+- macro: calico_writing_state
+  condition: proc.name=calico-node and fd.name contains "calico_node.state"
+# The calico_writing_state macro checks if the process is calico-node and if it is writing to a file that contains "calico_node.state"
+# in its name, which is associated with Calico network state information.
+
+- macro: rancher_writing_root
+  condition: proc.name=rancher and fd.name startswith "/root/"
+# The rancher_writing_root macro checks if the process is rancher and if it is writing to a file that starts with "/root/",
+# which is the root user's home directory.
+
+- macro: runc_writing_exec_fifo
+  condition: proc.name=runc and fd.name contains "exec.fifo"
+# The runc_writing_exec_fifo macro checks if the process is runc and if it is writing to a file that contains "exec.fifo" in its name,
+# which is associated with runc's execution FIFO used for container management.
+
+- macro: mysqlsh_writing_state
+  condition: proc.name=mysqlsh and fd.name contains "mysqlsh.state"
+# The mysqlsh_writing_state macro checks if the process is mysqlsh and if it is writing to a file that contains "mysqlsh.state" in its name,
+# which is associated with MySQL Shell state information.
+
+- macro: known_root_conditions
+  condition: proc.name in (known_root_processes) and fd.name in (known_root_files) and fd.directory in (known_root_directories)
+# The known_root_conditions macro checks if the process name is in a list of known root processes, if the file descriptor name is in a list
+# of known root files, and if the file descriptor directory is in a list of known root directories. This is used to filter out known
+# legitimate activities that involve writing to critical  system files or directories.
+
+- macro: user_known_write_root_conditions
+  condition: proc.name in (user_known_write_root_processes) and fd.name in (user_known_write_root_files) and fd.directory in (user_known_write_root_directories)
+# The user_known_write_root_conditions macro checks if the process name is in a list of user-known processes that write to root files, 
+# if the file descriptor name is in a list of user-known root files, and if the file descriptor directory is in a list of user-known root
+# directories. This allows users to specify additional legitimate activities that involve writing to critical system files or directories,
+# which may not be covered by the known_root_conditions macro.
+
+- macro: user_known_write_below_root_activities
+  condition: proc.name in (user_known_write_below_root_processes) and fd.name in (user_known_write_below_root_files) and fd.directory in (user_known_write_below_root_directories)
+# The user_known_write_below_root_activities macro checks if the process name is in a list of user-known processes that write below root,
+# if the file descriptor name is in a list of user-known files below root, and if the file descriptor directory is in a list of user-known
+# directories below root. This allows users to specify additional legitimate activities that involve writing to files or directories below the root level,
+# which may not be covered by the known_root_conditions macro.
+
+- macro: modify_shell_history
+  condition: evt.type in (open, creat) and fd.name in (shell_history_files) and evt.arg.flags contains "O_WRONLY"
+# The modify_shell_history macro checks if a file is being opened for writing (O_WRONLY) and if the file name is in a list of shell history files. 
+# This is used to detect potential modifications to shell history files, which could indicate an attempt to cover up command history.
+
+- macro: truncate_shell_history
+  condition: evt.type in (open, creat) and fd.name in (shell_history_files) and evt.arg.flags contains "O_TRUNC"
+# The truncate_shell_history macro checks if a file is being opened with the O_TRUNC flag, which indicates that the file is 
+# being truncated, and if the file name is in a list of shell history files.
+
+- macro: var_lib_docker_filepath
+  condition: fd.name startswith "/var/lib/docker/"
+# The var_lib_docker_filepath macro checks if the file descriptor name starts with "/var/lib/docker/", which is a common file path
+# used by Docker for storing its data. This is used to filter out legitimate activities performed by Docker that involve writing to 
+# files in this directory.
+
+- macro: user_known_shell_config_modifiers
+  condition: proc.name in (user_known_shell_config_modifying_processes)
+# The user_known_shell_config_modifiers macro checks if the process name is in a list of user-known processes that modify 
+# shell configuration files.
+
+- macro: network_tool_procs
+  condition: proc.name in (network_tool_processes)
+# The network_tool_procs macro checks if the process name is in a list of known network tool processes. This is used to identify
+# potentially suspicious network tools that may be used for reconnaissance or lateral movement activities.
+
+- macro: user_known_network_tool_activities
+  condition: proc.name in (user_known_network_tool_processes)
+# The user_known_network_tool_activities macro checks if the process name is in a list of user-known processes that are network tools.
+# This allows users to specify additional legitimate network tools that may not be covered by the network_tool_procs macro.
+
+- macro: inbound_outbound
+  condition: fd.type=ipv4 or fd.type=ipv6
+# The inbound_outbound macro checks if the file descriptor type is either ipv4 or ipv6, which indicates that the event is related 
+# to network activity.
+
+- macro: expected_udp_traffic
+  condition: proc.name in (processes_with_expected_udp_traffic)
+# The expected_udp_traffic macro checks if the process name is in a list of processes that are known to generate expected UDP traffic.
+# This is used to filter out legitimate UDP traffic that may be generated by certain processes, helping to reduce false positives when
+# monitoring for unexpected UDP traffic.
+
+- macro: mount_info
+  condition: (never_true)
+# The mount_info macro is a placeholder that always evaluates to false. It is used in the Mount Launched in Privileged Container rule to
+# filter out known legitimate mount activities in privileged containers, which are defined in the known_gke_mount_in_privileged_containers, known_aks_mount_in_privileged_containers, 
+# and user_known mount_in_privileged_containers macros. By including this never_true macro in the condition, we ensure that only the specific known legitimate mount activities 
+# defined in those macros are allowed, while any other mount activities in privileged containers will trigger the rule.
+
+- macro: known_gke_mount_in_privileged_containers
+  condition: proc.name=mount and container and container.privileged=true and fd.name in (known_gke_mount_files)
+# The known_gke_mount_in_privileged_containers macro checks if the process is the mount command, if it is running in a container, if 
+# the container is privileged, and if the file descriptor name is in a list of known GKE mount file paths. This is used to filter out
+# known legitimate mount activities in privileged containers in GKE, which are necessary for the proper functioning of GKE and do not
+# pose a security risk. The specific file paths in the known_gke_mount_files list are associated with legitimate mount activities 
+# performed by the mount binary in privileged containers in GKE. It is important to regularly review and update this list of allowed 
+# activities to ensure that it remains accurate and does not inadvertently allow malicious actions.
+
+- macro: known_gke_mount_in_privileged_containers
+  condition: proc.name=mount and container and container.privileged=true and fd.name in ("/var/lib/kubelet/plugins/kubernetes.io/csi/pv/pvc-*/globalmount", "/var/lib/kubelet/plugins/kubernetes.io/csi/pv/pvc-*/mount")
+# serves to filter out known legitimate mount activities in privileged containers in GKE, which are performed by the mount binary and 
+# involve specific file paths. These activities are currently allowed because they are necessary for the proper functioning of GKE and
+# do not pose a security risk. However, it is important to regularly review and update this list of allowed activities to ensure that
+# it remains accurate and does not inadvertently allow malicious actions.
+
+- macro: known_aks_mount_in_privileged_containers
+  condition: proc.name=mount and container and container.privileged=true and fd.name in ("/var/lib/kubelet/plugins/kubernetes.io/csi/pv/pvc-*/globalmount", "/var/lib/kubelet/plugins/kubernetes.io/csi/pv/pvc-*/mount")
+# The known_aks_mount_in_privileged_containers macro checks if the process is the mount command, if it is running in a container, if 
+# the container is privileged, and if the file descriptor name is in a list of known AKS mount file paths. This is used to filter out 
+# known legitimate mount activities in privileged containers in AKS, which are necessary for the proper functioning of AKS and do not 
+# pose a security risk. The specific file paths in the known_aks_mount_files list are associated with legitimate mount activities 
+# performed by the mount binary in privileged containers in AKS. It is important to regularly review and update this list of allowed
+# activities to ensure that it remains accurate and does not inadvertently allow malicious actions.
+
+- macro: user_known_mount_in_privileged_containers
+  condition: proc.name=mount and container and container.privileged=true and fd.name in (user_known_mount_in_privileged_containers_files)
+# The user_known_mount_in_privileged_containers macro checks if the process is the mount command, if it is running in a container, if
+# the container is privileged, and if the file descriptor name is in a list of user-known mount file paths in privileged containers. 
+# This allows users to specify additional legitimate mount activities in privileged containers that may not be covered by the 
+# known_gke_mount_in_privileged_containers and known_aks_mount_in_privileged_containers macros.
+
+# ==================================================== RULES =================================================================
 
 # ==================================================== RULE 1 ================================================================
 # This rule detects when a file is opened for writing below the root directory ("/") or the root user's home directory 
@@ -24,22 +161,13 @@
     It checks for various conditions to filter out known legitimate activities and focuses on potentially malicious actions 
     that could indicate an attempt to modify critical system files or configurations.
   condition: >
-    open_write and evt.dir=<
+    open_write
     and root_dir
     and proc_name_exists
     and not fd.name in (known_root_files)
     and not fd.directory pmatch (known_root_directories)
     and not exe_running_docker_save
-    and not gugent_writing_guestagent_log
-    and not dse_writing_tmp
-    and not zap_writing_state
-    and not airflow_writing_state
-    and not rpm_writing_root_rpmdb
-    and not maven_writing_groovy
-    and not chef_writing_conf
     and not kubectl_writing_state
-    and not cassandra_writing_state
-    and not galley_writing_state
     and not calico_writing_state
     and not rancher_writing_root
     and not runc_writing_exec_fifo
@@ -151,7 +279,7 @@
   output: Network tool launched in container | evt_type=%evt.type user=%user.name user_uid=%user.uid user_loginuid=%user.loginuid process=%proc.name proc_exepath=%proc.exepath parent=%proc.pname command=%proc.cmdline terminal=%proc.tty exe_flags=%evt.arg.flags
   priority: NOTICE
   tags: [container, network, process, mitre_execution, T1059]
-
+  
 # ==================================================== RULE 7 ================================================================
 # This rule detects the creation of packet sockets within a container. It monitors for socket events that involve the
 # AF_PACKET domain and checks for various conditions to filter out known legitimate activities. The rule aims to identify
@@ -164,7 +292,7 @@
     and checks for various conditions to filter out known legitimate activities. The rule aims to identify potential unauthorized 
     creation of packet sockets, which could be used by attackers for network sniffing or other malicious activities within containers.
   condition: > 
-    evt.type=socket and evt.dir=>
+    evt.type=socket
     and container 
     and evt.arg.domain contains AF_PACKET 
     and not proc.name in (user_known_packet_socket_binaries)
@@ -182,8 +310,9 @@
     Detects unexpected UDP traffic. It monitors for network events that involve the UDP protocol and checks for various conditions 
     to filter out known legitimate activities. The rule aims to identify potential unauthorized UDP traffic, which could indicate data 
     exfiltration or other malicious activities within the network.
-  condition: > 
-    inbound_outbound 
+  condition: >
+    evt.type in (sendto, sendmsg, recvfrom, recvmsg, connect) 
+    and inbound_outbound 
     and fd.l4proto=udp 
     and not expected_udp_traffic
   output: Unexpected UDP Traffic Seen | connection=%fd.name lport=%fd.lport rport=%fd.rport fd_type=%fd.type fd_proto=%fd.l4proto evt_type=%evt.type user=%user.name user_uid=%user.uid user_loginuid=%user.loginuid process=%proc.name proc_exepath=%proc.exepath parent=%proc.pname command=%proc.cmdline terminal=%proc.tty
