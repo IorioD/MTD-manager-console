@@ -26,7 +26,22 @@ This component consumes event flows and evaluates security rules to detect anoma
    
    Falco load rules from the `/etc/falco/falco_rules.yaml` file, followed by any custom rules located in the `/etc/falco/falco_rules.local.yaml` file, followed by any custom rules located in the `/etc/falco/rules.d` directory.
    
-   For the implemented custom rules refer to [this file](../miscConfig/falco/falco-rules.yaml)
+   Whenever a new rule is identified, it is crucial to validate it before applying it. Validation can be performed both on a pod running in the cluster or in a local docker container.
+   For a local verification, execute the following commands:
+   ```sh
+   docker pull falcosecurity/falco:0.43.0 # pull the Falco image corresponding with the one installed on the cluster to avoid inconsistency. 
+   docker cp /path/to/falco_custom_rules.yaml <container_id>:/tmp/falco_custom_rules.yaml # copy the rule file into the container
+   docker exec -it <container_name> sh # access the container
+   falco --validate /etc/falco/falco_rules.yaml --validate /path/to/falco_custom_rules.yaml
+         # ^ this is the path to the default rules in Falco (IMPORTANT: you need it if you use standard macros)
+   ```
+   If the last command does not return errors, the rule is validated and ready to be applied. To do so, use the following command on the master node:
+   ```sh
+   helm upgrade falco falcosecurity/falco --namespace falco --reuse-values --set-file 'customRules.falco_custom_rules\.yaml=/path/to/falco_custom_rules.yaml'
+   ```
+   Once the command is completed, the falco pods on each node will be terminated and recreated with the new rules applied in `/etc/falco/rules.d/falco_custom_rules.yaml`
+   
+   For the implemented custom rules refer to [this file](../miscConfig/falco/falco-rules.yaml).
 
 ## 2. Test Falco
    1. Using the following commands one by one, you can install a test pod and use it to generate potential malicious events (open a shell and expose sensitive data)
@@ -82,6 +97,8 @@ This component consumes event flows and evaluates security rules to detect anoma
    4. you can now connect to `http://<MASTER_IP>:<NODE_PORT>` (the `<node_port>` is listed in the `spec.ports`); use `admin` as username and password for the first UI access.
 
 Alternatively, you can edit the setting by locating the service in the Kubesphere UI and change the yaml. 
+
+N.B. If you introduce new rules, to keep the Sidekick UI running you need to perform the steps from 2 to 4
 
 You can now try introducing a malicious pod on the cluster following the [attack guide](Attack.md).
 
