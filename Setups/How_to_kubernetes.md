@@ -115,7 +115,7 @@ On each VM install Docker [official guide](https://docs.docker.com/engine/instal
                  host: <master_ip>
                  port: 22
                  user: <master_username>
-                 password: "<master_password>"
+                 password: <master_password>
                internal_ipv4: <master_internal_ip>
          
              worker1:
@@ -124,7 +124,7 @@ On each VM install Docker [official guide](https://docs.docker.com/engine/instal
                  host: <worker_ip>
                  port: 22
                  user: <worker_username>
-                 password: "<worker_password>"
+                 password: <worker_password>
                internal_ipv4: <worker_internal_ip>
          
            groups:
