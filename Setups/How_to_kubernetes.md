@@ -53,8 +53,9 @@ On each VM install Docker [official guide](https://docs.docker.com/engine/instal
     curl -sfL https://get-kk.kubesphere.io | sh -
     chmod +x kk
     ```
-
-2. Create cluster config:
+   Follow the [official KubeKey github page](https://github.com/kubesphere/kubekey/tree/main/docs/en/installation) for the updated version since the following steps are referred to the KubeKey3 Gen.
+   
+3. Create cluster config:
 
     ```sh
     ./kk create config --with-kubernetes v1.33.4
