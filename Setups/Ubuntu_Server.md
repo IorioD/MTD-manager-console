@@ -21,6 +21,8 @@ To avoid the changing of the IP of the VMs, you can set a static IP as follows:
 1. Run
     ```sh
     sudo nano /etc/netplan/50-cloud-init.yaml
+     OR
+    sudo nano /etc/netplan/00-installer-config.yaml
     ```
     to access the netplan file
 2. modify the file as follows
