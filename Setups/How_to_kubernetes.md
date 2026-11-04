@@ -85,7 +85,7 @@ The command using Kubesphere `./kk create config --with-kubernetes v1.23.10 --wi
     ```sh
     ./kk create cluster -f <config-name>.yaml
     ```
-Refer to [this file](KubeKey_CMD.md) if you need more KubeKey cluster management commands
+Refer to the [Official GitHub guide](https://github.com/kubesphere/kubekey) and [Support page](https://pkg.go.dev/github.com/kubesphere/kubekey#section-readme) if you need more KubeKey cluster management commands
 
 ---
 
