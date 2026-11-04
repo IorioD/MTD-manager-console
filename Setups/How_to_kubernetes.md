@@ -19,26 +19,31 @@
 
 If you want better performance, you can use virtual machines with Ubuntu server installed following [Ubuntu server guide](Ubuntu_Server.md).
 
-On each VM install
-- Docker [official guide](https://docs.docker.com/engine/install/ubuntu/).
-- `conntrack` and `socat` dependencies
-    ```sh
+On each VM install Docker [official guide](https://docs.docker.com/engine/install/ubuntu/) with `conntrack` and `socat` dependencies:  
+   ```sh
     # Add Docker's official GPG key:
-    sudo apt-get update
-    sudo apt-get install ca-certificates curl
+    sudo apt update
+    sudo apt install ca-certificates curl
     sudo install -m 0755 -d /etc/apt/keyrings
     sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
     sudo chmod a+r /etc/apt/keyrings/docker.asc
-
+    
     # Add the repository to Apt sources:
-    echo \
-      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-      $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
-      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    sudo apt-get update
+    sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+    Types: deb
+    URIs: https://download.docker.com/linux/ubuntu
+    Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+    Components: stable
+    Architectures: $(dpkg --print-architecture)
+    Signed-By: /etc/apt/keyrings/docker.asc
+    EOF
+    
+    sudo apt update
 
-    sudo apt install -y socat conntrack ebtables ipset
-    ```
+    sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+
+    sudo apt install socat conntrack ebtables ipset -y
+   ```
 ---    
 ## 2. Cluster Installation
 ### Steps:
