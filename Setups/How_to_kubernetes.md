@@ -156,7 +156,7 @@ On each VM install Docker [official guide](https://docs.docker.com/engine/instal
       Edit `config-v1.33.4.yaml` as needed, including the control-plane endpoint, network settings, container runtime and CNI plugin. See the official configuration reference.
       ## NOTE:
       
-      If you are using Ubuntu server 26.04 with KKv4 you need to change the way sudo operates (otherwise cluster reation will fail) by using the following commands:
+      If you are using Ubuntu server 26.04 with KKv4 you need to change the way sudo operates (otherwise cluster reation will fail) by using the following commands on each node:
       ```sh
         sudo update-alternatives --set sudo /usr/bin/sudo.ws  # change from sudo-rs to sudo
         sudo update-alternatives --auto sudo                  # after lounching the creation command to return to sudo-rs
@@ -171,7 +171,10 @@ On each VM install Docker [official guide](https://docs.docker.com/engine/instal
 
 10. Verify the cluster:
 
-       On a machine with kubectl configured to access the new cluster, run: `kubectl get nodes`
+       On a machine with kubectl configured to access the new cluster, run the following command and waif untill all the nodes are ready
+       ```sh
+          kubectl get nodes
+       ```
 
 Always refer to the [Official GitHub guide](https://github.com/kubesphere/kubekey) and [Support page](https://pkg.go.dev/github.com/kubesphere/kubekey#section-readme) if you need more KubeKey cluster management commands
 
