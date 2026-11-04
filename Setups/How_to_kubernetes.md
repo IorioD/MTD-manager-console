@@ -154,6 +154,13 @@ On each VM install Docker [official guide](https://docs.docker.com/engine/instal
 8. Review the cluster configuration:
 
       Edit `config-v1.33.4.yaml` as needed, including the control-plane endpoint, network settings, container runtime and CNI plugin. See the official configuration reference.
+      ## NOTE:
+      
+      If you are using Ubuntu server 26.04 with KKv4 you need to change the way sudo operates (otherwise cluster reation will fail) by using the following commands:
+      ```sh
+        sudo update-alternatives --set sudo /usr/bin/sudo.ws  # change from sudo-rs to sudo
+        sudo update-alternatives --auto sudo                  # after lounching the creation command to return to sudo-rs
+      ```
 
 9. Create the cluster:
    ```sh
