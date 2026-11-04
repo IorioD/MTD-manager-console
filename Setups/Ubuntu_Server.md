@@ -40,7 +40,7 @@ To avoid the changing of the IP of the VMs, you can set a static IP as follows:
             addresses: [8.8.8.8, 8.8.4.4]
     ```
     where `ens33` is the name of the network card, `<VM_Address>` is the IP that you want for your machine (use the same provided when running `ip a` in your terminal) and `<GatewayIP>` is the IP that allows you to connect to your router dashboard.
-   If you are using the natted process:
+   If you are using the natted process just add the rows from `enp0s8` included:
     ```yaml
     network:
       version: 2
