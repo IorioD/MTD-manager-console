@@ -54,7 +54,7 @@ On each VM install Docker [official guide](https://docs.docker.com/engine/instal
     chmod +x kk
     ```
 
-2. Check the installed version using `./kk version` ## if it is version 3 you can follow steps 3, 4, and 5 (check [this file](KubeKey_CMD.md) if you need more KubeKey cluster management commands) otherwise skip to step 6
+2. Check the installed version using `./kk version` if it is version 3 you can follow steps 3, 4, and 5 (check [this file](KubeKey_CMD.md) if you need more KubeKey cluster management commands) otherwise for version 4 skip to step 6
 ---
 ## KKv3
 3. Create cluster config:
@@ -63,10 +63,11 @@ On each VM install Docker [official guide](https://docs.docker.com/engine/instal
     ./kk create config --with-kubernetes v1.33.4
     ```
 
-Refer to [the official GitHub page](https://github.com/kubesphere/kubekey/blob/master/docs/kubernetes-versions.md) to check the latest Kubernetes supported version.
-The command using Kubesphere `./kk create config --with-kubernetes v1.23.10 --with-kubesphere v3.4.1` is not available anymore.
+   Refer to [the official GitHub page](https://github.com/kubesphere/kubekey/blob/master/docs/kubernetes-versions.md) to check the latest Kubernetes supported version.
 
-4. Edit configuration properly by setting `specs.hosts` with the name and the IPs, user, and password of the machine you set `specs.roleGroups` accordingly (etcd and control-plane must be set to the master node).
+   The command using Kubesphere `./kk create config --with-kubernetes v1.23.10 --with-kubesphere v3.4.1` is not available anymore.
+
+5. Edit configuration properly by setting `specs.hosts` with the name and the IPs, user, and password of the machine you set `specs.roleGroups` accordingly (etcd and control-plane must be set to the master node).
     ```yaml
     spec:
       hosts:
@@ -83,7 +84,7 @@ The command using Kubesphere `./kk create config --with-kubernetes v1.23.10 --wi
         # Add more worker names as needed
     # ... rest of the file
     ```
-5. Create cluster:
+6. Create cluster:
 
     ```sh
     ./kk create cluster -f <config-name>.yaml
@@ -100,7 +101,7 @@ The command using Kubesphere `./kk create config --with-kubernetes v1.23.10 --wi
 
 7.  Configure the nodes.
 
-   Edit inventory.yaml to define the SSH connection details and assign each node to a group. For example:
+      Edit `inventory.yaml` to define the SSH connection details and assign each node to a group. For example:
    ```yaml
          apiVersion: kubekey.kubesphere.io/v1
          kind: Inventory
@@ -140,26 +141,26 @@ The command using Kubesphere `./kk create config --with-kubernetes v1.23.10 --wi
                hosts:
                  - worker1
    ```
-   Replace the placeholders with your node details. Add more entries under hosts and kube_worker.hosts for additional workers. The internal IP can be the same as the SSH address when the nodes communicate over that address.
+   Replace the placeholders with your node details. Add more entries under hosts and `kube_worker.hosts` for additional workers. The internal IP can be the same as the SSH address when the nodes communicate over that address.
    
-   SSH keys can be used instead of passwords: set private_key under each node’s connector to the path of the private key on the machine running KubeKey. If using passwords, protect inventory.yaml because it contains credentials.
+   SSH keys can be used instead of passwords: set private_key under each node’s connector to the path of the private key on the machine running KubeKey. If using passwords, protect `inventory.yaml` because it contains credentials.
    
-   If the cluster configuration uses external etcd, also define an etcd group and list its nodes. Consult the inventory documentation for the available fields.
+   If the cluster configuration uses external etcd, also define an etcd group and list its nodes. Consult the [inventory documentation](https://github.com/kubesphere/kubekey/blob/main/docs/en/installation/README.md) for the available fields.
 
 8. Review the cluster configuration:
 
-   Edit config.yaml as needed, including the control-plane endpoint, network settings, container runtime and CNI plugin. See the official configuration reference.
+      Edit `config-v1.33.4.yaml` as needed, including the control-plane endpoint, network settings, container runtime and CNI plugin. See the official configuration reference.
 
 9. Create the cluster:
    ```sh
     ./kk create cluster -i inventory.yaml -c config-v1.33.4.yaml
    ```
 
-   If your generated configuration file has a different name, use that name with -c.
+      If your generated configuration file has a different name, use that name with -c.
 
 10. Verify the cluster:
 
-   On a machine with kubectl configured to access the new cluster, run: `kubectl get nodes`
+       On a machine with kubectl configured to access the new cluster, run: `kubectl get nodes`
 
 Always refer to the [Official GitHub guide](https://github.com/kubesphere/kubekey) and [Support page](https://pkg.go.dev/github.com/kubesphere/kubekey#section-readme) if you need more KubeKey cluster management commands
 
