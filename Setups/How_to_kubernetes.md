@@ -140,6 +140,10 @@ On each VM install Docker [official guide](https://docs.docker.com/engine/instal
              kube_worker:
                hosts:
                  - worker1
+
+             etcd:
+               hosts:
+                 - master
    ```
    Replace the placeholders with your node details. Add more entries under hosts and `kube_worker.hosts` for additional workers. The internal IP can be the same as the SSH address when the nodes communicate over that address.
    
