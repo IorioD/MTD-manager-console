@@ -51,9 +51,7 @@ kubectl create secret generic backend-secrets \
 The Ingress Controller is responsible for managing external access to services exposed via Ingress Resources via NodePort.
 ### 3.1 Installation
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/
-  kubernetes/ingress-nginx/controller-v1.12.1/
-  deploy/static/provider/baremetal/deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.12.1/deploy/static/provider/baremetal/deploy.yaml
 ```
 
 ### 3.2 Installation Verification
