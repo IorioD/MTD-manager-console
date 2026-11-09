@@ -21,7 +21,7 @@ If you want better performance, you can use virtual machines with Ubuntu server 
 
 On each VM install Docker [official guide](https://docs.docker.com/engine/install/ubuntu/) with `conntrack` and `socat` dependencies:  
    ```sh
-       # Add Docker's official GPG key:
+      # Add Docker's official GPG key:
       sudo apt update
       sudo apt install ca-certificates curl
       sudo install -m 0755 -d /etc/apt/keyrings
