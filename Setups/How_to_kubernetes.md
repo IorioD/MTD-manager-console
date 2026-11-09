@@ -19,9 +19,23 @@
 
 If you want better performance, you can use virtual machines with Ubuntu server installed following [Ubuntu server guide](Ubuntu_Server.md) NOTE: DUE TO DIFFERENT KERNEL VERSIONS AND OS CONFIG USE UBUNTU SERVER 24.04LTS.
 
-On each VM install [Docker](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository) (steps 1 & 2) and add `conntrack` and `socat` dependencies:
+On each VM execute the following command to install Docker and add `conntrack` and `socat` dependencies leaving to kubekey the management of `docker` and `containerd` versions:
    ```sh
-    sudo apt install socat conntrack ebtables ipset -y
+    # Add Docker's official GPG key:
+    sudo apt-get update
+    sudo apt-get install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add the repository to Apt sources:
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+      $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+
+    sudo apt install -y socat conntrack ebtables ipset
    ```
 ---    
 ## 2. Cluster Installation using [KubeKey](https://github.com/kubesphere/kubekey/tree/main/docs/en/installation)
