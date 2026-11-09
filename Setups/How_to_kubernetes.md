@@ -66,12 +66,10 @@ On each VM install [Docker](https://docs.docker.com/engine/install/ubuntu/#insta
     ./kk create cluster -f <config-name>.yaml
     ```
 
-6. Verify the cluster:
-
-   On a machine with kubectl configured to access the new cluster, run the following command and wait until all the nodes are ready.
-       ```sh
-          kubectl get nodes
-       ```
+6. Verify the cluster on a machine with kubectl configured to access the new cluster with the following command and wait until all the nodes are ready.
+    ```sh
+       kubectl get nodes --watch
+    ```
 
 Always refer to the [Official GitHub guide](https://github.com/kubesphere/kubekey) and [Support page](https://pkg.go.dev/github.com/kubesphere/kubekey#section-readme) if you need more KubeKey cluster management commands
 
