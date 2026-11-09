@@ -2,7 +2,7 @@
 The hardware requirements are the same as reported in [How to Kubernetes](How_to_kubernetes.md) and remember the bridged mode for the network.
 
 ## 1. ISO Download and setup
-1. Visit the [official web page](https://ubuntu.com/download/server) to download the iso.
+1. Visit the [official web page](https://ubuntu.com/download/server) to download the 24.04LTS iso.
 2. You can use both `VMware workstation` or `Virtual Box` or any other hypervisor to create and manage the VMs.
 3. During the installation process, leave all the default settings and select "install the OpenSSH Server".
 4. Once the installation is performed, access each machine and run:
