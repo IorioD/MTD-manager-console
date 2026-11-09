@@ -33,9 +33,8 @@ On each VM install [Docker](https://docs.docker.com/engine/install/ubuntu/#insta
     chmod +x kk
     ```
 
-2. Check the installed version using `./kk version` if you used version 3 you can follow steps 3, 4, and 5 (check [this file](KubeKey_CMD.md) if you need more KubeKey cluster management commands) otherwise for version 4 skip to step 6
----
-## KKv3
+2. Check the installed version using `./kk version` if you used version 3 you can follow this guide, otherwise follow the official guide for a different version (check [this file](KubeKey_CMD.md) if you need more KubeKey cluster management commands)
+
 3. Create cluster config:
 
     ```sh
@@ -44,9 +43,7 @@ On each VM install [Docker](https://docs.docker.com/engine/install/ubuntu/#insta
 
    Refer to [the official GitHub page](https://github.com/kubesphere/kubekey/blob/master/docs/kubernetes-versions.md) to check the latest Kubernetes supported version.
 
-   The command using Kubesphere `./kk create config --with-kubernetes v1.23.10 --with-kubesphere v3.4.1` is not available anymore.
-
-5. Edit configuration properly by setting `specs.hosts` with the name and the IPs, user, and password of the machine you set `specs.roleGroups` accordingly (etcd and control-plane must be set to the master node).
+4. Edit configuration properly by setting `specs.hosts` with the name and the IPs, user, and password of the machine you set `specs.roleGroups` accordingly (etcd and control-plane must be set to the master node).
     ```yaml
     spec:
       hosts:
@@ -63,94 +60,15 @@ On each VM install [Docker](https://docs.docker.com/engine/install/ubuntu/#insta
         # Add more worker names as needed
     # ... rest of the file
     ```
-6. Create cluster:
+5. Create cluster:
 
     ```sh
     ./kk create cluster -f <config-name>.yaml
     ```
----
-## KKv4
-6. Create the node inventory and cluster configuration:
-   
-   ```sh
-   ./kk create inventory -o .
-   ./kk create config --with-kubernetes v1.33.4 -o .
-   ```
-   Generating `inventory.yaml` and `config-1.33.4.yaml`
 
-7.  Configure the nodes.
+6. Verify the cluster:
 
-      Edit `inventory.yaml` to define the SSH connection details and assign each node to a group. For example:
-   ```yaml
-         apiVersion: kubekey.kubesphere.io/v1
-         kind: Inventory
-         metadata:
-           name: default
-         spec:
-           hosts:
-             master:
-               connector:
-                 type: ssh
-                 host: <master_ip>
-                 port: 22
-                 user: <master_username>
-                 password: "<master_password>"
-               internal_ipv4: <master_internal_ip>
-         
-             worker1:
-               connector:
-                 type: ssh
-                 host: <worker_ip>
-                 port: 22
-                 user: <worker_username>
-                 password: "<worker_password>"
-               internal_ipv4: <worker_internal_ip>
-         
-           groups:
-             k8s_cluster:
-               groups:
-                 - kube_control_plane
-                 - kube_worker
-         
-             kube_control_plane:
-               hosts:
-                 - master
-         
-             kube_worker:
-               hosts:
-                 - worker1
-
-             etcd:
-               hosts:
-                 - master
-   ```
-   Replace the placeholders with your node details. Add more entries under hosts and `kube_worker.hosts` for additional workers. The internal IP can be the same as the SSH address when the nodes communicate over that address.
-   
-   SSH keys can be used instead of passwords: set private_key under each node’s connector to the path of the private key on the machine running KubeKey. If using passwords, protect `inventory.yaml` because it contains credentials.
-   
-   If the cluster configuration uses external etcd, also define an etcd group and list its nodes. Consult the [inventory documentation](https://github.com/kubesphere/kubekey/blob/main/docs/en/installation/README.md) for the available fields.
-
-8. Review the cluster configuration:
-
-      Edit `config-v1.33.4.yaml` as needed, including the control-plane endpoint, network settings, container runtime and CNI plugin. See the official configuration reference.
-      ## NOTE:
-      
-      If you are using Ubuntu server 26.04 with KKv4 you need to change the way sudo operates (otherwise cluster reation will fail) by using the following commands on each node:
-      ```sh
-        sudo update-alternatives --set sudo /usr/bin/sudo.ws  # change from sudo-rs to sudo
-        sudo update-alternatives --auto sudo                  # after lounching the creation command to return to sudo-rs
-      ```
-
-9. Create the cluster:
-   ```sh
-    ./kk create cluster -i inventory.yaml -c config-v1.33.4.yaml
-   ```
-
-      If your generated configuration file has a different name, use that name with -c.
-
-10. Verify the cluster:
-
-       On a machine with kubectl configured to access the new cluster, run the following command and waif untill all the nodes are ready
+   On a machine with kubectl configured to access the new cluster, run the following command and wait until all the nodes are ready.
        ```sh
           kubectl get nodes
        ```
