@@ -89,9 +89,13 @@ To access the application using the name `bank.local`, you need to map this name
 ---
 # Application Deployment
 To deploy the application, you'll need the following files in `MTD-manager-console/miscConfig/bank`
+
 •  mysql_deployment.yaml
+
 •	frontend_deployment.yaml
+
 •	backend_deployment.yaml
+
 •	bank_ingress.yaml
 
 ## 1. Database Deployment
