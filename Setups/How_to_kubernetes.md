@@ -50,11 +50,11 @@ On each VM install Docker [official guide](https://docs.docker.com/engine/instal
 1. Download KubeKey and make it executable:
 
     ```sh
-    curl -sfL https://get-kk.kubesphere.io | sh -
+    curl -sfL https://get-kk.kubesphere.io | VERSION=v3.1.11 sh -
     chmod +x kk
     ```
 
-2. Check the installed version using `./kk version` if it is version 3 you can follow steps 3, 4, and 5 (check [this file](KubeKey_CMD.md) if you need more KubeKey cluster management commands) otherwise for version 4 skip to step 6
+2. Check the installed version using `./kk version` if you used version 3 you can follow steps 3, 4, and 5 (check [this file](KubeKey_CMD.md) if you need more KubeKey cluster management commands) otherwise for version 4 skip to step 6
 ---
 ## KKv3
 3. Create cluster config:
