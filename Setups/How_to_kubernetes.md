@@ -79,34 +79,11 @@ On each VM execute the following command to install Docker and add `conntrack` a
     ```sh
     ./kk create cluster -f <config-name>.yaml
     ```
-
-   If you are experiencing a failed installation, try executing the following commands on each node:
-
-    ```sh
-    sudo grep -n 'disabled_plugins' /etc/containerd/config.toml
-    sudo ctr plugins ls | grep -i cri
-    ```
-
-    If the result is disabled_plugins = ["cri"] you need to update the file deleting "cri"
-
-    ```sh
-    sudo cp /etc/containerd/config.toml /etc/containerd/config.toml.bak
-    sudoedit /etc/containerd/config.toml
-    ```
-
-    and then
-    ```sh
-    sudo systemctl restart containerd
-    sudo systemctl --no-pager --full status containerd
-    sudo crictl --runtime-endpoint unix:///run/containerd/containerd.sock info
-    sudo crictl pull kubesphere/pause:3.9
-    ```
-
-    finally retry installation.
    
-7. Verify the cluster on a machine with kubectl configured to access the new cluster with the following command and wait until all the nodes are ready.
+6. Verify the cluster executing the following commands on the master to access the new cluster and wait until all the nodes and pods are ready and running.
     ```sh
-       kubectl get nodes
+    kubectl get nodes
+    kubestl get pod -A
     ```
 
 Always refer to the [Official GitHub guide](https://github.com/kubesphere/kubekey) and [Support page](https://pkg.go.dev/github.com/kubesphere/kubekey#section-readme) if you need more KubeKey cluster management commands
