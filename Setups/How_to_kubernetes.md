@@ -19,7 +19,7 @@
 
 If you want better performance, you can use virtual machines with Ubuntu server installed following [Ubuntu server guide](Ubuntu_Server.md) NOTE: DUE TO DIFFERENT KERNEL VERSIONS AND OS CONFIG USE UBUNTU SERVER 24.04LTS.
 
-On each VM install [Docker]([https://docs.docker.com/engine/install/ubuntu/](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository) (steps 1 & 2) and add `conntrack` and `socat` dependencies:
+On each VM install [Docker](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository) (steps 1 & 2) and add `conntrack` and `socat` dependencies:
    ```sh
     sudo apt install socat conntrack ebtables ipset -y
    ```
