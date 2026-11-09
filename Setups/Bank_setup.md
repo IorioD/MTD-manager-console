@@ -70,7 +70,7 @@ Wait until the following pods show:
 ```bash
 kubectl get svc -n ingress-nginx
 ```
-In the PORT(S) column look for the 443 port mapping (e.g., 43:32313/TCP specifies that NodePort HTTPS is 32313.)
+In the PORT(S) column look for the 443 port mapping (e.g., 443:32313/TCP specifies that NodePort HTTPS is 32313.)
 
 ---
 ## 4. Configuring Local Access (Hosts File)
