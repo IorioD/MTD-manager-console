@@ -58,9 +58,12 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 ```bash
 kubectl get pods -n ingress-nginx --watch
 ```
-Wait untill the following pods show:
+Wait until the following pods show:
+
 •	ingress-nginx-controller: Running (1/1) - main controller
+
 •	ingress-nginx-admission-create: Completed - configuration job
+
 •	ingress-nginx-admission-patch: Completed - configuration job
 
 ### 3.3 NodePort Identification
