@@ -101,50 +101,44 @@ To deploy the application, you'll need the following files in `MTD-manager-conso
 ## 1. Database Deployment
 We will install MySQL as the backend database for the application and configure the necessary tables.
 
-1.  On the master node, create a Kubernetes Secret for the database credentials. This secret will be used by the application backend to connect to MySQL.
-
-    ```bash
-    kubectl create secret generic backend-secrets --from-literal=db_password='rootpassword' --from-literal=secret_key='rootpassword' -n bank-project
-    ```
-
-2.  Open the `mysql_deployment.yaml` file.
-3.  Find the line containing `kubernetes.io/hostname: worker1` (typically around line 28) and modify `worker1` with the name of the specific node where you want the MySQL pod to run. This is useful for ensuring the persistent volume is always attached to the same node.
-4.  Change the `Liveness Probe` by modifying the `initialDelaySeconds` from 30 to 120 seconds avoiding pod crashloopbackoff issues
+1.  Open the `mysql_deployment.yaml` file.
+2.  Find the line containing `kubernetes.io/hostname: worker1` (typically around line 28) and modify `worker1` with the name of the specific node where you want the MySQL pod to run. This is useful for ensuring the persistent volume is always attached to the same node.
+3.  Change the `Liveness Probe` by modifying the `initialDelaySeconds` from 30 to 120 seconds avoiding pod crashloopbackoff issues
    ```bash
    sed -i 's/initialDelaySeconds: 30/initialDelaySeconds: 120/' mysql_deployment.yaml
    ``` 
-5.  Save the changes to the `mysql_deployment.yaml` file.
-6.  Apply the MySQL deployment in the `bank-project` project:
+4.  Save the changes to the `mysql_deployment.yaml` file.
+5.  Apply the MySQL deployment in the `bank-project` project:
 
     ```bash
     kubectl apply -f mysql_deployment.yaml -n bank-project
     ```
 
-7.  Wait for the MySQL pod to be in the `Running` state. You can verify this with the command `kubectl get pods -n bank-project`. Note down the exact name of the pod (it will be something like `mysql-xxxxxxxxxx-xxxxx`).
+6.  Wait for the MySQL pod to be in the `Running` state. You can verify this with the command `kubectl get pods -n bank-project`. Note down the exact name of the pod (it will be something like `mysql-xxxxxxxxxx-xxxxx`).
 
-8.  Access the shell of the MySQL pod:
+7.  Access the shell of the MySQL pod:
      ```bash
      kubectl exec -it <MYSQL_POD_NAME> -n bank-project -- sh # Replace `<MYSQL_POD_NAME>` with the exact pod name noted in the previous step.
      ```
-9.  Once inside the pod's shell, access the MySQL client:
+8.  Once inside the pod's shell, access the MySQL client:
      ```bash
      mysql -u root -p
      ```
 
-10. When prompted, enter the password for the `root` user, which is `rootpassword` (as defined in the Secret).
-11. Once inside the MySQL console, view the existing databases:
+9. When prompted, enter the password for the `root` user, which is `rootpassword` (as defined in the Secret).
+10. Once inside the MySQL console, view the existing databases:
 
     ```sql
     SHOW DATABASES;
     ```
 
-12. The `bankdb` database should have been automatically created by the deployment (if it is not present, create it `CREATE DATABASE bankdb;`) and access it:
+11. The `bankdb` database should have been automatically created by the deployment (if it is not present, create it `CREATE DATABASE bankdb;`) and access it:
 
     ```sql
     USE bankdb;
     ```
 
-13. Create the `users` table to store user information:
+12. Create the `users` table to store user information:
 
     ```sql
     CREATE TABLE users (
@@ -157,7 +151,7 @@ We will install MySQL as the backend database for the application and configure 
     );
     ```
 
-14. Create the `transactions` table to record financial movements:
+13. Create the `transactions` table to record financial movements:
 
     ```sql
     CREATE TABLE transactions (
@@ -172,7 +166,7 @@ We will install MySQL as the backend database for the application and configure 
     );
     ```
 
-15. (Optional) Populate the `users` table with some sample data:
+14. (Optional) Populate the `users` table with some sample data:
 
     ```sql
     INSERT INTO users (name, surname, email, password, balance)
