@@ -94,6 +94,11 @@ To access the application using the name `bank.local`, you need to map this name
 4.  Save the `hosts` file.
 ---
 # Application Deployment
+Start by cloning the repository on the master node:
+```bash
+git clone https://github.com/DEFEDGE/MTD-manager-console.git
+```
+
 To deploy the application, you'll need the following files in `MTD-manager-console/miscConfig/bank`
 
 •  mysql_deployment.yaml
