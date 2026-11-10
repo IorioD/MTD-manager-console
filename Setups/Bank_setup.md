@@ -227,14 +227,14 @@ Now we will deploy the application components and configure the Ingress Resource
 ```bash
 kubectl get pods -n bank-project
 ```
-front-end-xxxxxxxxx-xxxxx (Frontend), backend-xxxxxxxxx-xxxxx (Backend), mysql-xxxxxxxxx-xxxxx (Database) must be up and running.
+front-end-xxxxxxxxx-xxxxx (Frontend), backend-xxxxxxxxx-xxxxx (Backend), mysql-xxxxxxxxx-xxxxx (Database) must be up and running. Once all components have been deployed and are in the `Running` state, the application will be accessible.
 
-2. Application Access
-Once all components have been deployed and are in the `Running` state (you can verify this in the Kubesphere UI in the Pods section of the `bank-project`), the application will be accessible.
-
-1.  Open a web browser on the machine where you modified the `hosts` file.
-2.  Navigate to the URL: `https://bank.local:<NodePort>`
-    Replace `<NodePort>` with the actual NodePort you noted in step 6.4 (e.g., `https://bank.local:30662`).
+2.  Open a web browser on the machine where you modified the `hosts` file.
+3.  Navigate to the URL: `https://bank.local:<NodePort>`
+    Replace `<NodePort>` with the actual NodePort returned by
+    ```bash
+     grep "bank.local" backend_deployment.yaml
+     ```
 
 You have successfully completed the deployment of the banking application on Kubesphere. You should now be able to access the application dashboard and, optionally, use the sample user credentials entered into the database to log in.
 
