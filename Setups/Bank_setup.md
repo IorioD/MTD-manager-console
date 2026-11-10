@@ -125,31 +125,33 @@ We will install MySQL as the backend database for the application and configure 
     kubectl apply -f mysql_deployment.yaml -n bank-project
     ```
 
-6.  Wait for the MySQL pod to be in the `Running` state. You can verify this with the command `kubectl get pods -n bank-project`. Note down the exact name of the pod (it will be something like `mysql-xxxxxxxxxx-xxxxx`).
-
-7.  Access the shell of the MySQL pod:
+6.  Wait for the MySQL pod to be in the `Running` state. You can verify this with the following command (take note of the exact name of the pod, It will be something like `mysql-xxxxxxxxxx-xxxxx`).
+    ```bash
+    kubectl get pods -n bank-project --watch
+    ```
+8.  Access the shell of the MySQL pod:
      ```bash
      kubectl exec -it <MYSQL_POD_NAME> -n bank-project -- sh # Replace `<MYSQL_POD_NAME>` with the exact pod name noted in the previous step.
      ```
-8.  Once inside the pod's shell, access the MySQL client:
+9.  Once inside the pod's shell, access the MySQL client:
      ```bash
      mysql -u root -p
      ```
 
-9. When prompted, enter the password for the `root` user, which is `rootpassword` (as defined in the Secret).
-10. Once inside the MySQL console, view the existing databases:
+10. When prompted, enter the password for the `root` user, which is `rootpassword` (as defined in the Secret).
+11. Once inside the MySQL console, view the existing databases:
 
     ```sql
     SHOW DATABASES;
     ```
 
-11. The `bankdb` database should have been automatically created by the deployment (if it is not present, create it `CREATE DATABASE bankdb;`) and access it:
+12. The `bankdb` database should have been automatically created by the deployment (if it is not present, create it `CREATE DATABASE bankdb;`) and access it:
 
     ```sql
     USE bankdb;
     ```
 
-12. Create the `users` table to store user information:
+13. Create the `users` table to store user information:
 
     ```sql
     CREATE TABLE users (
@@ -162,7 +164,7 @@ We will install MySQL as the backend database for the application and configure 
     );
     ```
 
-13. Create the `transactions` table to record financial movements:
+14. Create the `transactions` table to record financial movements:
 
     ```sql
     CREATE TABLE transactions (
@@ -177,7 +179,7 @@ We will install MySQL as the backend database for the application and configure 
     );
     ```
 
-14. (Optional) Populate the `users` table with some sample data:
+15. (Optional) Populate the `users` table with some sample data:
 
     ```sql
     INSERT INTO users (name, surname, email, password, balance)
