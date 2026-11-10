@@ -113,8 +113,8 @@ To deploy the application, you'll need the following files in `MTD-manager-conso
 We will install MySQL as the backend database for the application and configure the necessary tables.
 
 1.  Open the `mysql_deployment.yaml` file.
-2.  Find the line containing `kubernetes.io/hostname: worker1` (typically around line 28) and modify `worker1` with the name of the specific node where you want the MySQL pod to run. This is useful for ensuring the persistent volume is always attached to the same node.
-3.  Change the `Liveness Probe` by modifying the `initialDelaySeconds` from 30 to 120 seconds avoiding pod crashloopbackoff issues
+2.  Find the line for pv and deployment containing `worker1` and modify the value with the name of the specific node where you want the MySQL pod to run. This is useful for ensuring the persistent volume is always attached to the same node.
+3.  Change the `Liveness Probe` by modifying the `initialDelaySeconds` from 30 to 120 seconds avoiding pod crashloopbackoff issues manually or with the following command:
    ```bash
    sed -i 's/initialDelaySeconds: 30/initialDelaySeconds: 120/' mysql_deployment.yaml
    ``` 
