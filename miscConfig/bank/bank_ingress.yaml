@@ -9,6 +9,7 @@ metadata:
     kubesphere.io/creator: project-regular
     # NESSUNA ANNOTAZIONE DI REWRITE QUI. Questo Ingress serve solo il frontend statico.
 spec:
+  ingressClassName: nginx
   tls:
     # Mantieni la sezione TLS anche qui se vuoi l'accesso HTTPS diretto al frontend.
     - hosts:
@@ -44,6 +45,7 @@ metadata:
     # quindi la rewrite si applica solo ai percorsi /api/....
     nginx.ingress.kubernetes.io/rewrite-target: /$2 
 spec:
+  ingressClassName: nginx
   tls:
     # Mantieni la sezione TLS anche qui se vuoi l'accesso HTTPS alle API.
     - hosts:
