@@ -203,12 +203,15 @@ Now we will deploy the application components and configure the Ingress Resource
     kubectl apply -f frontend_deployment.yaml -n bank-project
     ```
 
-2. Before applying the Ingress Resource in the `bank-project` project, Add `ingressClassName: nginx` below every `spec:` block and verify that `secretName` is equal to the TLS secret created (https-secrets). Then execute:
+2. Apply the Ingress Resource in the `bank-project` project:
     ```bash
     kubectl apply -f bank_ingress.yaml -n bank-project    # ingress deployment
-    kubectl get ingress -n bank-project                   # to verify that both ingress are of NGINX class 
+    kubectl get ingress -n bank-project                   # to verify that both ingress are of NGINX class
+                                              # NAME                    CLASS   HOSTS        ADDRESS          PORTS     AGE
+                                              # bank-ingress-backend    nginx   bank.local   192.168.56.105   80, 443   15s
+                                              # bank-ingress-frontend   nginx   bank.local   192.168.56.105   80, 443   15s
     ```
-3. Open the `backend_deployment.yaml` file and change nodePort to the HTTPS one applied before (or use `sed -i 's/<MODIFY HERE>/32313/g' backend_deployment.yaml`) and save the changes. This tells the backend which port the application will be accessible on from the frontend via the Ingress.
+3. Open the `backend_deployment.yaml` file and change nodePort to the HTTPS returned in step 3.3 (or use `sed -i 's/<MODIFY HERE>/32313/g' backend_deployment.yaml`) and save the changes. This tells the backend which port the application will be accessible on from the frontend via the Ingress.
 4. Verify the change using
    ```bash
    grep "bank.local" backend_deployment.yaml
