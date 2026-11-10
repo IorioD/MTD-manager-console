@@ -138,7 +138,7 @@ We will install MySQL as the backend database for the application and configure 
      mysql -u root -p
      ```
 
-10. When prompted, enter the password for the `root` user, which is `rootpassword` (as defined in the Secret).
+10. When prompted, enter the password for the `root` user, which is `password` (as defined in the Secret).
 11. Once inside the MySQL console, view the existing databases:
 
     ```sql
