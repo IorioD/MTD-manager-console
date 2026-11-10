@@ -84,8 +84,14 @@ To access the application using the name `bank.local`, you need to map this name
     ```
     <FRONTEND_WORKER_IP> bank.local
     ```
-    Replace `<FRONTEND_WORKER_IP>` with the IP address of the frontend's worker node where the Ingress Controller is running.
-3.  Save the `hosts` file.
+    Replace `<FRONTEND_WORKER_IP>` with the IP address of the frontend's worker node where the Ingress Controller is running. To find it execute the following command:
+
+    ```bash
+    kubectl describe pod <ingress-nginx-controller-xxx> -n ingress-nginx
+    ```
+    (`ingress-nginx-controller-xxx` is the corresponding name of the pod obtained before) and search for the row `Node: worker#/worker_IP`.
+
+4.  Save the `hosts` file.
 ---
 # Application Deployment
 To deploy the application, you'll need the following files in `MTD-manager-console/miscConfig/bank`
